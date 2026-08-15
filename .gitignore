@@ -1,0 +1,35 @@
+# Python
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+*.env
+
+# Database
+backend/*.db
+backend/*.sqlite
+backend/*.sqlite3
+
+# Backend generated files
+backend/uploads/
+backend/reports/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Test files / generated media
+test_videos/
+test_images/
+test_mission_1/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
