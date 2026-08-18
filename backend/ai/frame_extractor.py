@@ -1,4 +1,5 @@
 import cv2
+import json
 from pathlib import Path
 
 
@@ -8,12 +9,15 @@ def extract_frames(
     frame_interval: int = 30
 ):
     """
-    Extracts one frame after every `frame_interval`
-    frames from a video.
+    Extract frames from a video and preserve
+    frame number + timestamp metadata.
 
     Example:
         frame_interval = 30
-        → approximately one frame from every 30 video frames.
+        At 30 FPS:
+        frame 0  -> 0.0 seconds
+        frame 30 -> 1.0 seconds
+        frame 60 -> 2.0 seconds
     """
 
     video_path = Path(video_path)
@@ -44,8 +48,15 @@ def extract_frames(
         cv2.CAP_PROP_FPS
     )
 
+    if fps <= 0:
+        raise RuntimeError(
+            f"Invalid FPS detected for video: {video_path}"
+        )
+
     frame_number = 0
     saved_frames = 0
+
+    frame_metadata = []
 
     while True:
 
@@ -56,14 +67,26 @@ def extract_frames(
 
         if frame_number % frame_interval == 0:
 
-            output_path = (
-                output_folder /
-                f"frame_{saved_frames:05d}.jpg"
-            )
+            filename = f"frame_{saved_frames:05d}.jpg"
+
+            output_path = output_folder / filename
 
             cv2.imwrite(
                 str(output_path),
                 frame
+            )
+
+            timestamp_seconds = frame_number / fps
+
+            frame_metadata.append(
+                {
+                    "frame": filename,
+                    "original_frame_number": frame_number,
+                    "timestamp_seconds": round(
+                        timestamp_seconds,
+                        3
+                    )
+                }
             )
 
             saved_frames += 1
@@ -72,9 +95,27 @@ def extract_frames(
 
     cap.release()
 
+    metadata_path = (
+        output_folder.parent /
+        "frame_metadata.json"
+    )
+
+    with open(
+        metadata_path,
+        "w"
+    ) as file:
+
+        json.dump(
+            frame_metadata,
+            file,
+            indent=4
+        )
+
     return {
         "video": video_path.name,
         "total_frames": total_frames,
         "fps": fps,
-        "frames_saved": saved_frames
+        "frames_saved": saved_frames,
+        "metadata_file": str(metadata_path),
+        "frame_interval": frame_interval
     }

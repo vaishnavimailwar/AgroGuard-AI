@@ -9,10 +9,11 @@ def detect_frames(
     output_file: str
 ):
     """
-    Runs the YOLO detector on every image
-    inside a frames folder.
+    Runs YOLO detection on every extracted frame.
 
-    The final results are stored in one JSON file.
+    If frame_metadata.json exists in the mission folder,
+    frame number and timestamp information are attached
+    to the corresponding detection result.
     """
 
     frames_folder = Path(frames_folder)
@@ -22,6 +23,36 @@ def detect_frames(
         raise FileNotFoundError(
             f"Frames folder not found: {frames_folder}"
         )
+
+    # --------------------------------------------------
+    # Load frame metadata
+    # --------------------------------------------------
+
+    metadata_file = (
+        frames_folder.parent /
+        "frame_metadata.json"
+    )
+
+    frame_metadata = {}
+
+    if metadata_file.exists():
+
+        with open(
+            metadata_file,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            metadata = json.load(file)
+
+        frame_metadata = {
+            item["frame"]: item
+            for item in metadata
+        }
+
+    # --------------------------------------------------
+    # Find extracted frames
+    # --------------------------------------------------
 
     image_files = sorted(
         [
@@ -36,6 +67,10 @@ def detect_frames(
     )
 
     all_results = []
+
+    # --------------------------------------------------
+    # Run YOLO on every frame
+    # --------------------------------------------------
 
     for frame_number, image_file in enumerate(
         image_files,
@@ -52,15 +87,42 @@ def detect_frames(
             str(image_file)
         )
 
+        frame_result = {
+            "frame": image_file.name,
+            "detections": detections
+        }
+
+        # Attach metadata when available
+        if image_file.name in frame_metadata:
+
+            metadata = frame_metadata[
+                image_file.name
+            ]
+
+            frame_result[
+                "original_frame_number"
+            ] = metadata[
+                "original_frame_number"
+            ]
+
+            frame_result[
+                "timestamp_seconds"
+            ] = metadata[
+                "timestamp_seconds"
+            ]
+
         all_results.append(
-            {
-                "frame": image_file.name,
-                "detections": detections
-            }
+            frame_result
         )
 
+    # --------------------------------------------------
+    # Final result
+    # --------------------------------------------------
+
     result = {
-        "total_frames_processed": len(image_files),
+        "total_frames_processed": len(
+            image_files
+        ),
         "frames": all_results
     }
 
