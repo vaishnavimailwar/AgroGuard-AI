@@ -1517,6 +1517,22 @@ function App() {
                 0
             );
 
+            const severity =
+    resultData?.severity || null;
+
+const severityLevel =
+    severity?.severity_level || "LOW";
+
+const severityScore =
+    Number(severity?.severity_score || 0);
+
+const averageConfidence =
+    Number(severity?.average_confidence || 0);
+
+const detectedPests =
+    Array.isArray(severity?.detected_pests)
+        ? severity.detected_pests
+        : [];
 
         return (
 
@@ -1706,6 +1722,262 @@ function App() {
 
                             </section>
 
+{/* AI SEVERITY ASSESSMENT */}
+
+{severity && (
+
+    <section className="section">
+
+        <div
+            style={{
+                padding: "25px",
+                borderRadius: "12px",
+                background: "#ffffff",
+                border: "1px solid #dcebd5",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
+            }}
+        >
+
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: "20px"
+                }}
+            >
+
+                <div>
+
+                    <small
+                        style={{
+                            fontWeight: 700,
+                            letterSpacing: "0.08em"
+                        }}
+                    >
+                        AI FIELD RISK ASSESSMENT
+                    </small>
+
+                    <h2
+                        style={{
+                            margin: "8px 0"
+                        }}
+                    >
+                        {severityLevel}
+                    </h2>
+
+                    <p
+                        style={{
+                            margin: 0,
+                            color: "#666"
+                        }}
+                    >
+                        Detection-based pest risk assessment
+                    </p>
+
+                </div>
+
+
+                <div
+                    style={{
+                        minWidth: "150px",
+                        textAlign: "center",
+                        padding: "15px 20px",
+                        borderRadius: "12px",
+                        background: "#f5f7f4"
+                    }}
+                >
+
+                    <small>
+                        RISK SCORE
+                    </small>
+
+                    <div
+                        style={{
+                            fontSize: "32px",
+                            fontWeight: 800
+                        }}
+                    >
+                        {severityScore.toFixed(1)}
+                    </div>
+
+                    <small>
+                        / 100
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            {/* METRICS */}
+
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                        "repeat(auto-fit, minmax(160px, 1fr))",
+                    gap: "15px",
+                    marginTop: "25px"
+                }}
+            >
+
+                <div
+                    style={{
+                        padding: "15px",
+                        background: "#f8faf8",
+                        borderRadius: "10px"
+                    }}
+                >
+
+                    <small>
+                        Total Detections
+                    </small>
+
+                    <strong
+                        style={{
+                            display: "block",
+                            fontSize: "22px",
+                            marginTop: "5px"
+                        }}
+                    >
+                        {severity.total_detections ??
+                            totalDetectionsForMission}
+                    </strong>
+
+                </div>
+
+
+                <div
+                    style={{
+                        padding: "15px",
+                        background: "#f8faf8",
+                        borderRadius: "10px"
+                    }}
+                >
+
+                    <small>
+                        Average Confidence
+                    </small>
+
+                    <strong
+                        style={{
+                            display: "block",
+                            fontSize: "22px",
+                            marginTop: "5px"
+                        }}
+                    >
+                        {(averageConfidence * 100).toFixed(1)}%
+                    </strong>
+
+                </div>
+
+
+                <div
+                    style={{
+                        padding: "15px",
+                        background: "#f8faf8",
+                        borderRadius: "10px"
+                    }}
+                >
+
+                    <small>
+                        Pest Types
+                    </small>
+
+                    <strong
+                        style={{
+                            display: "block",
+                            fontSize: "22px",
+                            marginTop: "5px"
+                        }}
+                    >
+                        {detectedPests.length}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            {/* DETECTED PESTS */}
+
+            {detectedPests.length > 0 && (
+
+                <div
+                    style={{
+                        marginTop: "20px"
+                    }}
+                >
+
+                    <strong>
+                        Detected Pests
+                    </strong>
+
+
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "8px",
+                            marginTop: "10px"
+                        }}
+                    >
+
+                        {detectedPests.map(
+                            (pest) => (
+
+                                <span
+                                    key={pest}
+                                    style={{
+                                        padding:
+                                            "6px 12px",
+                                        borderRadius:
+                                            "20px",
+                                        background:
+                                            "#eef5e9",
+                                        fontSize:
+                                            "13px",
+                                        fontWeight:
+                                            600
+                                    }}
+                                >
+                                    {pest}
+                                </span>
+
+                            )
+                        )}
+
+                    </div>
+
+                </div>
+
+            )}
+
+
+            {/* EXPLANATION */}
+
+            {severity.note && (
+
+                <p
+                    style={{
+                        marginTop: "20px",
+                        marginBottom: 0,
+                        fontSize: "12px",
+                        color: "#6b7280"
+                    }}
+                >
+                    {severity.note}
+                </p>
+
+            )}
+
+        </div>
+
+    </section>
+
+)}
 
                             <section className="section">
 
