@@ -13,6 +13,10 @@ from services.mission_service import (
     get_all_missions
 )
 
+from services.severity_services import (
+    calculate_severity
+)
+
 
 router = APIRouter(
     prefix="/missions",
@@ -20,11 +24,16 @@ router = APIRouter(
 )
 
 
+# ==========================================================
+# CREATE MISSION
+# ==========================================================
+
 @router.post("/")
 def add_mission(
     mission: schemas.MissionCreate,
     db: Session = Depends(get_db)
 ):
+
     new_mission = create_mission(
         db,
         mission
@@ -36,53 +45,101 @@ def add_mission(
     }
 
 
+# ==========================================================
+# GET ALL MISSIONS
+# ==========================================================
+
 @router.get("/")
 def get_missions(
     db: Session = Depends(get_db)
 ):
+
     return get_all_missions(db)
 
+
+# ==========================================================
+# GET MISSION RESULTS
+# ==========================================================
 
 @router.get("/{mission_id}/results")
 def get_mission_results(
     mission_id: int,
     db: Session = Depends(get_db)
 ):
-    # Find mission
-    mission = db.query(models.Mission).filter(
+
+    # ------------------------------------------------------
+    # 1. Find mission
+    # ------------------------------------------------------
+
+    mission = db.query(
+        models.Mission
+    ).filter(
         models.Mission.id == mission_id
     ).first()
 
     if not mission:
+
         raise HTTPException(
             status_code=404,
             detail="Mission not found"
         )
 
-    # Check detection file
+    # ------------------------------------------------------
+    # 2. Check detection file
+    # ------------------------------------------------------
+
     if not mission.detection_file:
+
         raise HTTPException(
             status_code=404,
             detail="Detection results not available"
         )
 
-    if not os.path.exists(mission.detection_file):
+    # ------------------------------------------------------
+    # 3. Check detection file exists
+    # ------------------------------------------------------
+
+    if not os.path.exists(
+        mission.detection_file
+    ):
+
         raise HTTPException(
             status_code=404,
             detail="Detection file not found"
         )
 
-    # Read detection results
+    # ------------------------------------------------------
+    # 4. Read detection results
+    # ------------------------------------------------------
+
     with open(
         mission.detection_file,
         "r",
         encoding="utf-8"
     ) as file:
+
         results = json.load(file)
+
+    # ------------------------------------------------------
+    # 5. Calculate severity
+    # ------------------------------------------------------
+
+    severity = calculate_severity(
+        results
+    )
+
+    # ------------------------------------------------------
+    # 6. Return mission results
+    # ------------------------------------------------------
 
     return {
         "mission_id": mission.id,
         "mission_name": mission.mission_name,
         "status": mission.status,
-        "results": results
+
+        # Existing detection results
+        "results": results,
+
+        # New AgroGuard severity analysis
+        "severity": severity
     }
