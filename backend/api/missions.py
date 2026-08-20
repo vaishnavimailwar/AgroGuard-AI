@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+﻿from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import json
 import os
@@ -129,7 +129,41 @@ def get_mission_results(
     )
 
     # ------------------------------------------------------
-    # 6. Return mission results
+    # 6. Locate zone analysis
+    # ------------------------------------------------------
+
+    detection_path = os.path.abspath(
+        mission.detection_file
+    )
+
+    mission_folder = os.path.dirname(
+        detection_path
+    )
+
+    zone_file = os.path.join(
+        mission_folder,
+        "heatmap",
+        "zone_analysis.json"
+    )
+
+    zones = None
+
+    # ------------------------------------------------------
+    # 7. Read zone analysis when available
+    # ------------------------------------------------------
+
+    if os.path.exists(zone_file):
+
+        with open(
+            zone_file,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            zones = json.load(file)
+
+    # ------------------------------------------------------
+    # 8. Return mission results
     # ------------------------------------------------------
 
     return {
@@ -140,6 +174,9 @@ def get_mission_results(
         # Existing detection results
         "results": results,
 
-        # New AgroGuard severity analysis
-        "severity": severity
+        # Existing severity analysis
+        "severity": severity,
+
+        # Image-based risk zone analysis
+        "zones": zones
     }
