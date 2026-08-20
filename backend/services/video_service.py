@@ -1,7 +1,10 @@
-import os
+﻿import os
 
 from ai.frame_extractor import extract_frames
 from ai.detector import detect_frames
+
+from services.zone_service import analyze_zones
+from services.report_service import generate_mission_report
 
 
 def process_video(video_path, mission_id):
@@ -20,14 +23,47 @@ def process_video(video_path, mission_id):
         "frames"
     )
 
+    heatmap_folder = os.path.join(
+        mission_folder,
+        "heatmap"
+    )
+
+    reports_folder = os.path.join(
+        mission_folder,
+        "reports"
+    )
+
     detection_output = os.path.join(
         mission_folder,
         "detection_results.json"
     )
 
+    zone_output = os.path.join(
+        heatmap_folder,
+        "zone_analysis.json"
+    )
+
+    report_output = os.path.join(
+        reports_folder,
+        f"mission_{mission_id}_report.pdf"
+    )
+
+    # -----------------------------------------
     # Create folders
+    # -----------------------------------------
+
     os.makedirs(
         frames_folder,
+        exist_ok=True
+    )
+
+    os.makedirs(
+        heatmap_folder,
+        exist_ok=True
+    )
+
+    os.makedirs(
+        reports_folder,
         exist_ok=True
     )
 
@@ -51,11 +87,37 @@ def process_video(video_path, mission_id):
     )
 
     # -----------------------------------------
-    # 3. Return results
+    # 3. Analyze spatial risk zones
+    # -----------------------------------------
+
+    zone_result = analyze_zones(
+        detection_file=detection_output,
+        frames_folder=frames_folder,
+        output_file=zone_output
+    )
+
+    # -----------------------------------------
+    # 4. Generate mission PDF report
+    # -----------------------------------------
+
+    report_path = generate_mission_report(
+        mission_id=mission_id,
+        mission_name=f"Mission {mission_id}",
+        status="Completed",
+        detection_file=detection_output,
+        zone_file=zone_output,
+        output_file=report_output
+    )
+
+    # -----------------------------------------
+    # 5. Return complete results
     # -----------------------------------------
 
     return {
         "frames": frames_result,
         "detections": detections,
-        "detection_file": detection_output
+        "detection_file": detection_output,
+        "zone_file": zone_output,
+        "zone_analysis": zone_result,
+        "report_file": report_path
     }
