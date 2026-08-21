@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import SplashScreen from "./components/branding/SplashScreen.jsx";
 
 import {
     getMissions,
@@ -11,21 +10,6 @@ import {
 
 
 function App() {
-
-    const [showSplash, setShowSplash] = useState(true);
-
-    // ==========================================================
-    // SPLASH SCREEN
-    // ==========================================================
-
-    if (showSplash) {
-        return (
-            <SplashScreen
-                onComplete={() => setShowSplash(false)}
-            />
-        );
-    }
-
 
     // ==========================================================
     // STATE
