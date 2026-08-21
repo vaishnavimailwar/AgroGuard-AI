@@ -31,6 +31,17 @@ class Farmer(Base):
         unique=True
     )
 
+    email = Column(
+        String,
+        unique=True,
+        nullable=True
+    )
+
+    password_hash = Column(
+        String,
+        nullable=True
+    )
+
     village = Column(
         String
     )

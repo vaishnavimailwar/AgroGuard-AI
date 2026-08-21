@@ -4,7 +4,14 @@ from pydantic import BaseModel
 class FarmerCreate(BaseModel):
     name: str
     mobile: str
+    email: str
+    password: str
     village: str
+
+
+class FarmerLogin(BaseModel):
+    email: str
+    password: str
 
 
 class FarmCreate(BaseModel):

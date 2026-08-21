@@ -1,0 +1,168 @@
+/* =========================================================
+   ABOUT PAGE
+========================================================= */
+
+.about-page {
+    background: #ffffff;
+}
+
+.about-hero {
+    min-height: 620px;
+}
+
+.about-hero::after {
+    right: -100px;
+    top: -260px;
+}
+
+.about-hero .public-page-hero-content {
+    padding-top: 30px;
+}
+
+
+/* subtle agricultural field pattern */
+
+.about-page::selection {
+    background: #b8d97d;
+    color: #17351f;
+}
+
+
+/* mobile */
+
+@media (max-width: 650px) {
+
+    .about-hero {
+        min-height: 620px;
+    }
+
+    .about-hero .public-page-hero-content {
+        padding-top: 20px;
+    }
+}
+/* =========================================================
+   ABOUT — MOBILE RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .about-hero {
+        min-height: 620px;
+        padding: 110px 0 70px;
+    }
+
+    .about-hero .public-page-hero-content {
+        max-width: 100%;
+    }
+
+    .about-hero h1 {
+        font-size: clamp(2.8rem, 13vw, 4.2rem);
+        line-height: 0.96;
+        letter-spacing: -0.045em;
+    }
+
+    .about-hero p {
+        max-width: 100%;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .public-editorial-grid {
+        grid-template-columns: 1fr !important;
+        gap: 35px;
+    }
+
+    .public-lead {
+        font-size: 20px;
+        line-height: 1.5;
+    }
+
+    .public-editorial-copy {
+        padding-top: 0;
+    }
+
+    .public-stat-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px;
+    }
+
+    .public-stat {
+        padding: 18px 15px;
+    }
+
+    .public-stat strong {
+        font-size: 22px;
+    }
+
+    .public-section-heading {
+        display: block !important;
+    }
+
+    .public-section-heading h2 {
+        font-size: clamp(2.6rem, 12vw, 4rem);
+        line-height: 0.98;
+    }
+
+    .public-section-heading p {
+        margin-top: 18px;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .public-card {
+        min-height: 230px;
+        padding: 22px;
+    }
+
+    .public-card-number {
+        font-size: 10px;
+    }
+
+    .public-card h3 {
+        font-size: 20px;
+    }
+
+    .public-card p {
+        font-size: 13px;
+        line-height: 1.65;
+    }
+
+    .public-dark-section {
+        padding-top: 75px;
+        padding-bottom: 75px;
+    }
+
+    .public-cta {
+        padding-top: 75px;
+        padding-bottom: 75px;
+    }
+
+    .public-cta-content {
+        text-align: center;
+    }
+
+    .public-cta h2 {
+        font-size: clamp(2.8rem, 13vw, 4.4rem);
+        line-height: 0.96;
+    }
+
+    .public-cta-content .public-button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .public-stat-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .about-hero {
+        min-height: 590px;
+    }
+
+    .about-hero h1 {
+        font-size: 3rem;
+    }
+}

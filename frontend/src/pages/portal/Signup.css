@@ -1,0 +1,19 @@
+@import "./Login.css";
+
+.signup-page .auth-layout {
+    min-height: 700px;
+}
+
+.signup-card {
+    padding-top: 32px;
+}
+
+.signup-card .auth-submit {
+    margin-top: 4px;
+}
+
+@media (max-width: 760px) {
+    .signup-page .auth-layout {
+        margin-top: 45px;
+    }
+}

@@ -1,0 +1,851 @@
+/* =========================================================
+   AGROGUARD-AI
+   SPECIALISTS PAGE
+========================================================= */
+
+.specialists-page {
+    background: #ffffff;
+    color: #17231a;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.specialists-container {
+    width: min(1180px, calc(100% - 64px));
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.specialists-hero {
+    min-height: 610px;
+
+    padding: 110px 0 85px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #092914 0%,
+            #124723 55%,
+            #1c542b 100%
+        );
+
+    color: white;
+
+    overflow: hidden;
+}
+
+
+.specialists-hero-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        430px;
+
+    gap: 70px;
+
+    align-items: center;
+}
+
+
+.specialists-hero-copy {
+    max-width: 680px;
+}
+
+
+.specialists-eyebrow,
+.specialists-label {
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .16em;
+
+    color: #a9d36e;
+}
+
+
+.specialists-eyebrow {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+}
+
+
+.specialists-eyebrow::before {
+    content: "";
+
+    width: 28px;
+    height: 1px;
+
+    background: #a9d36e;
+}
+
+
+.specialists-hero h1 {
+    margin: 0;
+
+    font-size: clamp(
+        3.8rem,
+        6vw,
+        6.2rem
+    );
+
+    line-height: .94;
+
+    letter-spacing: -.055em;
+
+    font-weight: 600;
+}
+
+
+.specialists-hero h1 span {
+    color: #b9db78;
+}
+
+
+.specialists-hero-copy > p {
+    max-width: 570px;
+
+    margin: 27px 0 0;
+
+    color: rgba(255,255,255,.72);
+
+    font-size: 15px;
+
+    line-height: 1.75;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.specialists-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 30px;
+
+    flex-wrap: wrap;
+}
+
+
+.specialists-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    min-height: 45px;
+
+    padding: 0 17px;
+
+    border-radius: 3px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: .2s ease;
+}
+
+
+.specialists-btn-primary {
+    background: #b8d97d;
+
+    color: #16371f;
+}
+
+
+.specialists-btn-primary:hover {
+    background: #c9e593;
+
+    transform: translateY(-2px);
+}
+
+
+.specialists-btn-secondary {
+    border: 1px solid rgba(255,255,255,.28);
+
+    color: white;
+}
+
+
+.specialists-btn-secondary:hover {
+    background: rgba(255,255,255,.08);
+}
+
+
+/* =========================================================
+   HERO VISUAL
+========================================================= */
+
+.specialists-visual {
+    position: relative;
+
+    width: 390px;
+    height: 390px;
+
+    justify-self: end;
+}
+
+
+.specialists-orbit {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    border: 1px solid rgba(184,217,125,.20);
+
+    border-radius: 50%;
+
+    transform: translate(-50%,-50%);
+}
+
+
+.orbit-one {
+    width: 150px;
+    height: 150px;
+}
+
+
+.orbit-two {
+    width: 265px;
+    height: 265px;
+}
+
+
+.orbit-three {
+    width: 375px;
+    height: 375px;
+
+    border-color: rgba(184,217,125,.10);
+}
+
+
+.specialists-center {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 145px;
+    height: 145px;
+
+    transform: translate(-50%,-50%);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f4f7ef;
+
+    color: #16371f;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.18);
+}
+
+
+.specialists-center-icon {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 7px;
+
+    border-radius: 9px;
+
+    background: #b8d97d;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+
+.specialists-center strong {
+    font-size: 14px;
+}
+
+
+.specialists-center span {
+    margin-top: 4px;
+
+    color: #718078;
+
+    font-size: 9px;
+}
+
+
+.specialist-node {
+    position: absolute;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 67px;
+    height: 67px;
+
+    border:
+        1px solid rgba(255,255,255,.18);
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.06);
+
+    backdrop-filter: blur(5px);
+
+    text-align: center;
+}
+
+
+.specialist-node strong {
+    font-size: 11px;
+
+    color: #b8d97d;
+}
+
+
+.specialist-node span {
+    margin-top: 3px;
+
+    font-size: 8px;
+
+    color: rgba(255,255,255,.65);
+}
+
+
+.node-one {
+    top: 30px;
+    right: 25px;
+}
+
+
+.node-two {
+    left: 0;
+    bottom: 50px;
+}
+
+
+.node-three {
+    right: 0;
+    bottom: 30px;
+}
+
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+.specialists-section {
+    padding: 95px 0;
+}
+
+
+.specialists-section-head {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        370px;
+
+    gap: 80px;
+
+    align-items: end;
+}
+
+
+.specialists-section-head h2,
+.specialists-workflow h2 {
+    margin: 15px 0 0;
+
+    font-size: clamp(
+        2.7rem,
+        4.5vw,
+        4.8rem
+    );
+
+    line-height: .98;
+
+    letter-spacing: -.05em;
+}
+
+
+.specialists-section-head h2 em,
+.specialists-workflow h2 em {
+    color: #4f813e;
+
+    font-style: normal;
+}
+
+
+.specialists-section-head > p {
+    margin: 0;
+
+    color: #68736b;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.specialists-feature-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    margin-top: 60px;
+
+    border-top:
+        1px solid #dfe6de;
+
+    border-left:
+        1px solid #dfe6de;
+}
+
+
+.specialist-feature {
+    min-height: 235px;
+
+    padding: 25px;
+
+    border-right:
+        1px solid #dfe6de;
+
+    border-bottom:
+        1px solid #dfe6de;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    transition: .2s ease;
+}
+
+
+.specialist-feature:hover {
+    background: #f4f7ef;
+}
+
+
+.specialist-feature > span {
+    color: #4f813e;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.specialist-feature h3 {
+    margin: 40px 0 10px;
+
+    font-size: 20px;
+
+    letter-spacing: -.02em;
+}
+
+
+.specialist-feature p {
+    margin: 0;
+
+    color: #737d75;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   WORKFLOW
+========================================================= */
+
+.specialists-workflow {
+    padding: 100px 0;
+
+    background: #f4f7f1;
+}
+
+
+.specialists-workflow h2 {
+    max-width: 700px;
+}
+
+
+.specialist-process {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        55px
+        1fr
+        55px
+        1fr;
+
+    align-items: center;
+
+    margin-top: 65px;
+}
+
+
+.process-step {
+    min-height: 190px;
+
+    padding: 25px;
+
+    background: white;
+
+    border: 1px solid #dfe6de;
+}
+
+
+.process-number {
+    color: #4f813e;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.process-step h3 {
+    margin: 45px 0 9px;
+
+    font-size: 18px;
+}
+
+
+.process-step p {
+    margin: 0;
+
+    color: #737d75;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+}
+
+
+.process-line {
+    height: 1px;
+
+    background: #b9c8b8;
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.specialists-cta {
+    padding: 70px 0;
+}
+
+
+.specialists-cta-box {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 40px;
+
+    padding: 45px;
+
+    background: #123c20;
+
+    color: white;
+}
+
+
+.specialists-cta-box h2 {
+    margin: 12px 0 0;
+
+    font-size: 32px;
+
+    line-height: 1.05;
+
+    letter-spacing: -.04em;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .specialists-hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .specialists-visual {
+        display: none;
+    }
+
+    .specialists-section-head {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .specialist-process {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+    .process-line {
+        display: none;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .specialists-container {
+        width: calc(100% - 36px);
+    }
+
+    .specialists-hero {
+        min-height: auto;
+
+        padding: 80px 0 70px;
+    }
+
+    .specialists-hero h1 {
+        font-size: 3.5rem;
+    }
+
+    .specialists-section {
+        padding: 75px 0;
+    }
+
+    .specialists-feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .specialists-cta-box {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 30px;
+    }
+}
+/* =========================================================
+   SPECIALISTS — MOBILE RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .specialists-page {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .specialists-container {
+        width: calc(100% - 36px);
+        margin: 0 auto;
+    }
+
+    /* HERO */
+
+    .specialists-hero {
+        padding: 110px 0 70px;
+    }
+
+    .specialists-hero-grid {
+        grid-template-columns: 1fr !important;
+        gap: 40px;
+    }
+
+    .specialists-hero-copy {
+        width: 100%;
+    }
+
+    .specialists-hero h1 {
+        font-size: clamp(2.9rem, 13vw, 4.4rem);
+        line-height: 0.96;
+        letter-spacing: -0.05em;
+    }
+
+    .specialists-hero-copy p {
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .specialists-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .specialists-btn {
+        width: 100%;
+        min-height: 48px;
+    }
+
+    /* VISUAL */
+
+    .specialists-visual {
+        width: 100%;
+        min-height: 330px;
+    }
+
+    .specialists-center {
+        transform: scale(0.8);
+    }
+
+    .specialist-node {
+        transform: scale(0.8);
+    }
+
+    /* SECTION */
+
+    .specialists-section {
+        padding: 70px 0;
+    }
+
+    .specialists-section-head {
+        display: block !important;
+    }
+
+    .specialists-section-head h2 {
+        font-size: clamp(2.7rem, 12vw, 4rem);
+        line-height: 0.98;
+    }
+
+    .specialists-section-head p {
+        margin-top: 18px;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    /* FEATURES */
+
+    .specialists-feature-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+        margin-top: 35px;
+    }
+
+    .specialist-feature {
+        min-height: 220px;
+        padding: 22px;
+    }
+
+    .specialist-feature h3 {
+        font-size: 20px;
+    }
+
+    .specialist-feature p {
+        font-size: 13px;
+        line-height: 1.65;
+    }
+
+    /* WORKFLOW */
+
+    .specialists-workflow {
+        padding: 70px 0;
+    }
+
+    .specialists-workflow h2 {
+        font-size: clamp(2.7rem, 12vw, 4rem);
+        line-height: 0.98;
+    }
+
+    .specialist-process {
+        display: flex !important;
+        flex-direction: column;
+        gap: 18px;
+        margin-top: 35px;
+    }
+
+    .process-line {
+        width: 1px;
+        height: 30px;
+        margin: 0 auto;
+    }
+
+    /* CTA */
+
+    .specialists-cta {
+        padding: 70px 0;
+    }
+
+    .specialists-cta-box {
+        padding: 35px 22px;
+        text-align: left;
+    }
+
+    .specialists-cta-box h2 {
+        font-size: clamp(2.6rem, 12vw, 4rem);
+        line-height: 0.98;
+    }
+
+    .specialists-cta-box .specialists-btn {
+        width: 100%;
+        margin-top: 18px;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .specialists-container {
+        width: calc(100% - 30px);
+    }
+
+    .specialists-hero h1 {
+        font-size: 2.9rem;
+    }
+
+    .specialists-visual {
+        min-height: 290px;
+    }
+
+    .specialists-section-head h2 {
+        font-size: 2.7rem;
+    }
+}

@@ -1,0 +1,739 @@
+/* =========================================================
+   AGROGUARD-AI
+   PUBLIC WEBSITE DESIGN SYSTEM
+========================================================= */
+
+.public-page {
+    --public-green: #174a2a;
+    --public-deep: #082612;
+    --public-lime: #b8d97d;
+    --public-cream: #f5f7f2;
+    --public-white: #ffffff;
+    --public-text: #18231b;
+    --public-muted: #68736b;
+    --public-border: #dce4da;
+
+    min-height: 100vh;
+    background: var(--public-white);
+    color: var(--public-text);
+}
+
+
+/* =========================================================
+   SHARED CONTAINER
+========================================================= */
+
+.public-container {
+    width: min(1240px, calc(100% - 80px));
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   PAGE HERO
+========================================================= */
+
+.public-page-hero {
+    position: relative;
+
+    min-height: 560px;
+
+    display: flex;
+    align-items: flex-end;
+
+    padding: 150px 0 90px;
+
+    overflow: hidden;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            110deg,
+            #082612 0%,
+            #123c20 55%,
+            #1d512b 100%
+        );
+}
+
+.public-page-hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.055) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.055) 1px,
+            transparent 1px
+        );
+
+    background-size: 70px 70px;
+
+    opacity: .35;
+
+    mask-image:
+        linear-gradient(
+            90deg,
+            black,
+            transparent 75%
+        );
+}
+
+.public-page-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 650px;
+    height: 650px;
+
+    right: -180px;
+    top: -220px;
+
+    border:
+        1px solid rgba(184,217,125,.16);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 80px rgba(184,217,125,.025),
+        0 0 0 160px rgba(184,217,125,.018);
+}
+
+.public-page-hero-content {
+    position: relative;
+    z-index: 2;
+
+    max-width: 900px;
+}
+
+.public-eyebrow {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 24px;
+
+    color: var(--public-lime);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: .2em;
+}
+
+.public-eyebrow::before {
+    content: "";
+
+    width: 34px;
+    height: 1px;
+
+    background: var(--public-lime);
+}
+
+.public-page-hero h1 {
+    margin: 0;
+
+    max-width: 900px;
+
+    color: white;
+
+    font-size: clamp(
+        4rem,
+        8vw,
+        7.5rem
+    );
+
+    line-height: .88;
+
+    letter-spacing: -.06em;
+
+    font-weight: 600;
+}
+
+.public-page-hero h1 em {
+    color: var(--public-lime);
+    font-style: normal;
+}
+
+.public-page-hero p {
+    max-width: 620px;
+
+    margin-top: 30px;
+
+    color: rgba(255,255,255,.76);
+
+    font-size: 17px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.public-section {
+    padding: 115px 0;
+}
+
+.public-section.cream {
+    background: var(--public-cream);
+}
+
+.public-section-label {
+    color: var(--public-green);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: .18em;
+}
+
+.public-section-heading {
+    max-width: 850px;
+
+    margin-top: 20px;
+}
+
+.public-section-heading h2 {
+    margin: 0;
+
+    font-size: clamp(
+        3rem,
+        5.5vw,
+        5.5rem
+    );
+
+    line-height: .94;
+
+    letter-spacing: -.055em;
+}
+
+.public-section-heading h2 em {
+    color: var(--public-green);
+    font-style: normal;
+}
+
+.public-section-heading p {
+    max-width: 620px;
+
+    margin-top: 25px;
+
+    color: var(--public-muted);
+
+    font-size: 16px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   EDITORIAL GRID
+========================================================= */
+
+.public-editorial-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.1fr)
+        minmax(300px, .7fr);
+
+    gap: 100px;
+
+    align-items: start;
+
+    margin-top: 65px;
+}
+
+.public-editorial-copy {
+    color: var(--public-muted);
+
+    font-size: 16px;
+
+    line-height: 1.9;
+}
+
+.public-editorial-copy p + p {
+    margin-top: 22px;
+}
+
+.public-lead {
+    color: var(--public-text);
+
+    font-size: 22px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   STAT BLOCKS
+========================================================= */
+
+.public-stat-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    border-top:
+        1px solid var(--public-border);
+
+    border-left:
+        1px solid var(--public-border);
+}
+
+.public-stat {
+    min-height: 155px;
+
+    padding: 25px;
+
+    border-right:
+        1px solid var(--public-border);
+
+    border-bottom:
+        1px solid var(--public-border);
+}
+
+.public-stat strong {
+    display: block;
+
+    color: var(--public-green);
+
+    font-size: 38px;
+
+    letter-spacing: -.04em;
+}
+
+.public-stat span {
+    display: block;
+
+    margin-top: 8px;
+
+    color: var(--public-muted);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FEATURE CARDS
+========================================================= */
+
+.public-card-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    margin-top: 65px;
+
+    border-top:
+        1px solid var(--public-border);
+
+    border-left:
+        1px solid var(--public-border);
+}
+
+.public-card {
+    position: relative;
+
+    min-height: 300px;
+
+    padding: 30px;
+
+    border-right:
+        1px solid var(--public-border);
+
+    border-bottom:
+        1px solid var(--public-border);
+
+    background: white;
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+}
+
+.public-card:hover {
+    background: var(--public-cream);
+    transform: translateY(-4px);
+}
+
+.public-card-number {
+    color: var(--public-green);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: .15em;
+}
+
+.public-card h3 {
+    margin-top: 65px;
+
+    font-size: 23px;
+
+    letter-spacing: -.025em;
+}
+
+.public-card p {
+    max-width: 330px;
+
+    margin-top: 12px;
+
+    color: var(--public-muted);
+
+    font-size: 14px;
+
+    line-height: 1.75;
+}
+
+.public-card-arrow {
+    position: absolute;
+
+    right: 25px;
+    bottom: 25px;
+
+    color: var(--public-green);
+
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   DARK FEATURE
+========================================================= */
+
+.public-dark-section {
+    padding: 120px 0;
+
+    color: white;
+
+    background: var(--public-deep);
+}
+
+.public-dark-section .public-section-label {
+    color: var(--public-lime);
+}
+
+.public-dark-section h2 {
+    color: white;
+}
+
+.public-dark-section p {
+    color: rgba(255,255,255,.68);
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.public-cta {
+    position: relative;
+
+    padding: 125px 0;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    background: var(--public-cream);
+}
+
+.public-cta::before,
+.public-cta::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    border:
+        1px solid rgba(23,74,42,.08);
+
+    border-radius: 50%;
+
+    transform: translate(-50%,-50%);
+}
+
+.public-cta::before {
+    width: 520px;
+    height: 520px;
+}
+
+.public-cta::after {
+    width: 360px;
+    height: 360px;
+}
+
+.public-cta-content {
+    position: relative;
+    z-index: 2;
+}
+
+.public-cta h2 {
+    margin-top: 18px;
+
+    font-size: clamp(
+        3.3rem,
+        6vw,
+        6.5rem
+    );
+
+    line-height: .92;
+
+    letter-spacing: -.055em;
+}
+
+.public-cta h2 em {
+    color: var(--public-green);
+    font-style: normal;
+}
+
+.public-cta p {
+    max-width: 540px;
+
+    margin: 25px auto 0;
+
+    color: var(--public-muted);
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.public-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    min-height: 50px;
+
+    padding: 13px 21px;
+
+    border: 1px solid transparent;
+
+    border-radius: 3px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease;
+}
+
+.public-button:hover {
+    transform: translateY(-2px);
+}
+
+.public-button-primary {
+    background: var(--public-lime);
+    color: #16341e;
+}
+
+.public-button-primary:hover {
+    background: #c9e593;
+}
+
+.public-button-outline {
+    border-color: var(--public-green);
+
+    background: transparent;
+
+    color: var(--public-green);
+}
+
+.public-button-outline:hover {
+    background: var(--public-green);
+    color: white;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .public-container {
+        width: min(
+            100% - 48px,
+            1240px
+        );
+    }
+
+    .public-editorial-grid {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .public-card-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .public-container {
+        width: calc(100% - 36px);
+    }
+
+    .public-page-hero {
+        min-height: 600px;
+
+        padding: 130px 0 75px;
+    }
+
+    .public-page-hero h1 {
+        font-size: clamp(
+            3.4rem,
+            15vw,
+            5rem
+        );
+    }
+
+    .public-page-hero p {
+        font-size: 15px;
+    }
+
+    .public-section,
+    .public-dark-section {
+        padding: 80px 0;
+    }
+
+    .public-card-grid {
+        grid-template-columns: 1fr;
+
+        margin-top: 45px;
+    }
+
+    .public-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .public-cta {
+        padding: 90px 0;
+    }
+
+    .public-cta::before {
+        width: 400px;
+        height: 400px;
+    }
+
+    .public-cta::after {
+        width: 270px;
+        height: 270px;
+    }
+}
+/* =========================================================
+   AGROGUARD PUBLIC PAGES — MOBILE FOUNDATION
+========================================================= */
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.public-page,
+.about-page,
+.farmers-page,
+.solutions-page,
+.specialists-page,
+.workflow-page {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.public-container,
+.farmers-container,
+.solutions-container,
+.specialists-container,
+.workflow-container {
+    width: min(1280px, calc(100% - 80px));
+    margin-inline: auto;
+}
+
+@media (max-width: 700px) {
+
+    .public-container,
+    .farmers-container,
+    .solutions-container,
+    .specialists-container,
+    .workflow-container {
+        width: calc(100% - 36px);
+        max-width: 100%;
+    }
+
+    /* Prevent giant editorial typography */
+    .public-page h1,
+    .public-page h2,
+    .about-page h1,
+    .about-page h2,
+    .farmers-page h1,
+    .farmers-page h2,
+    .solutions-page h1,
+    .solutions-page h2,
+    .specialists-page h1,
+    .specialists-page h2,
+    .workflow-page h1,
+    .workflow-page h2 {
+        max-width: 100%;
+        overflow-wrap: break-word;
+    }
+
+    /* Buttons */
+    .public-button,
+    .farmers-btn,
+    .solutions-btn,
+    .specialists-btn,
+    .workflow-btn {
+        min-height: 46px;
+        padding: 12px 17px;
+        font-size: 12px;
+    }
+
+    /* Generic mobile section spacing */
+    .public-section,
+    .solutions-section,
+    .specialists-section,
+    .workflow-section {
+        padding-top: 72px;
+        padding-bottom: 72px;
+    }
+
+    /* Cards */
+    .public-card-grid,
+    .solutions-grid,
+    .specialists-feature-grid,
+    .workflow-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
