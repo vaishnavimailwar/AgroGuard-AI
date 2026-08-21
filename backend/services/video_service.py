@@ -74,7 +74,7 @@ def process_video(video_path, mission_id):
     frames_result = extract_frames(
         video_path=video_path,
         output_folder=frames_folder,
-        frame_interval=30
+        frame_interval=None
     )
 
     # -----------------------------------------

@@ -1,4 +1,4 @@
-import cv2
+﻿import cv2
 import json
 from pathlib import Path
 
@@ -6,7 +6,7 @@ from pathlib import Path
 def extract_frames(
     video_path: str,
     output_folder: str,
-    frame_interval: int = 30
+    frame_interval: int | None = None
 ):
     """
     Extract frames from a video and preserve
@@ -52,6 +52,9 @@ def extract_frames(
         raise RuntimeError(
             f"Invalid FPS detected for video: {video_path}"
         )
+    # Extract approximately 1 frame per second
+    if frame_interval is None:
+        frame_interval = max(1, round(fps))
 
     frame_number = 0
     saved_frames = 0

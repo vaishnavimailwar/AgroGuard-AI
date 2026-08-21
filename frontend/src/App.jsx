@@ -12,6 +12,7 @@ import Specialists from "./pages/public/Specialists.jsx";
 import Portal from "./pages/portal/Portal.jsx";
 import Login from "./pages/portal/Login.jsx";
 import Signup from "./pages/portal/Signup.jsx";
+import AgroGuardDashboard from "./pages/portal/AgroGuardDashboard.jsx";
 
 function App() {
     return (
@@ -68,6 +69,12 @@ function App() {
     path="/signup"
     element={<Signup />}
 />
+
+<Route
+    path="/dashboard"
+    element={<AgroGuardDashboard />}
+/>
+
             </Routes>
         </BrowserRouter>
     );
