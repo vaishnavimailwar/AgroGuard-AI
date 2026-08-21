@@ -1,0 +1,335 @@
+/* =========================================================
+   AGROGUARD-AI — GLOBAL DESIGN FOUNDATION
+   Premium agricultural / institutional interface
+========================================================= */
+
+:root {
+  /* ---------- Brand ---------- */
+
+  --ag-primary: #174a2a;
+  --ag-primary-deep: #0e351d;
+  --ag-primary-soft: #e8f1e8;
+
+  --ag-green: #3f7d3a;
+  --ag-green-light: #6fa65a;
+
+  --ag-earth: #b17a3c;
+  --ag-earth-soft: #f5eadc;
+
+  /* ---------- Surfaces ---------- */
+
+  --ag-bg: #f8faf6;
+  --ag-surface: #ffffff;
+  --ag-surface-soft: #f1f6ef;
+
+  /* ---------- Text ---------- */
+
+  --ag-text: #1c2a20;
+  --ag-text-soft: #58665b;
+  --ag-text-muted: #7b877d;
+  --ag-text-inverse: #ffffff;
+
+  /* ---------- Borders ---------- */
+
+  --ag-border: #dfe7de;
+  --ag-border-soft: #ebf0e9;
+
+  /* ---------- Status ---------- */
+
+  --ag-success: #2f7d32;
+  --ag-warning: #c38a19;
+  --ag-danger: #b8443c;
+  --ag-info: #39749a;
+
+  /* ---------- Typography ---------- */
+
+  --font-body:
+    Candara,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  --font-heading:
+    Candara,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  --font-mono:
+    "Cascadia Code",
+    Consolas,
+    monospace;
+
+  /* ---------- Typography Scale ---------- */
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.35rem;
+  --text-2xl: 1.8rem;
+  --text-3xl: 2.5rem;
+  --text-4xl: 3.5rem;
+  --text-hero: clamp(3rem, 6vw, 5.5rem);
+
+  /* ---------- Spacing ---------- */
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  /* ---------- Radius ---------- */
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* ---------- Shadows ---------- */
+
+  --shadow-sm:
+    0 2px 8px rgba(23, 74, 42, 0.06);
+
+  --shadow-md:
+    0 10px 30px rgba(23, 74, 42, 0.09);
+
+  --shadow-lg:
+    0 20px 50px rgba(23, 74, 42, 0.13);
+
+  /* ---------- Layout ---------- */
+
+  --container:
+    1280px;
+
+  --container-wide:
+    1440px;
+
+  /* ---------- Motion ---------- */
+
+  --transition-fast:
+    160ms ease;
+
+  --transition:
+    260ms ease;
+
+  --transition-slow:
+    500ms ease;
+
+  color: var(--ag-text);
+  background: var(--ag-bg);
+
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  background: var(--ag-bg);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+
+  font-family: var(--font-body);
+  color: var(--ag-text);
+  background: var(--ag-bg);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   ROOT APPLICATION
+========================================================= */
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+
+  font-family: var(--font-heading);
+  color: var(--ag-text);
+
+  font-weight: 700;
+  line-height: 1.15;
+
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-4xl);
+  letter-spacing: -0.035em;
+}
+
+h2 {
+  font-size: var(--text-3xl);
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: var(--text-2xl);
+}
+
+h4 {
+  font-size: var(--text-xl);
+}
+
+p {
+  margin: 0;
+}
+
+small {
+  font-size: var(--text-sm);
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+  color: var(--ag-text-inverse);
+  background: var(--ag-primary);
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+:focus-visible {
+  outline: 3px solid rgba(63, 125, 58, 0.35);
+  outline-offset: 3px;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ag-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b7c5b7;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ag-green);
+}
+
+
+/* =========================================================
+   RESPONSIVE TYPOGRAPHY
+========================================================= */
+
+@media (max-width: 1024px) {
+  :root {
+    --text-4xl: 2.75rem;
+    --text-3xl: 2.1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --text-4xl: 2.35rem;
+    --text-3xl: 1.85rem;
+    --text-2xl: 1.5rem;
+  }
+
+  html {
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

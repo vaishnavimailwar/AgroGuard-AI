@@ -1,111 +1,261 @@
+@import url("https://fonts.googleapis.com/css2?family=Candara&family=DM+Sans:wght@400;500;600;700&display=swap");
+
+/* =========================================================
+   AGROGUARD-AI GLOBAL DESIGN SYSTEM
+========================================================= */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    --ag-bg: #ffffff;
+    --ag-surface: #f7f9f5;
+    --ag-surface-soft: #f1f5ef;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+    --ag-primary: #174a2a;
+    --ag-primary-deep: #0d321b;
+    --ag-primary-soft: #eaf2e5;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    --ag-green: #4f813e;
+    --ag-green-light: #b5d879;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+    --ag-earth: #a46f3f;
+    --ag-danger: #c84a42;
+
+    --ag-text: #17231a;
+    --ag-text-soft: #637066;
+    --ag-text-muted: #8b958d;
+
+    --ag-border: #dfe6de;
+
+    --container: 1280px;
+
+    --space-10: 110px;
+
+    --font-body:
+        "Candara",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    --font-heading:
+        "Candara",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    --transition: 220ms ease;
+
+    font-family: var(--font-body);
+
+    color: var(--ag-text);
+    background: var(--ag-bg);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+
+    scroll-behavior: smooth;
+
+    background: var(--ag-bg);
 }
 
 body {
-  margin: 0;
+    margin: 0;
+    padding: 0;
+
+    min-width: 320px;
+    min-height: 100vh;
+
+    background: var(--ag-bg);
+    color: var(--ag-text);
+
+    font-family: var(--font-body);
 }
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+img {
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   ROOT
+========================================================= */
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+    width: 100%;
+    min-height: 100vh;
+
+    margin: 0;
+    padding: 0;
+
+    text-align: left;
 }
 
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+
 h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+
+    font-family: var(--font-heading);
+
+    color: inherit;
+
+    font-weight: 600;
+
+    text-wrap: balance;
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+    font-size: clamp(
+        3rem,
+        6vw,
+        6rem
+    );
+
+    line-height: 1;
 }
+
 h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+    font-size: clamp(
+        2.2rem,
+        4vw,
+        4rem
+    );
+
+    line-height: 1.05;
 }
+
+h3 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
 p {
-  margin: 0;
+    margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+    color: white;
+    background: var(--ag-green);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: #edf1eb;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+
+    background: #aeb9ad;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #81907f;
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+:focus-visible {
+    outline: 3px solid rgba(79, 129, 62, 0.45);
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    :root {
+        --space-10: 85px;
+    }
+}
+
+@media (max-width: 680px) {
+
+    :root {
+        --space-10: 70px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
