@@ -8,29 +8,35 @@ def detect_frames(
     frames_folder: str,
     output_file: str
 ):
+
     """
     Runs YOLO detection on every extracted frame.
 
-    If frame_metadata.json exists in the mission folder,
-    frame number and timestamp information are attached
-    to the corresponding detection result.
+    Metadata is attached when available.
     """
 
-    frames_folder = Path(frames_folder)
-    output_file = Path(output_file)
+    frames_folder = Path(
+        frames_folder
+    )
+
+    output_file = Path(
+        output_file
+    )
 
     if not frames_folder.exists():
+
         raise FileNotFoundError(
-            f"Frames folder not found: {frames_folder}"
+            f"Frames folder not found: "
+            f"{frames_folder}"
         )
 
-    # --------------------------------------------------
-    # Load frame metadata
-    # --------------------------------------------------
+    # ======================================================
+    # LOAD FRAME METADATA
+    # ======================================================
 
     metadata_file = (
-        frames_folder.parent /
-        "frame_metadata.json"
+        frames_folder.parent
+        / "frame_metadata.json"
     )
 
     frame_metadata = {}
@@ -43,22 +49,27 @@ def detect_frames(
             encoding="utf-8"
         ) as file:
 
-            metadata = json.load(file)
+            metadata = json.load(
+                file
+            )
 
         frame_metadata = {
             item["frame"]: item
             for item in metadata
         }
 
-    # --------------------------------------------------
-    # Find extracted frames
-    # --------------------------------------------------
+    # ======================================================
+    # FIND IMAGES
+    # ======================================================
 
     image_files = sorted(
         [
             file
+
             for file in frames_folder.iterdir()
-            if file.suffix.lower() in {
+
+            if file.suffix.lower()
+            in {
                 ".jpg",
                 ".jpeg",
                 ".png"
@@ -68,9 +79,13 @@ def detect_frames(
 
     all_results = []
 
-    # --------------------------------------------------
-    # Run YOLO on every frame
-    # --------------------------------------------------
+    total_images = len(
+        image_files
+    )
+
+    # ======================================================
+    # DETECT EACH IMAGE
+    # ======================================================
 
     for frame_number, image_file in enumerate(
         image_files,
@@ -79,7 +94,7 @@ def detect_frames(
 
         print(
             f"Processing frame "
-            f"{frame_number}/{len(image_files)}: "
+            f"{frame_number}/{total_images}: "
             f"{image_file.name}"
         )
 
@@ -92,7 +107,10 @@ def detect_frames(
             "detections": detections
         }
 
-        # Attach metadata when available
+        # --------------------------------------------------
+        # Attach metadata
+        # --------------------------------------------------
+
         if image_file.name in frame_metadata:
 
             metadata = frame_metadata[
@@ -115,14 +133,12 @@ def detect_frames(
             frame_result
         )
 
-    # --------------------------------------------------
-    # Final result
-    # --------------------------------------------------
+    # ======================================================
+    # FINAL JSON
+    # ======================================================
 
     result = {
-        "total_frames_processed": len(
-            image_files
-        ),
+        "total_frames_processed": total_images,
         "frames": all_results
     }
 

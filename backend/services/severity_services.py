@@ -2,20 +2,16 @@ from collections import Counter
 
 
 def calculate_severity(detection_results):
-    """
-    Calculate a demo-stage pest detection severity
-    from YOLO frame detection results.
-
-    This is a software risk score based on
-    detection frequency and confidence.
-
-    It is NOT a real-world percentage of
-    affected agricultural land.
-    """
 
     total_detections = 0
+
     confidence_sum = 0.0
+
     pest_counts = Counter()
+
+    # --------------------------------------------------
+    # Process frames
+    # --------------------------------------------------
 
     for frame in detection_results:
 
@@ -33,13 +29,16 @@ def calculate_severity(detection_results):
                 )
             )
 
-            class_name = detection.get(
-                "class_name",
-                "Unknown"
+            class_name = (
+                detection.get("class_name")
+                or detection.get("pest")
+                or "Unknown"
             )
 
             total_detections += 1
+
             confidence_sum += confidence
+
             pest_counts[class_name] += 1
 
     # --------------------------------------------------
@@ -49,20 +48,26 @@ def calculate_severity(detection_results):
     if total_detections == 0:
 
         return {
+
             "severity_level": "LOW",
+
             "severity_score": 0.0,
+
             "total_detections": 0,
+
             "average_confidence": 0.0,
+
             "detected_pests": [],
+
             "pest_counts": {},
-            "note": (
+
+            "note":
                 "No pest detections were found "
                 "in the analyzed frames."
-            )
         }
 
     # --------------------------------------------------
-    # Average detection confidence
+    # Average confidence
     # --------------------------------------------------
 
     average_confidence = (
@@ -71,7 +76,7 @@ def calculate_severity(detection_results):
     )
 
     # --------------------------------------------------
-    # Demo-stage severity score
+    # Demo-stage risk score
     # --------------------------------------------------
 
     severity_score = min(
@@ -83,7 +88,7 @@ def calculate_severity(detection_results):
     )
 
     # --------------------------------------------------
-    # Severity classification
+    # Classification
     # --------------------------------------------------
 
     if severity_score < 30:
@@ -98,27 +103,43 @@ def calculate_severity(detection_results):
 
         severity_level = "HIGH"
 
+    # --------------------------------------------------
+    # Result
+    # --------------------------------------------------
+
     return {
-        "severity_level": severity_level,
-        "severity_score": round(
-            severity_score,
-            2
-        ),
-        "total_detections": total_detections,
-        "average_confidence": round(
-            average_confidence,
-            3
-        ),
-        "detected_pests": sorted(
-            pest_counts.keys()
-        ),
-        "pest_counts": dict(
-            pest_counts
-        ),
-        "note": (
+
+        "severity_level":
+            severity_level,
+
+        "severity_score":
+            round(
+                severity_score,
+                2
+            ),
+
+        "total_detections":
+            total_detections,
+
+        "average_confidence":
+            round(
+                average_confidence,
+                3
+            ),
+
+        "detected_pests":
+            sorted(
+                pest_counts.keys()
+            ),
+
+        "pest_counts":
+            dict(
+                pest_counts
+            ),
+
+        "note":
             "Severity is a detection-based "
             "software risk score. Actual affected "
-            "field area requires calibrated "
-            "UAV/geospatial data."
-        )
+            "field area requires calibrated UAV/"
+            "geospatial data."
     }

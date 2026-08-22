@@ -11,14 +11,14 @@ from api.video import router as video_router
 
 
 # ==========================================================
-# Create database tables
+# CREATE DATABASE TABLES
 # ==========================================================
 
 models.Base.metadata.create_all(bind=engine)
 
 
 # ==========================================================
-# Create FastAPI application
+# CREATE FASTAPI APPLICATION
 # ==========================================================
 
 app = FastAPI(
@@ -28,7 +28,7 @@ app = FastAPI(
 
 
 # ==========================================================
-# CORS CONFIGURATION
+# CORS
 # ==========================================================
 
 app.add_middleware(
@@ -48,7 +48,7 @@ app.add_middleware(
 
 
 # ==========================================================
-# Register API Routers
+# REGISTER ROUTERS
 # ==========================================================
 
 app.include_router(farmer_router)
@@ -58,11 +58,11 @@ app.include_router(video_router)
 
 
 # ==========================================================
-# Home Route
+# HOME
 # ==========================================================
 
 @app.get("/")
 def home():
     return {
-        "message": "Welcome to AgroGuard AI Backend 🚁🌾"
+        "message": "Welcome to AgroGuard AI Backend"
     }

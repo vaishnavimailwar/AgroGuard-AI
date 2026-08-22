@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import "./App.css";
 
 import {
@@ -6,6 +6,7 @@ import {
     createMission,
     uploadVideo,
     getMissionResults,
+    downloadMissionReport,
 } from "./api";
 
 
@@ -462,9 +463,7 @@ function App() {
 
                     <div className="logo">
 
-                        <div className="logo-icon">
-                            🌿
-                        </div>
+                        <div className="logo-icon">🌿</div>
 
                         <div>
 
@@ -595,9 +594,7 @@ function App() {
                 </div>
 
 
-                <div className="drone-visual">
-                    🚁
-                </div>
+                <div className="drone-visual">🚁</div>
 
             </section>
 
@@ -606,9 +603,7 @@ function App() {
 
                 <div className="stat-card">
 
-                    <div className="stat-icon">
-                        🌾
-                    </div>
+                    <div className="stat-icon">🌿</div>
 
                     <div>
 
@@ -627,9 +622,7 @@ function App() {
 
                 <div className="stat-card">
 
-                    <div className="stat-icon">
-                        👨‍🌾
-                    </div>
+                    <div className="stat-icon">🌿</div>
 
                     <div>
 
@@ -648,9 +641,7 @@ function App() {
 
                 <div className="stat-card">
 
-                    <div className="stat-icon">
-                        🎯
-                    </div>
+                    <div className="stat-icon">🌿</div>
 
                     <div>
 
@@ -669,9 +660,7 @@ function App() {
 
                 <div className="stat-card">
 
-                    <div className="stat-icon">
-                        🐛
-                    </div>
+                    <div className="stat-icon">🌿</div>
 
                     <div>
 
@@ -822,7 +811,7 @@ function App() {
 
                                         <div className="completed">
 
-                                            ●{" "}
+                                            •{" "}
                                             {
                                                 mission.status
                                             }
@@ -1154,7 +1143,7 @@ function App() {
 
                                 <div className="completed">
 
-                                    ●{" "}
+                                    •{" "}
                                     {
                                         mission.status
                                     }
@@ -1204,13 +1193,25 @@ function App() {
                 </div>
 
 
-                <div className="system-status">
+                <div
+    style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "15px"
+    }}
+>
 
-                    <div className="status-dot"></div>
+    <div className="system-status">
 
-                    AI System Online
+        <div className="status-dot"></div>
 
-                </div>
+        AI System Online
+
+    </div>
+
+
+
+</div>
 
             </header>
 
@@ -1490,7 +1491,6 @@ function App() {
         const resultData =
             selectedResults;
 
-
         const results =
             resultData &&
             Array.isArray(
@@ -1498,7 +1498,6 @@ function App() {
             )
                 ? resultData.results
                 : [];
-
 
         const totalDetectionsForMission =
             results.reduce(
@@ -1517,30 +1516,101 @@ function App() {
                 0
             );
 
-            const severity =
-    resultData?.severity || null;
+        const severity =
+            resultData?.severity || null;
 
-const severityLevel =
-    severity?.severity_level || "LOW";
+        const severityLevel =
+            severity?.severity_level || "LOW";
 
-const severityScore =
-    Number(severity?.severity_score || 0);
+        const severityScore =
+            Number(
+                severity?.severity_score || 0
+            );
 
-const averageConfidence =
-    Number(severity?.average_confidence || 0);
+        const averageConfidence =
+            Number(
+                severity?.average_confidence || 0
+            );
 
-const detectedPests =
-    Array.isArray(severity?.detected_pests)
-        ? severity.detected_pests
-        : [];
+        const detectedPests =
+            Array.isArray(
+                severity?.detected_pests
+            )
+                ? severity.detected_pests
+                : [];
 
-const zonesData =
-    resultData?.zones || null;
+        const zonesData =
+            resultData?.zone_analysis || null;
 
-const zones =
-    Array.isArray(zonesData?.zones)
-        ? zonesData.zones
-        : [];
+        const zones =
+            Array.isArray(
+                zonesData?.zones
+            )
+                ? zonesData.zones
+                : [];
+
+        const displayZones =
+            Array.from(
+                { length: 9 },
+                (_, index) =>
+                    zones[index] || {
+                        zone: index + 1,
+                        risk_level: "LOW",
+                        total_detections: 0,
+                        average_confidence: 0
+                    }
+            );
+
+        const sprayAdvisories =
+            Array.isArray(
+                resultData?.spray_advisories
+            )
+                ? resultData.spray_advisories
+                : [];
+
+        const uniqueSprayAdvisories =
+            Array.from(
+                new Map(
+                    sprayAdvisories.map(
+                        (advisory) => [
+                            advisory.pest,
+                            advisory
+                        ]
+                    )
+                ).values()
+            );
+
+        const getRiskStyle = (
+            riskLevel
+        ) => {
+
+            const risk =
+                String(
+                    riskLevel || "LOW"
+                ).toUpperCase();
+
+            if (risk === "HIGH") {
+                return {
+                    background: "#fde8e8",
+                    border: "1px solid #ef4444",
+                    color: "#dc2626"
+                };
+            }
+
+            if (risk === "MODERATE") {
+                return {
+                    background: "#fff7d6",
+                    border: "1px solid #eab308",
+                    color: "#a16207"
+                };
+            }
+
+            return {
+                background: "#eef8ee",
+                border: "1px solid #86c986",
+                color: "#16801a"
+            };
+        };
 
         return (
 
@@ -1561,11 +1631,107 @@ const zones =
                     </div>
 
 
-                    <div className="system-status">
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "15px"
+                        }}
+                    >
 
-                        <div className="status-dot"></div>
+                        <div className="system-status">
 
-                        AI System Online
+                            <div className="status-dot"></div>
+
+                            AI System Online
+
+                        </div>
+
+
+                        {selectedMissionId && (
+
+                            <button
+                                type="button"
+                                onClick={async () => {
+
+                                    try {
+
+                                        const response =
+                                            await downloadMissionReport(
+                                                selectedMissionId
+                                            );
+
+                                        const blob =
+                                            new Blob(
+                                                [response.data],
+                                                {
+                                                    type:
+                                                        "application/pdf"
+                                                }
+                                            );
+
+                                        const url =
+                                            window.URL.createObjectURL(
+                                                blob
+                                            );
+
+                                        const link =
+                                            document.createElement(
+                                                "a"
+                                            );
+
+                                        link.href = url;
+
+                                        link.download =
+                                            `mission_${selectedMissionId}_report.pdf`;
+
+                                        document.body.appendChild(
+                                            link
+                                        );
+
+                                        link.click();
+
+                                        document.body.removeChild(
+                                            link
+                                        );
+
+                                        window.URL.revokeObjectURL(
+                                            url
+                                        );
+
+                                    } catch (error) {
+
+                                        console.error(
+                                            "Mission report download failed:",
+                                            error
+                                        );
+
+                                        alert(
+                                            "Unable to download mission report."
+                                        );
+
+                                    }
+
+                                }}
+                                style={{
+                                    padding:
+                                        "10px 16px",
+                                    borderRadius:
+                                        "8px",
+                                    border: "none",
+                                    background:
+                                        "#2e7d32",
+                                    color: "white",
+                                    fontWeight:
+                                        "600",
+                                    cursor:
+                                        "pointer"
+                                }}
+                            >
+                                Download Mission Report
+                            </button>
+
+                        )}
 
                     </div>
 
@@ -1583,7 +1749,8 @@ const zones =
                         style={{
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "space-between",
+                            justifyContent:
+                                "space-between",
                             marginBottom: "20px"
                         }}
                     >
@@ -1615,7 +1782,8 @@ const zones =
                             style={{
                                 padding: "10px",
                                 borderRadius: "8px",
-                                border: "1px solid #ccc"
+                                border:
+                                    "1px solid #ccc"
                             }}
                         >
 
@@ -1653,7 +1821,8 @@ const zones =
 
                             <div
                                 style={{
-                                    marginBottom: "20px"
+                                    marginBottom:
+                                        "20px"
                                 }}
                             >
 
@@ -1675,342 +1844,53 @@ const zones =
                                     {
                                         selectedMission.status
                                     }
-
                                 </p>
 
                             </div>
 
 
-                            <section className="stats-grid">
+                            {/* ==================================================
+                                AI FIELD RISK ASSESSMENT
+                            ================================================== */}
 
-                                <div className="stat-card">
+                            {severity && (
 
-                                    <div className="stat-icon">
-                                        🐛
-                                    </div>
-
-                                    <div>
-
-                                        <span>
-                                            Total Detections
-                                        </span>
-
-                                        <strong>
-                                            {
-                                                totalDetectionsForMission
-                                            }
-                                        </strong>
-
-                                    </div>
-
-                                </div>
-
-
-                                <div className="stat-card">
-
-                                    <div className="stat-icon">
-                                        🎞️
-                                    </div>
-
-                                    <div>
-
-                                        <span>
-                                            Frames Analysed
-                                        </span>
-
-                                        <strong>
-                                            {
-                                                results.length
-                                            }
-                                        </strong>
-
-                                    </div>
-
-                                </div>
-
-                            </section>
-
-{/* AI SEVERITY ASSESSMENT */}
-
-{severity && (
-
-    <section className="section">
-
-        <div
-            style={{
-                padding: "25px",
-                borderRadius: "12px",
-                background: "#ffffff",
-                border: "1px solid #dcebd5",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
-            }}
-        >
-
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "20px"
-                }}
-            >
-
-                <div>
-
-                    <small
-                        style={{
-                            fontWeight: 700,
-                            letterSpacing: "0.08em"
-                        }}
-                    >
-                        AI FIELD RISK ASSESSMENT
-                    </small>
-
-                    <h2
-                        style={{
-                            margin: "8px 0"
-                        }}
-                    >
-                        {severityLevel}
-                    </h2>
-
-                    <p
-                        style={{
-                            margin: 0,
-                            color: "#666"
-                        }}
-                    >
-                        Detection-based pest risk assessment
-                    </p>
-
-                </div>
-
-
-                <div
-                    style={{
-                        minWidth: "150px",
-                        textAlign: "center",
-                        padding: "15px 20px",
-                        borderRadius: "12px",
-                        background: "#f5f7f4"
-                    }}
-                >
-
-                    <small>
-                        RISK SCORE
-                    </small>
-
-                    <div
-                        style={{
-                            fontSize: "32px",
-                            fontWeight: 800
-                        }}
-                    >
-                        {severityScore.toFixed(1)}
-                    </div>
-
-                    <small>
-                        / 100
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            {/* METRICS */}
-
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns:
-                        "repeat(auto-fit, minmax(160px, 1fr))",
-                    gap: "15px",
-                    marginTop: "25px"
-                }}
-            >
-
-                <div
-                    style={{
-                        padding: "15px",
-                        background: "#f8faf8",
-                        borderRadius: "10px"
-                    }}
-                >
-
-                    <small>
-                        Total Detections
-                    </small>
-
-                    <strong
-                        style={{
-                            display: "block",
-                            fontSize: "22px",
-                            marginTop: "5px"
-                        }}
-                    >
-                        {severity.total_detections ??
-                            totalDetectionsForMission}
-                    </strong>
-
-                </div>
-
-
-                <div
-                    style={{
-                        padding: "15px",
-                        background: "#f8faf8",
-                        borderRadius: "10px"
-                    }}
-                >
-
-                    <small>
-                        Average Confidence
-                    </small>
-
-                    <strong
-                        style={{
-                            display: "block",
-                            fontSize: "22px",
-                            marginTop: "5px"
-                        }}
-                    >
-                        {(averageConfidence * 100).toFixed(1)}%
-                    </strong>
-
-                </div>
-
-
-                <div
-                    style={{
-                        padding: "15px",
-                        background: "#f8faf8",
-                        borderRadius: "10px"
-                    }}
-                >
-
-                    <small>
-                        Pest Types
-                    </small>
-
-                    <strong
-                        style={{
-                            display: "block",
-                            fontSize: "22px",
-                            marginTop: "5px"
-                        }}
-                    >
-                        {detectedPests.length}
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            {/* DETECTED PESTS */}
-
-            {detectedPests.length > 0 && (
-
-                <div
-                    style={{
-                        marginTop: "20px"
-                    }}
-                >
-
-                    <strong>
-                        Detected Pests
-                    </strong>
-
-
-                    <div
-                        style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "8px",
-                            marginTop: "10px"
-                        }}
-                    >
-
-                        {detectedPests.map(
-                            (pest) => (
-
-                                <span
-                                    key={pest}
+                                <section
+                                    className="section"
                                     style={{
-                                        padding:
-                                            "6px 12px",
-                                        borderRadius:
-                                            "20px",
-                                        background:
-                                            "#eef5e9",
-                                        fontSize:
-                                            "13px",
-                                        fontWeight:
-                                            600
+                                        padding: 0,
+                                        marginBottom:
+                                            "20px"
                                     }}
                                 >
-                                    {pest}
-                                </span>
-
-                            )
-                        )}
-
-                    </div>
-
-                </div>
-
-            )}
-
-
-            {/* EXPLANATION */}
-
-            {severity.note && (
-
-                <p
-                    style={{
-                        marginTop: "20px",
-                        marginBottom: 0,
-                        fontSize: "12px",
-                        color: "#6b7280"
-                    }}
-                >
-                    {severity.note}
-                </p>
-
-            )}
-
-        </div>
-
-    </section>
-
-)}
-
-                            {/* RISK ZONE MAP */}
-
-                            {zones.length > 0 && (
-
-                                <section className="section">
 
                                     <div
                                         style={{
-                                            padding: "25px",
-                                            borderRadius: "12px",
-                                            background: "#ffffff",
-                                            border: "1px solid #dcebd5",
-                                            boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
+                                            padding:
+                                                "25px",
+                                            borderRadius:
+                                                "12px",
+                                            background:
+                                                "#ffffff",
+                                            border:
+                                                "1px solid #dcebd5",
+                                            boxShadow:
+                                                "0 4px 12px rgba(0,0,0,0.05)"
                                         }}
                                     >
 
                                         <div
                                             style={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                alignItems: "center",
-                                                flexWrap: "wrap",
-                                                gap: "15px",
-                                                marginBottom: "20px"
+                                                display:
+                                                    "flex",
+                                                justifyContent:
+                                                    "space-between",
+                                                alignItems:
+                                                    "center",
+                                                flexWrap:
+                                                    "wrap",
+                                                gap:
+                                                    "15px"
                                             }}
                                         >
 
@@ -2018,45 +1898,74 @@ const zones =
 
                                                 <small
                                                     style={{
-                                                        fontWeight: 700,
-                                                        letterSpacing: "0.08em"
+                                                        fontWeight:
+                                                            700,
+                                                        letterSpacing:
+                                                            "0.08em"
                                                     }}
                                                 >
-                                                    SPATIAL PEST RISK
+                                                    AI FIELD RISK ASSESSMENT
                                                 </small>
 
                                                 <h2
                                                     style={{
-                                                        margin: "8px 0"
+                                                        margin:
+                                                            "8px 0 4px"
                                                     }}
                                                 >
-                                                    Risk Zone Map
+                                                    {
+                                                        severityLevel
+                                                    }
                                                 </h2>
 
                                                 <p
                                                     style={{
                                                         margin: 0,
-                                                        color: "#666"
+                                                        color:
+                                                            "#666"
                                                     }}
                                                 >
-                                                    Image-based 3?3 demonstration risk zoning
+                                                    Detection-based pest risk assessment
                                                 </p>
 
                                             </div>
 
+
                                             <div
                                                 style={{
-                                                    display: "flex",
-                                                    gap: "12px",
-                                                    flexWrap: "wrap",
-                                                    fontSize: "13px",
-                                                    fontWeight: 600
+                                                    padding:
+                                                        "15px 22px",
+                                                    borderRadius:
+                                                        "10px",
+                                                    background:
+                                                        "#f8faf8",
+                                                    textAlign:
+                                                        "center"
                                                 }}
                                             >
 
-                                                <span>Low Risk</span>
-                                                <span>Moderate Risk</span>
-                                                <span>High Risk</span>
+                                                <small>
+                                                    RISK SCORE
+                                                </small>
+
+                                                <strong
+                                                    style={{
+                                                        display:
+                                                            "block",
+                                                        fontSize:
+                                                            "28px"
+                                                    }}
+                                                >
+                                                    {
+                                                        severityScore.toFixed(
+                                                            1
+                                                        )
+                                                    }
+                                                </strong>
+
+                                                <small>
+                                                    / 100
+                                                </small>
 
                                             </div>
 
@@ -2065,142 +1974,211 @@ const zones =
 
                                         <div
                                             style={{
-                                                display: "grid",
+                                                display:
+                                                    "grid",
                                                 gridTemplateColumns:
-                                                    "repeat(3, minmax(90px, 1fr))",
-                                                gap: "8px",
-                                                maxWidth: "520px",
-                                                margin: "0 auto"
+                                                    "repeat(3, 1fr)",
+                                                gap:
+                                                    "12px",
+                                                marginTop:
+                                                    "20px"
                                             }}
                                         >
 
-                                            {zones.map((zone) => {
+                                            <div
+                                                style={{
+                                                    padding:
+                                                        "15px",
+                                                    background:
+                                                        "#f8faf8",
+                                                    borderRadius:
+                                                        "10px",
+                                                    textAlign:
+                                                        "center"
+                                                }}
+                                            >
 
-                                                const riskLevel =
-                                                    zone.risk_level || "LOW";
+                                                <small>
+                                                    Total Detections
+                                                </small>
 
-                                                const background =
-                                                    riskLevel === "HIGH"
-                                                        ? "#f8d7da"
-                                                        : riskLevel === "MODERATE"
-                                                            ? "#fff3cd"
-                                                            : "#dff3df";
+                                                <strong
+                                                    style={{
+                                                        display:
+                                                            "block",
+                                                        fontSize:
+                                                            "22px",
+                                                        marginTop:
+                                                            "5px"
+                                                    }}
+                                                >
+                                                    {
+                                                        totalDetectionsForMission
+                                                    }
+                                                </strong>
 
-                                                const border =
-                                                    riskLevel === "HIGH"
-                                                        ? "#dc3545"
-                                                        : riskLevel === "MODERATE"
-                                                            ? "#e0a800"
-                                                            : "#4caf50";
+                                            </div>
 
-                                                const icon =
-                                                    riskLevel === "HIGH"
-                                                        ? "HIGH"
-                                                        : riskLevel === "MODERATE"
-                                                            ? "MODERATE"
-                                                            : "LOW";
 
-                                                return (
+                                            <div
+                                                style={{
+                                                    padding:
+                                                        "15px",
+                                                    background:
+                                                        "#f8faf8",
+                                                    borderRadius:
+                                                        "10px",
+                                                    textAlign:
+                                                        "center"
+                                                }}
+                                            >
 
-                                                    <div
-                                                        key={zone.zone}
-                                                        style={{
-                                                            minHeight: "120px",
-                                                            padding: "15px",
-                                                            borderRadius: "10px",
-                                                            background,
-                                                            border: `2px solid ${border}`,
-                                                            display: "flex",
-                                                            flexDirection: "column",
-                                                            alignItems: "center",
-                                                            justifyContent: "center",
-                                                            textAlign: "center"
-                                                        }}
-                                                    >
+                                                <small>
+                                                    Average Confidence
+                                                </small>
 
-                                                        <div
-                                                            style={{
-                                                                fontSize: "24px"
-                                                            }}
-                                                        >
-                                                            {icon}
-                                                        </div>
+                                                <strong
+                                                    style={{
+                                                        display:
+                                                            "block",
+                                                        fontSize:
+                                                            "22px",
+                                                        marginTop:
+                                                            "5px"
+                                                    }}
+                                                >
+                                                    {
+                                                        (
+                                                            averageConfidence *
+                                                            100
+                                                        ).toFixed(
+                                                            1
+                                                        )
+                                                    }%
+                                                </strong>
 
-                                                        <strong>
-                                                            Zone {zone.zone}
-                                                        </strong>
+                                            </div>
 
-                                                        <span
-                                                            style={{
-                                                                fontSize: "13px",
-                                                                marginTop: "4px"
-                                                            }}
-                                                        >
-                                                            {riskLevel}
-                                                        </span>
 
-                                                        <span
-                                                            style={{
-                                                                fontSize: "12px",
-                                                                marginTop: "5px"
-                                                            }}
-                                                        >
-                                                            {zone.total_detections} detections
-                                                        </span>
+                                            <div
+                                                style={{
+                                                    padding:
+                                                        "15px",
+                                                    background:
+                                                        "#f8faf8",
+                                                    borderRadius:
+                                                        "10px",
+                                                    textAlign:
+                                                        "center"
+                                                }}
+                                            >
 
-                                                    </div>
+                                                <small>
+                                                    Pest Types
+                                                </small>
 
-                                                );
+                                                <strong
+                                                    style={{
+                                                        display:
+                                                            "block",
+                                                        fontSize:
+                                                            "22px",
+                                                        marginTop:
+                                                            "5px"
+                                                    }}
+                                                >
+                                                    {
+                                                        detectedPests.length
+                                                    }
+                                                </strong>
 
-                                            })}
+                                            </div>
 
                                         </div>
 
 
-                                        {zonesData.summary && (
+                                        {detectedPests.length >
+                                            0 && (
 
                                             <div
                                                 style={{
-                                                    display: "flex",
-                                                    justifyContent: "center",
-                                                    gap: "20px",
-                                                    flexWrap: "wrap",
-                                                    marginTop: "20px",
-                                                    fontSize: "13px",
-                                                    fontWeight: 600
+                                                    marginTop:
+                                                        "20px"
                                                 }}
                                             >
 
-                                                <span>
-                                                    High:{" "}
-                                                    {zonesData.summary.high_risk_zone_count}
-                                                </span>
+                                                <strong>
+                                                    Detected Pests
+                                                </strong>
 
-                                                <span>
-                                                    Moderate:{" "}
-                                                    {zonesData.summary.moderate_risk_zone_count}
-                                                </span>
+                                                <div
+                                                    style={{
+                                                        display:
+                                                            "flex",
+                                                        flexWrap:
+                                                            "wrap",
+                                                        gap:
+                                                            "8px",
+                                                        marginTop:
+                                                            "10px"
+                                                    }}
+                                                >
 
-                                                <span>
-                                                    Low:{" "}
-                                                    {zonesData.summary.low_risk_zone_count}
-                                                </span>
+                                                    {detectedPests.map(
+                                                        (pest) => (
+
+                                                            <span
+                                                                key={
+                                                                    pest
+                                                                }
+                                                                style={{
+                                                                    padding:
+                                                                        "6px 12px",
+                                                                    borderRadius:
+                                                                        "20px",
+                                                                    background:
+                                                                        "#eef5e9",
+                                                                    fontSize:
+                                                                        "13px",
+                                                                    fontWeight:
+                                                                        600
+                                                                }}
+                                                            >
+                                                                {
+                                                                    pest
+                                                                }
+                                                            </span>
+
+                                                        )
+                                                    )}
+
+                                                </div>
 
                                             </div>
 
                                         )}
 
 
-                                        <p
-                                            style={{
-                                                marginTop: "20px",
-                                                marginBottom: 0,
-                                                fontSize: "12px",
-                                                color: "#6b7280"
-                                            }}
-                                        >
-                                            {zonesData.note}
-                                        </p>
+                                        {severity.note && (
+
+                                            <p
+                                                style={{
+                                                    marginTop:
+                                                        "20px",
+                                                    marginBottom:
+                                                        0,
+                                                    fontSize:
+                                                        "12px",
+                                                    color:
+                                                        "#6b7280"
+                                                }}
+                                            >
+                                                {
+                                                    severity.note
+                                                }
+                                            </p>
+
+                                        )}
 
                                     </div>
 
@@ -2208,26 +2186,356 @@ const zones =
 
                             )}
 
+
+                            {/* ==================================================
+                                SPATIAL PEST RISK — 3 x 3 MAP
+                            ================================================== */}
+
+                            <section
+                                className="section"
+                                style={{
+                                    padding: 0,
+                                    marginBottom:
+                                        "20px"
+                                }}
+                            >
+
+                                <div
+                                    style={{
+                                        padding:
+                                            "25px",
+                                        borderRadius:
+                                            "12px",
+                                        background:
+                                            "#ffffff",
+                                        border:
+                                            "1px solid #dcebd5",
+                                        boxShadow:
+                                            "0 4px 12px rgba(0,0,0,0.05)"
+                                    }}
+                                >
+
+                                    <div
+                                        style={{
+                                            display:
+                                                "flex",
+                                            justifyContent:
+                                                "space-between",
+                                            alignItems:
+                                                "center",
+                                            flexWrap:
+                                                "wrap",
+                                            gap:
+                                                "15px",
+                                            marginBottom:
+                                                "20px"
+                                        }}
+                                    >
+
+                                        <div>
+
+                                            <small
+                                                style={{
+                                                    fontWeight:
+                                                        700,
+                                                    letterSpacing:
+                                                        "0.08em"
+                                                }}
+                                            >
+                                                SPATIAL PEST RISK
+                                            </small>
+
+                                            <h2
+                                                style={{
+                                                    margin:
+                                                        "8px 0"
+                                                }}
+                                            >
+                                                Risk Zone Map
+                                            </h2>
+
+                                            <p
+                                                style={{
+                                                    margin:
+                                                        0,
+                                                    color:
+                                                        "#666"
+                                                }}
+                                            >
+                                                Image-based 3 × 3 demonstration risk zoning
+                                            </p>
+
+                                        </div>
+
+
+                                        <div
+                                            style={{
+                                                display:
+                                                    "flex",
+                                                gap:
+                                                    "12px",
+                                                flexWrap:
+                                                    "wrap",
+                                                fontSize:
+                                                    "13px"
+                                            }}
+                                        >
+
+                                            <span>
+                                                🟢 Low Risk
+                                            </span>
+
+                                            <span>
+                                                🟡 Moderate Risk
+                                            </span>
+
+                                            <span>
+                                                🔴 High Risk
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div
+                                        style={{
+                                            width:
+                                                "100%",
+                                            maxWidth:
+                                                "520px",
+                                            margin:
+                                                "0 auto",
+                                            display:
+                                                "grid",
+                                            gridTemplateColumns:
+                                                "repeat(3, 1fr)",
+                                            gap:
+                                                "4px"
+                                        }}
+                                    >
+
+                                        {displayZones.map(
+                                            (
+                                                zone,
+                                                index
+                                            ) => {
+
+                                                const riskLevel =
+                                                    String(
+                                                        zone?.risk_level ||
+                                                        "LOW"
+                                                    ).toUpperCase();
+
+                                                const riskStyle =
+                                                    getRiskStyle(
+                                                        riskLevel
+                                                    );
+
+                                                const zoneNumber =
+                                                    zone?.zone ||
+                                                    index + 1;
+
+                                                const detectionCount =
+                                                    Number(
+                                                        zone?.total_detections ||
+                                                        0
+                                                    );
+
+                                                return (
+
+                                                    <div
+                                                        key={
+                                                            zoneNumber
+                                                        }
+                                                        style={{
+                                                            minHeight:
+                                                                "105px",
+                                                            padding:
+                                                                "14px 8px",
+                                                            display:
+                                                                "flex",
+                                                            flexDirection:
+                                                                "column",
+                                                            justifyContent:
+                                                                "center",
+                                                            alignItems:
+                                                                "center",
+                                                            textAlign:
+                                                                "center",
+                                                            background:
+                                                                riskStyle.background,
+                                                            border:
+                                                                riskStyle.border
+                                                        }}
+                                                    >
+
+                                                        <strong
+                                                            style={{
+                                                                color:
+                                                                    riskStyle.color,
+                                                                fontSize:
+                                                                    "15px"
+                                                            }}
+                                                        >
+                                                            {
+                                                                riskLevel
+                                                            }
+                                                        </strong>
+
+                                                        <strong
+                                                            style={{
+                                                                marginTop:
+                                                                    "6px",
+                                                                fontSize:
+                                                                    "14px"
+                                                            }}
+                                                        >
+                                                            Zone{" "}
+                                                            {
+                                                                zoneNumber
+                                                            }
+                                                        </strong>
+
+                                                        <small
+                                                            style={{
+                                                                marginTop:
+                                                                    "6px",
+                                                                color:
+                                                                    "#555"
+                                                            }}
+                                                        >
+                                                            {
+                                                                detectionCount
+                                                            }{" "}
+                                                            detection
+                                                            {
+                                                                detectionCount ===
+                                                                1
+                                                                    ? ""
+                                                                    : "s"
+                                                            }
+                                                        </small>
+
+                                                    </div>
+
+                                                );
+
+                                            }
+                                        )}
+
+                                    </div>
+
+
+                                    <div
+                                        style={{
+                                            display:
+                                                "flex",
+                                            justifyContent:
+                                                "center",
+                                            gap:
+                                                "25px",
+                                            flexWrap:
+                                                "wrap",
+                                            marginTop:
+                                                "18px",
+                                            fontSize:
+                                                "13px",
+                                            fontWeight:
+                                                600
+                                        }}
+                                    >
+
+                                        <span>
+                                            High:{" "}
+                                            {
+                                                zonesData?.summary
+                                                    ?.high_risk_zone_count ||
+                                                0
+                                            }
+                                        </span>
+
+                                        <span>
+                                            Moderate:{" "}
+                                            {
+                                                zonesData?.summary
+                                                    ?.moderate_risk_zone_count ||
+                                                0
+                                            }
+                                        </span>
+
+                                        <span>
+                                            Low:{" "}
+                                            {
+                                                zonesData?.summary
+                                                    ?.low_risk_zone_count ??
+                                                displayZones.filter(
+                                                    (zone) =>
+                                                        String(
+                                                            zone?.risk_level ||
+                                                            "LOW"
+                                                        ).toUpperCase() ===
+                                                        "LOW"
+                                                ).length
+                                            }
+                                        </span>
+
+                                    </div>
+
+
+                                    <p
+                                        style={{
+                                            marginTop:
+                                                "20px",
+                                            marginBottom:
+                                                0,
+                                            fontSize:
+                                                "12px",
+                                            color:
+                                                "#6b7280",
+                                            textAlign:
+                                                "center"
+                                        }}
+                                    >
+                                        {
+                                            zonesData?.note ||
+                                            "This is an image-based demonstration of pest risk zoning. Actual geographic affected field area requires calibrated UAV, GPS and geospatial data."
+                                        }
+                                    </p>
+
+                                </div>
+
+                            </section>
+
+
+                            {/* ==================================================
+                                DETECTION TABLE
+                            ================================================== */}
+
                             <section className="section">
 
-                                <div className="mission-table">
+                                <div
+                                    className="mission-table"
+                                >
 
-                                    <div className="table-header">
+                                    <div
+                                        className="table-header"
+                                    >
 
                                         <div>
-                                            Pest
+                                            PEST
                                         </div>
 
                                         <div>
-                                            Confidence
+                                            CONFIDENCE
                                         </div>
 
                                         <div>
-                                            Frame
+                                            FRAME
                                         </div>
 
                                         <div>
-                                            Bounding Box
+                                            BOUNDING BOX
                                         </div>
 
                                     </div>
@@ -2258,11 +2566,8 @@ const zones =
                                                         frame.detections
                                                     )
                                                 ) {
-
                                                     return null;
-
                                                 }
-
 
                                                 return frame.detections.map(
                                                     (
@@ -2271,16 +2576,51 @@ const zones =
                                                     ) => {
 
                                                         const bbox =
-                                                            detection.bbox;
+                                                            detection?.bbox ||
+                                                            detection?.bounding_box ||
+                                                            null;
 
+                                                        const x1 =
+                                                            bbox
+                                                                ? Number(
+                                                                    bbox.x1 ??
+                                                                    bbox[0] ??
+                                                                    0
+                                                                )
+                                                                : null;
+
+                                                        const y1 =
+                                                            bbox
+                                                                ? Number(
+                                                                    bbox.y1 ??
+                                                                    bbox[1] ??
+                                                                    0
+                                                                )
+                                                                : null;
+
+                                                        const x2 =
+                                                            bbox
+                                                                ? Number(
+                                                                    bbox.x2 ??
+                                                                    bbox[2] ??
+                                                                    0
+                                                                )
+                                                                : null;
+
+                                                        const y2 =
+                                                            bbox
+                                                                ? Number(
+                                                                    bbox.y2 ??
+                                                                    bbox[3] ??
+                                                                    0
+                                                                )
+                                                                : null;
 
                                                         return (
 
                                                             <div
                                                                 className="mission-row"
-                                                                key={
-                                                                    `${frameIndex}-${detectionIndex}`
-                                                                }
+                                                                key={`${frameIndex}-${detectionIndex}`}
                                                             >
 
                                                                 <div>
@@ -2306,13 +2646,15 @@ const zones =
                                                                     <strong>
                                                                         {
                                                                             (
-                                                                                detection.confidence *
+                                                                                Number(
+                                                                                    detection.confidence ||
+                                                                                    0
+                                                                                ) *
                                                                                 100
                                                                             ).toFixed(
                                                                                 1
                                                                             )
-                                                                        }
-                                                                        %
+                                                                        }%
                                                                     </strong>
 
                                                                 </div>
@@ -2333,7 +2675,7 @@ const zones =
 
                                                                             x1:{" "}
                                                                             {
-                                                                                bbox.x1.toFixed(
+                                                                                x1.toFixed(
                                                                                     2
                                                                                 )
                                                                             }
@@ -2342,7 +2684,7 @@ const zones =
 
                                                                             y1:{" "}
                                                                             {
-                                                                                bbox.y1.toFixed(
+                                                                                y1.toFixed(
                                                                                     2
                                                                                 )
                                                                             }
@@ -2351,7 +2693,7 @@ const zones =
 
                                                                             x2:{" "}
                                                                             {
-                                                                                bbox.x2.toFixed(
+                                                                                x2.toFixed(
                                                                                     2
                                                                                 )
                                                                             }
@@ -2360,7 +2702,7 @@ const zones =
 
                                                                             y2:{" "}
                                                                             {
-                                                                                bbox.y2.toFixed(
+                                                                                y2.toFixed(
                                                                                     2
                                                                                 )
                                                                             }
@@ -2392,47 +2734,932 @@ const zones =
                             </section>
 
 
-                            <section className="section">
+                            {/* ==================================================
+                                SPRAY ADVISORY — AFTER DETECTION TABLE
+                            ================================================== */}
+
+                                                    <section className="section">
 
                                 <div
                                     style={{
-                                        padding: "25px",
-                                        borderRadius: "12px",
-                                        background: "#f1f8ee",
-                                        border: "1px solid #dcebd5"
+                                        padding: "28px",
+                                        borderRadius: "16px",
+                                        background:
+                                            "linear-gradient(135deg, #f4faef 0%, #ffffff 100%)",
+                                        border: "1px solid #d8e8d2",
+                                        boxShadow:
+                                            "0 6px 18px rgba(46, 125, 50, 0.08)"
                                     }}
                                 >
 
-                                    <h2>
-                                        🌱 Spray Advisory
-                                    </h2>
+                                    {/* ==================================================
+                                        ADVISORY HEADER
+                                    ================================================== */}
 
-                                    <p>
-                                        Pest detections have been identified
-                                        in this UAV mission.
-                                    </p>
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "flex-start",
+                                            gap: "20px",
+                                            flexWrap: "wrap",
+                                            marginBottom: "24px"
+                                        }}
+                                    >
 
-                                    <p>
+                                        <div>
 
-                                        <strong>
-                                            Recommendation:
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: "10px",
+                                                    marginBottom: "6px"
+                                                }}
+                                            >
+
+                                                <span
+                                                    style={{
+                                                        fontSize: "24px"
+                                                    }}
+                                                >
+                                                    🌱
+                                                </span>
+
+                                                <h2
+                                                    style={{
+                                                        margin: 0,
+                                                        fontSize: "22px"
+                                                    }}
+                                                >
+                                                    Spray Advisory
+                                                </h2>
+
+                                            </div>
+
+                                            <p
+                                                style={{
+                                                    margin: 0,
+                                                    color: "#5f6b61",
+                                                    fontSize: "14px",
+                                                    lineHeight: 1.6
+                                                }}
+                                            >
+                                                Agricultural pest-management
+                                                decision support based on the
+                                                AgroGuard AI advisory dataset.
+                                            </p>
+
+                                        </div>
+
+
+                                        <div
+                                            style={{
+                                                padding: "8px 14px",
+                                                borderRadius: "20px",
+                                                background: "#eaf5e6",
+                                                color: "#2e7d32",
+                                                fontSize: "12px",
+                                                fontWeight: 700,
+                                                border:
+                                                    "1px solid #cfe4c9"
+                                            }}
+                                        >
+                                            AI DECISION SUPPORT
+                                        </div>
+
+                                    </div>
+
+
+                                    {/* ==================================================
+                                        ADVISORY CARDS
+                                    ================================================== */}
+
+                                    {uniqueSprayAdvisories.length > 0 ? (
+
+                                        <div
+                                            style={{
+                                                display: "grid",
+                                                gridTemplateColumns:
+                                                    "repeat(auto-fit, minmax(320px, 1fr))",
+                                                gap: "20px"
+                                            }}
+                                        >
+
+                                            {uniqueSprayAdvisories.map(
+                                                (
+                                                    advisory,
+                                                    index
+                                                ) => {
+
+                                                    const severityValue =
+                                                        String(
+                                                            advisory?.severity ||
+                                                            severityLevel ||
+                                                            "LOW"
+                                                        ).toUpperCase();
+
+                                                    const severityStyle =
+                                                        severityValue ===
+                                                        "HIGH"
+                                                            ? {
+                                                                background:
+                                                                    "#fff0f0",
+                                                                border:
+                                                                    "#ef4444",
+                                                                text:
+                                                                    "#b91c1c"
+                                                            }
+                                                            : severityValue ===
+                                                              "MODERATE"
+                                                            ? {
+                                                                background:
+                                                                    "#fff8df",
+                                                                border:
+                                                                    "#eab308",
+                                                                text:
+                                                                    "#a16207"
+                                                            }
+                                                            : {
+                                                                background:
+                                                                    "#eef8ee",
+                                                                border:
+                                                                    "#86c986",
+                                                                text:
+                                                                    "#16801a"
+                                                            };
+
+                                                    const confidence =
+                                                        Number(
+                                                            advisory?.confidence ||
+                                                            0
+                                                        );
+
+                                                    const detectionCount =
+                                                        Number(
+                                                            advisory?.detection_count ||
+                                                            0
+                                                        );
+
+                                                    const hasVerifiedRecord =
+                                                        advisory?.advisory_status ===
+                                                        "Verified advisory record found";
+
+                                                    return (
+
+                                                        <div
+                                                            key={`${advisory.pest}-${index}`}
+                                                            style={{
+                                                                background:
+                                                                    "#ffffff",
+                                                                border:
+                                                                    "1px solid #dce6d9",
+                                                                borderRadius:
+                                                                    "14px",
+                                                                overflow:
+                                                                    "hidden",
+                                                                boxShadow:
+                                                                    "0 4px 14px rgba(0,0,0,0.05)"
+                                                            }}
+                                                        >
+
+                                                            {/* PEST HEADER */}
+
+                                                            <div
+                                                                style={{
+                                                                    padding:
+                                                                        "20px 22px",
+                                                                    borderBottom:
+                                                                        "1px solid #edf1eb",
+                                                                    display:
+                                                                        "flex",
+                                                                    justifyContent:
+                                                                        "space-between",
+                                                                    alignItems:
+                                                                        "center",
+                                                                    gap:
+                                                                        "15px"
+                                                                }}
+                                                            >
+
+                                                                <div>
+
+                                                                    <div
+                                                                        style={{
+                                                                            fontSize:
+                                                                                "12px",
+                                                                            fontWeight:
+                                                                                700,
+                                                                            color:
+                                                                                "#748074",
+                                                                            textTransform:
+                                                                                "uppercase",
+                                                                            letterSpacing:
+                                                                                "0.08em",
+                                                                            marginBottom:
+                                                                                "5px"
+                                                                        }}
+                                                                    >
+                                                                        Detected Pest
+                                                                    </div>
+
+                                                                    <h3
+                                                                        style={{
+                                                                            margin: 0,
+                                                                            fontSize:
+                                                                                "21px",
+                                                                            color:
+                                                                                "#1f2937"
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            advisory.pest ||
+                                                                            "Unknown Pest"
+                                                                        }
+                                                                    </h3>
+
+                                                                </div>
+
+
+                                                                <div
+                                                                    style={{
+                                                                        padding:
+                                                                            "6px 12px",
+                                                                        borderRadius:
+                                                                            "20px",
+                                                                        background:
+                                                                            severityStyle.background,
+                                                                        color:
+                                                                            severityStyle.text,
+                                                                        border:
+                                                                            `1px solid ${severityStyle.border}`,
+                                                                        fontSize:
+                                                                            "12px",
+                                                                        fontWeight:
+                                                                            800
+                                                                    }}
+                                                                >
+                                                                    {severityValue}
+                                                                </div>
+
+                                                            </div>
+
+
+                                                            {/* QUICK METRICS */}
+
+                                                            <div
+                                                                style={{
+                                                                    display:
+                                                                        "grid",
+                                                                    gridTemplateColumns:
+                                                                        "repeat(3, 1fr)",
+                                                                    gap:
+                                                                        "1px",
+                                                                    background:
+                                                                        "#e9eee7"
+                                                                }}
+                                                            >
+
+                                                                <div
+                                                                    style={{
+                                                                        background:
+                                                                            "#ffffff",
+                                                                        padding:
+                                                                            "15px",
+                                                                        textAlign:
+                                                                            "center"
+                                                                    }}
+                                                                >
+
+                                                                    <small
+                                                                        style={{
+                                                                            display:
+                                                                                "block",
+                                                                            color:
+                                                                                "#7b857b",
+                                                                            fontSize:
+                                                                                "11px",
+                                                                            fontWeight:
+                                                                                600
+                                                                        }}
+                                                                    >
+                                                                        DETECTIONS
+                                                                    </small>
+
+                                                                    <strong
+                                                                        style={{
+                                                                            display:
+                                                                                "block",
+                                                                            marginTop:
+                                                                                "5px",
+                                                                            fontSize:
+                                                                                "19px",
+                                                                            color:
+                                                                                "#263238"
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            detectionCount ||
+                                                                            totalDetectionsForMission
+                                                                        }
+                                                                    </strong>
+
+                                                                </div>
+
+
+                                                                <div
+                                                                    style={{
+                                                                        background:
+                                                                            "#ffffff",
+                                                                        padding:
+                                                                            "15px",
+                                                                        textAlign:
+                                                                            "center"
+                                                                    }}
+                                                                >
+
+                                                                    <small
+                                                                        style={{
+                                                                            display:
+                                                                                "block",
+                                                                            color:
+                                                                                "#7b857b",
+                                                                            fontSize:
+                                                                                "11px",
+                                                                            fontWeight:
+                                                                                600
+                                                                        }}
+                                                                    >
+                                                                        CONFIDENCE
+                                                                    </small>
+
+                                                                    <strong
+                                                                        style={{
+                                                                            display:
+                                                                                "block",
+                                                                            marginTop:
+                                                                                "5px",
+                                                                            fontSize:
+                                                                                "19px",
+                                                                            color:
+                                                                                "#263238"
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            (
+                                                                                confidence *
+                                                                                100
+                                                                            ).toFixed(
+                                                                                1
+                                                                            )
+                                                                        }%
+                                                                    </strong>
+
+                                                                </div>
+
+
+                                                                <div
+                                                                    style={{
+                                                                        background:
+                                                                            "#ffffff",
+                                                                        padding:
+                                                                            "15px",
+                                                                        textAlign:
+                                                                            "center"
+                                                                    }}
+                                                                >
+
+                                                                    <small
+                                                                        style={{
+                                                                            display:
+                                                                                "block",
+                                                                            color:
+                                                                                "#7b857b",
+                                                                            fontSize:
+                                                                                "11px",
+                                                                            fontWeight:
+                                                                                600
+                                                                        }}
+                                                                    >
+                                                                        CROP
+                                                                    </small>
+
+                                                                    <strong
+                                                                        style={{
+                                                                            display:
+                                                                                "block",
+                                                                            marginTop:
+                                                                                "5px",
+                                                                            fontSize:
+                                                                                "13px",
+                                                                            color:
+                                                                                "#263238"
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            advisory.crop ||
+                                                                            "Crop-dependent"
+                                                                        }
+                                                                    </strong>
+
+                                                                </div>
+
+                                                            </div>
+
+
+                                                            {/* ADVISORY STATUS */}
+
+                                                            <div
+                                                                style={{
+                                                                    margin:
+                                                                        "18px 20px 0",
+                                                                    padding:
+                                                                        "13px 15px",
+                                                                    borderRadius:
+                                                                        "10px",
+                                                                    background:
+                                                                        hasVerifiedRecord
+                                                                            ? "#eef8ee"
+                                                                            : "#fff8e6",
+                                                                    border:
+                                                                        hasVerifiedRecord
+                                                                            ? "1px solid #cde4c8"
+                                                                            : "1px solid #f0d58a"
+                                                                }}
+                                                            >
+
+                                                                <div
+                                                                    style={{
+                                                                        fontSize:
+                                                                            "11px",
+                                                                        fontWeight:
+                                                                            800,
+                                                                        letterSpacing:
+                                                                            "0.05em",
+                                                                        color:
+                                                                            hasVerifiedRecord
+                                                                                ? "#2e7d32"
+                                                                                : "#9a6700",
+                                                                        marginBottom:
+                                                                            "5px"
+                                                                    }}
+                                                                >
+                                                                    ADVISORY STATUS
+                                                                </div>
+
+                                                                <div
+                                                                    style={{
+                                                                        fontSize:
+                                                                            "13px",
+                                                                        lineHeight:
+                                                                            1.5,
+                                                                        color:
+                                                                            "#4b5563"
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        advisory.advisory_status ||
+                                                                        "Advisory status unavailable"
+                                                                    }
+                                                                </div>
+
+                                                            </div>
+
+
+                                                            {/* RECOMMENDATION */}
+
+                                                            <div
+                                                                style={{
+                                                                    padding:
+                                                                        "20px"
+                                                                }}
+                                                            >
+
+                                                                <div
+                                                                    style={{
+                                                                        display:
+                                                                            "grid",
+                                                                        gridTemplateColumns:
+                                                                            "repeat(auto-fit, minmax(220px, 1fr))",
+                                                                        gap:
+                                                                            "14px"
+                                                                    }}
+                                                                >
+
+                                                                    {/* MONITORING */}
+
+                                                                    <div
+                                                                        style={{
+                                                                            padding:
+                                                                                "16px",
+                                                                            borderRadius:
+                                                                                "11px",
+                                                                            background:
+                                                                                "#f8faf8",
+                                                                            border:
+                                                                                "1px solid #e5ebe3"
+                                                                        }}
+                                                                    >
+
+                                                                        <div
+                                                                            style={{
+                                                                                fontWeight:
+                                                                                    800,
+                                                                                fontSize:
+                                                                                    "13px",
+                                                                                color:
+                                                                                    "#263238",
+                                                                                marginBottom:
+                                                                                    "7px"
+                                                                            }}
+                                                                        >
+                                                                            🔍 Monitoring
+                                                                        </div>
+
+                                                                        <div
+                                                                            style={{
+                                                                                fontSize:
+                                                                                    "13px",
+                                                                                lineHeight:
+                                                                                    1.6,
+                                                                                color:
+                                                                                    "#5f6b61"
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                advisory.monitoring ||
+                                                                                "Continue monitoring affected plants and nearby plants."
+                                                                            }
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                    {/* ACTION */}
+
+                                                                    <div
+                                                                        style={{
+                                                                            padding:
+                                                                                "16px",
+                                                                            borderRadius:
+                                                                                "11px",
+                                                                            background:
+                                                                                "#f8faf8",
+                                                                            border:
+                                                                                "1px solid #e5ebe3"
+                                                                        }}
+                                                                    >
+
+                                                                        <div
+                                                                            style={{
+                                                                                fontWeight:
+                                                                                    800,
+                                                                                fontSize:
+                                                                                    "13px",
+                                                                                color:
+                                                                                    "#263238",
+                                                                                marginBottom:
+                                                                                    "7px"
+                                                                            }}
+                                                                        >
+                                                                            ✓ Recommended Action
+                                                                        </div>
+
+                                                                        <div
+                                                                            style={{
+                                                                                fontSize:
+                                                                                    "13px",
+                                                                                lineHeight:
+                                                                                    1.6,
+                                                                                color:
+                                                                                    "#5f6b61"
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                advisory.action ||
+                                                                                "Follow validated integrated pest-management practices."
+                                                                            }
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                    {/* INTERVENTION */}
+
+                                                                    <div
+                                                                        style={{
+                                                                            padding:
+                                                                                "16px",
+                                                                            borderRadius:
+                                                                                "11px",
+                                                                            background:
+                                                                                "#fffaf0",
+                                                                            border:
+                                                                                "1px solid #f0dfb5"
+                                                                        }}
+                                                                    >
+
+                                                                        <div
+                                                                            style={{
+                                                                                fontWeight:
+                                                                                    800,
+                                                                                fontSize:
+                                                                                    "13px",
+                                                                                color:
+                                                                                    "#6b4f00",
+                                                                                marginBottom:
+                                                                                    "7px"
+                                                                            }}
+                                                                        >
+                                                                            ⚠ Intervention Guidance
+                                                                        </div>
+
+                                                                        <div
+                                                                            style={{
+                                                                                fontSize:
+                                                                                    "13px",
+                                                                                lineHeight:
+                                                                                    1.6,
+                                                                                color:
+                                                                                    "#6b6250"
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                advisory.intervention ||
+                                                                                "Consult qualified agricultural guidance before selecting any pesticide."
+                                                                            }
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+
+                                                                {/* VERIFIED CHEMICAL DATA */}
+
+                                                                {hasVerifiedRecord && (
+
+                                                                    <div
+                                                                        style={{
+                                                                            marginTop:
+                                                                                "16px",
+                                                                            padding:
+                                                                                "16px",
+                                                                            borderRadius:
+                                                                                "11px",
+                                                                            background:
+                                                                                "#f5f9f3",
+                                                                            border:
+                                                                                "1px solid #dce8d8"
+                                                                        }}
+                                                                    >
+
+                                                                        <div
+                                                                            style={{
+                                                                                fontSize:
+                                                                                    "12px",
+                                                                                fontWeight:
+                                                                                    800,
+                                                                                color:
+                                                                                    "#2e7d32",
+                                                                                marginBottom:
+                                                                                    "12px"
+                                                                            }}
+                                                                        >
+                                                                            VERIFIED AGRICULTURAL RECOMMENDATION
+                                                                        </div>
+
+
+                                                                        <div
+                                                                            style={{
+                                                                                display:
+                                                                                    "grid",
+                                                                                gridTemplateColumns:
+                                                                                    "repeat(auto-fit, minmax(170px, 1fr))",
+                                                                                gap:
+                                                                                    "12px"
+                                                                            }}
+                                                                        >
+
+                                                                            <div>
+                                                                                <small>
+                                                                                    Recommendation
+                                                                                </small>
+
+                                                                                <strong
+                                                                                    style={{
+                                                                                        display:
+                                                                                            "block",
+                                                                                        marginTop:
+                                                                                            "4px"
+                                                                                    }}
+                                                                                >
+                                                                                    {
+                                                                                        advisory.recommendation_class ||
+                                                                                        "Not specified"
+                                                                                    }
+                                                                                </strong>
+                                                                            </div>
+
+
+                                                                            <div>
+                                                                                <small>
+                                                                                    Active Ingredient
+                                                                                </small>
+
+                                                                                <strong
+                                                                                    style={{
+                                                                                        display:
+                                                                                            "block",
+                                                                                        marginTop:
+                                                                                            "4px"
+                                                                                    }}
+                                                                                >
+                                                                                    {
+                                                                                        advisory.active_ingredient ||
+                                                                                        "Not specified"
+                                                                                    }
+                                                                                </strong>
+                                                                            </div>
+
+
+                                                                            <div>
+                                                                                <small>
+                                                                                    Formulation
+                                                                                </small>
+
+                                                                                <strong
+                                                                                    style={{
+                                                                                        display:
+                                                                                            "block",
+                                                                                        marginTop:
+                                                                                            "4px"
+                                                                                    }}
+                                                                                >
+                                                                                    {
+                                                                                        advisory.formulation ||
+                                                                                        "Not specified"
+                                                                                    }
+                                                                                </strong>
+                                                                            </div>
+
+
+                                                                            <div>
+                                                                                <small>
+                                                                                    Dose
+                                                                                </small>
+
+                                                                                <strong
+                                                                                    style={{
+                                                                                        display:
+                                                                                            "block",
+                                                                                        marginTop:
+                                                                                            "4px"
+                                                                                    }}
+                                                                                >
+                                                                                    {
+                                                                                        advisory.dose ||
+                                                                                        "Not specified"
+                                                                                    }
+                                                                                </strong>
+                                                                            </div>
+
+
+                                                                            <div>
+                                                                                <small>
+                                                                                    Application Method
+                                                                                </small>
+
+                                                                                <strong
+                                                                                    style={{
+                                                                                        display:
+                                                                                            "block",
+                                                                                        marginTop:
+                                                                                            "4px"
+                                                                                    }}
+                                                                                >
+                                                                                    {
+                                                                                        advisory.application_method ||
+                                                                                        "Not specified"
+                                                                                    }
+                                                                                </strong>
+                                                                            </div>
+
+
+                                                                            <div>
+                                                                                <small>
+                                                                                    Economic Threshold
+                                                                                </small>
+
+                                                                                <strong
+                                                                                    style={{
+                                                                                        display:
+                                                                                            "block",
+                                                                                        marginTop:
+                                                                                            "4px"
+                                                                                    }}
+                                                                                >
+                                                                                    {
+                                                                                        advisory.economic_threshold ||
+                                                                                        "Not specified"
+                                                                                    }
+                                                                                </strong>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                )}
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    );
+                                                }
+                                            )}
+
+                                        </div>
+
+                                    ) : (
+
+                                        <div
+                                            style={{
+                                                padding: "30px",
+                                                textAlign: "center",
+                                                background: "#ffffff",
+                                                borderRadius: "12px",
+                                                border:
+                                                    "1px dashed #cbd8c8"
+                                            }}
+                                        >
+
+                                            <div
+                                                style={{
+                                                    fontSize: "30px",
+                                                    marginBottom: "10px"
+                                                }}
+                                            >
+                                                🌿
+                                            </div>
+
+                                            <h3
+                                                style={{
+                                                    margin: "0 0 8px"
+                                                }}
+                                            >
+                                                No Spray Advisory Available
+                                            </h3>
+
+                                            <p
+                                                style={{
+                                                    margin: 0,
+                                                    color: "#68736a",
+                                                    fontSize: "14px"
+                                                }}
+                                            >
+                                                No pest-specific advisory was
+                                                generated for this mission.
+                                            </p>
+
+                                        </div>
+
+                                    )}
+
+
+                                    {/* SAFETY FOOTER */}
+
+                                    <div
+                                        style={{
+                                            marginTop: "20px",
+                                            paddingTop: "16px",
+                                            borderTop:
+                                                "1px solid #dce7d9",
+                                            fontSize: "12px",
+                                            lineHeight: 1.6,
+                                            color: "#69756b"
+                                        }}
+                                    >
+
+                                        <strong
+                                            style={{
+                                                color: "#4f5b51"
+                                            }}
+                                        >
+                                            AgroGuard AI safety note:
                                         </strong>
 
                                         {" "}
 
-                                        Inspect the affected crop area and
-                                        follow the appropriate agricultural
-                                        pest-management recommendation for
-                                        the detected pest.
+                                        The system provides agricultural
+                                        decision-support information. Chemical
+                                        application should only follow validated
+                                        crop-specific recommendations, local
+                                        agricultural guidance, and product-label
+                                        instructions.
 
-                                    </p>
-
-                                    <small>
-                                        AgroGuard AI provides decision-support
-                                        information. Chemical application should
-                                        follow local agricultural guidance and
-                                        product-label instructions.
-                                    </small>
+                                    </div>
 
                                 </div>
 
@@ -2444,8 +3671,10 @@ const zones =
 
                         <div
                             style={{
-                                padding: "30px",
-                                textAlign: "center"
+                                padding:
+                                    "30px",
+                                textAlign:
+                                    "center"
                             }}
                         >
 
@@ -2596,9 +3825,7 @@ const zones =
 
                 <div className="logo">
 
-                    <div className="logo-icon">
-                        🌿
-                    </div>
+                    <div className="logo-icon">🌿</div>
 
                     <div>
 
@@ -2632,9 +3859,7 @@ const zones =
                         }
                     >
 
-                        <span>
-                            ⌂
-                        </span>
+                        <span>⌂</span>
 
                         Dashboard
 
@@ -2656,9 +3881,7 @@ const zones =
                         }
                     >
 
-                        <span>
-                            🚜
-                        </span>
+                        <span>🚜</span>
 
                         Farms
 
@@ -2680,9 +3903,7 @@ const zones =
                         }
                     >
 
-                        <span>
-                            👨‍🌾
-                        </span>
+                        <span>👨‍🌾</span>
 
                         Farmers
 
@@ -2704,9 +3925,7 @@ const zones =
                         }
                     >
 
-                        <span>
-                            🎯
-                        </span>
+                        <span>🎯</span>
 
                         Missions
 
@@ -2728,9 +3947,7 @@ const zones =
                         }
                     >
 
-                        <span>
-                            📹
-                        </span>
+                        <span>📹</span>
 
                         Video Analysis
 
@@ -2752,9 +3969,7 @@ const zones =
                         }
                     >
 
-                        <span>
-                            📊
-                        </span>
+                        <span>📊</span>
 
                         Detection Results
 
@@ -2794,3 +4009,4 @@ const zones =
 
 
 export default App;
+

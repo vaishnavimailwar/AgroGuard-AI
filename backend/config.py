@@ -1,21 +1,48 @@
 from pathlib import Path
 
-# Backend Directory
+
+# ============================================================
+# BACKEND DIRECTORY
+# ============================================================
+
 BASE_DIR = Path(__file__).resolve().parent
 
-# Project Root
+
+# ============================================================
+# PROJECT ROOT
+# ============================================================
+
 PROJECT_ROOT = BASE_DIR.parent
 
-# Existing Repository
-REFERENCE_REPO = PROJECT_ROOT / "UAV-Assisted-Agricultural-Pest-Surveillance"
 
-# YOLO Model
+# ============================================================
+# AGROGUARD TRAINED YOLO MODEL
+# ============================================================
+
+# This is the 30-epoch trained AgroGuard YOLO11 model.
 MODEL_PATH = (
-    REFERENCE_REPO
-    / "YOLOv11n - Model Weights"
+    PROJECT_ROOT
+    / "ml_spray_advisory"
+    / "models"
     / "best.pt"
 )
 
-# Upload Folder
-UPLOAD_FOLDER = BASE_DIR / "uploads"
-TEST_IMAGE_FOLDER = PROJECT_ROOT / "test_images"
+
+# ============================================================
+# UPLOAD FOLDER
+# ============================================================
+
+UPLOAD_FOLDER = (
+    BASE_DIR
+    / "uploads"
+)
+
+
+# ============================================================
+# TEST IMAGE FOLDER
+# ============================================================
+
+TEST_IMAGE_FOLDER = (
+    PROJECT_ROOT
+    / "test_images"
+)

@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 
-from ai.frame_extractor import extract_frames
-from ai.batch_detector import detect_frames
+from backend.ai.frame_extractor import extract_frames
+from backend.ai.batch_detector import detect_frames
 
 
 def process_mission_video(
