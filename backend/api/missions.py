@@ -127,7 +127,120 @@ def get_mission_results(
     severity = calculate_severity(
         results
     )
+    # ------------------------------------------------------
+    # 5A. Generate safe spray advisory guidance
+    # ------------------------------------------------------
 
+    pest_counts = {}
+    confidence_values = []
+
+    for frame in results:
+
+        for detection in frame.get(
+            "detections",
+            []
+        ):
+
+            pest_name = detection.get(
+                "class_name",
+                "Unknown"
+            )
+
+            pest_counts[pest_name] = (
+                pest_counts.get(
+                    pest_name,
+                    0
+                ) + 1
+            )
+
+            confidence = detection.get(
+                "confidence"
+            )
+
+            if confidence is not None:
+                confidence_values.append(
+                    float(confidence)
+                )
+
+        average_confidence = (
+        sum(confidence_values) /
+        len(confidence_values)
+        if confidence_values
+        else 0.0
+    )
+
+    if isinstance(severity, dict):
+
+        severity_level = (
+            severity.get("severity_level")
+            or severity.get("severity")
+            or severity.get("level")
+            or "Calculated"
+        )
+
+    else:
+
+        severity_level = str(
+            severity
+        )
+
+    spray_advisories = []
+
+    for pest_name, pest_count in pest_counts.items():
+
+        spray_advisories.append({
+
+            "pest": pest_name,
+
+            "detection_count": pest_count,
+
+            "confidence": round(
+                average_confidence,
+                3
+            ),
+
+            "severity": severity_level,
+
+            "crop": "Crop-dependent",
+
+            "advisory_status":
+                "No crop-specific advisory record found",
+
+            "monitoring":
+                (
+                    "Inspect affected plants and nearby "
+                    "plants for continued pest activity."
+                ),
+
+            "action":
+                (
+                    "Continue monitoring and use validated "
+                    "integrated pest management practices."
+                ),
+
+            "intervention":
+                (
+                    "Consult a qualified agricultural "
+                    "extension recommendation before "
+                    "selecting any pesticide."
+                ),
+
+            "recommendation_class": None,
+
+            "economic_threshold": None,
+
+            "active_ingredient": None,
+
+            "formulation": None,
+
+            "dose": None,
+
+            "application_method": None,
+
+            "source": None,
+
+            "evidence_type": None
+        })
     # ------------------------------------------------------
     # 6. Locate zone analysis
     # ------------------------------------------------------
@@ -178,7 +291,10 @@ def get_mission_results(
         "severity": severity,
 
         # Image-based risk zone analysis
-        "zones": zones
+         "zones": zones,
+
+        # Safe agricultural advisory guidance
+        "spray_advisories": spray_advisories
     }
 
 # ==========================================================
