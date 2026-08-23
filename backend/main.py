@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+﻿from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import engine
@@ -8,6 +8,7 @@ from api.farmers import router as farmer_router
 from api.farms import router as farm_router
 from api.missions import router as mission_router
 from api.video import router as video_router
+from api.admin import router as admin_router
 
 
 # ==========================================================
@@ -56,6 +57,7 @@ app.include_router(farmer_router)
 app.include_router(farm_router)
 app.include_router(mission_router)
 app.include_router(video_router)
+app.include_router(admin_router)
 
 
 # ==========================================================
@@ -65,5 +67,5 @@ app.include_router(video_router)
 @app.get("/")
 def home():
     return {
-        "message": "Welcome to AgroGuard AI Backend 🚁🌾"
+        "message": "Welcome to AgroGuard AI Backend ðŸšðŸŒ¾"
     }

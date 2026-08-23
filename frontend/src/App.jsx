@@ -13,6 +13,8 @@ import Portal from "./pages/portal/Portal.jsx";
 import Login from "./pages/portal/Login.jsx";
 import Signup from "./pages/portal/Signup.jsx";
 import AgroGuardDashboard from "./pages/portal/AgroGuardDashboard.jsx";
+import AdminLogin from "./pages/admin/AdminLogin.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 
 function App() {
     return (
@@ -74,6 +76,15 @@ function App() {
     path="/dashboard"
     element={<AgroGuardDashboard />}
 />
+<Route
+    path="/admin/login"
+    element={<AdminLogin />}
+/>
+<Route
+    path="/admin"
+    element={<AdminDashboard />}
+/>
+
 
             </Routes>
         </BrowserRouter>
