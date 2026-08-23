@@ -1,4 +1,4 @@
-﻿from fastapi import FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import engine
@@ -38,7 +38,7 @@ app.add_middleware(
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:5174",
-        "http://127.0.0.1:5174",
+        "http://127.0.0.1:5174",`n        "https://agroguard-ai-two.vercel.app",
     ],
 
     allow_credentials=True,
@@ -67,5 +67,5 @@ app.include_router(admin_router)
 @app.get("/")
 def home():
     return {
-        "message": "Welcome to AgroGuard AI Backend ðŸšðŸŒ¾"
+        "message": "Welcome to AgroGuard AI Backend 🚁🌾"
     }
