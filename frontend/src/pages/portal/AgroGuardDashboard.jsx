@@ -1,8 +1,9 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../../App.css";
 
 import {
     getMissions,
+    getFarmerMissions,
     createMission,
     uploadVideo,
     getMissionResults,
@@ -55,7 +56,13 @@ function AgroGuardDashboard() {
 
             setError("");
 
-            const response = await getMissions();
+            const farmer = JSON.parse(
+    localStorage.getItem("agroguard_farmer")
+);
+
+const response = farmer
+    ? await getFarmerMissions(farmer.farmer_id)
+    : await getMissions();
 
             const missionData = Array.isArray(response.data)
                 ? response.data
@@ -462,8 +469,8 @@ function AgroGuardDashboard() {
 
                     <div className="logo">
 
-                        <div className="logo-icon">
-                            ðŸŒ¿
+                        <div>
+
                         </div>
 
                         <div>
@@ -595,8 +602,8 @@ function AgroGuardDashboard() {
                 </div>
 
 
-                <div className="drone-visual">
-                    ðŸš
+                <div>
+
                 </div>
 
             </section>
@@ -606,8 +613,8 @@ function AgroGuardDashboard() {
 
                 <div className="stat-card">
 
-                    <div className="stat-icon">
-                        ðŸŒ¾
+                    <div>
+
                     </div>
 
                     <div>
@@ -627,8 +634,8 @@ function AgroGuardDashboard() {
 
                 <div className="stat-card">
 
-                    <div className="stat-icon">
-                        ðŸ‘¨â€ðŸŒ¾
+                    <div>
+
                     </div>
 
                     <div>
@@ -648,8 +655,8 @@ function AgroGuardDashboard() {
 
                 <div className="stat-card">
 
-                    <div className="stat-icon">
-                        ðŸŽ¯
+                    <div>
+
                     </div>
 
                     <div>
@@ -669,8 +676,8 @@ function AgroGuardDashboard() {
 
                 <div className="stat-card">
 
-                    <div className="stat-icon">
-                        ðŸ›
+                    <div>
+
                     </div>
 
                     <div>
@@ -822,7 +829,7 @@ function AgroGuardDashboard() {
 
                                         <div className="completed">
 
-                                            â—{" "}
+                                            {" "}
                                             {
                                                 mission.status
                                             }
@@ -876,7 +883,7 @@ function AgroGuardDashboard() {
                     >
 
                         <span>
-                            ðŸŽ¯
+
                         </span>
 
                         <div>
@@ -902,7 +909,7 @@ function AgroGuardDashboard() {
                     >
 
                         <span>
-                            ðŸ“¹
+
                         </span>
 
                         <div>
@@ -928,7 +935,7 @@ function AgroGuardDashboard() {
                     >
 
                         <span>
-                            ðŸ“Š
+
                         </span>
 
                         <div>
@@ -1154,7 +1161,7 @@ function AgroGuardDashboard() {
 
                                 <div className="completed">
 
-                                    â—{" "}
+                                    {" "}
                                     {
                                         mission.status
                                     }
@@ -1419,7 +1426,7 @@ function AgroGuardDashboard() {
                             }}
                         >
 
-                            â³ AI is extracting frames and
+                             AI is extracting frames and
                             running pest detection. Please wait...
 
                         </p>
@@ -1669,7 +1676,7 @@ const zones =
                                         selectedMission.id
                                     }
 
-                                    {" â€¢ "}
+                                    {"  "}
 
                                     Status:{" "}
                                     {
@@ -1685,8 +1692,8 @@ const zones =
 
                                 <div className="stat-card">
 
-                                    <div className="stat-icon">
-                                        ðŸ›
+                                    <div>
+
                                     </div>
 
                                     <div>
@@ -1708,8 +1715,8 @@ const zones =
 
                                 <div className="stat-card">
 
-                                    <div className="stat-icon">
-                                        ðŸŽžï¸
+                                    <div>
+
                                     </div>
 
                                     <div>
@@ -2404,7 +2411,7 @@ const zones =
                                 >
 
                                     <h2>
-                                        ðŸŒ± Spray Advisory
+                                         Spray Advisory
                                     </h2>
 
                                     <p>
@@ -2596,8 +2603,8 @@ const zones =
 
                 <div className="logo">
 
-                    <div className="logo-icon">
-                        ðŸŒ¿
+                    <div>
+
                     </div>
 
                     <div>
@@ -2633,7 +2640,7 @@ const zones =
                     >
 
                         <span>
-                            âŒ‚
+
                         </span>
 
                         Dashboard
@@ -2657,7 +2664,7 @@ const zones =
                     >
 
                         <span>
-                            ðŸšœ
+
                         </span>
 
                         Farms
@@ -2681,7 +2688,7 @@ const zones =
                     >
 
                         <span>
-                            ðŸ‘¨â€ðŸŒ¾
+
                         </span>
 
                         Farmers
@@ -2705,7 +2712,7 @@ const zones =
                     >
 
                         <span>
-                            ðŸŽ¯
+
                         </span>
 
                         Missions
@@ -2729,7 +2736,7 @@ const zones =
                     >
 
                         <span>
-                            ðŸ“¹
+
                         </span>
 
                         Video Analysis
@@ -2753,7 +2760,7 @@ const zones =
                     >
 
                         <span>
-                            ðŸ“Š
+
                         </span>
 
                         Detection Results

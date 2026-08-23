@@ -180,3 +180,19 @@ def get_mission_results(
         # Image-based risk zone analysis
         "zones": zones
     }
+
+# ==========================================================
+# GET MISSIONS FOR A FARMER
+# ==========================================================
+
+@router.get("/farmer/{farmer_id}")
+def get_farmer_missions(
+    farmer_id: int,
+    db: Session = Depends(get_db)
+):
+
+    return db.query(
+        models.Mission
+    ).filter(
+        models.Mission.farmer_id == farmer_id
+    ).all()

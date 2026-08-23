@@ -24,3 +24,7 @@ export const uploadVideo = (missionId, file) => {
 export const getMissionResults = (missionId) => {
     return API.get(`/missions/${missionId}/results`);
 };
+
+export const getFarmerMissions = (farmerId) => {
+    return API.get(`/missions/farmer/${farmerId}`);
+};
