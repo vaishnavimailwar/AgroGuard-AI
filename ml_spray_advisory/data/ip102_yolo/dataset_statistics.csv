@@ -1,0 +1,103 @@
+yolo_class_id,ip102_class_id,class_name,object_count
+0,1,rice leaf roller,190
+1,2,rice leaf caterpillar,130
+2,3,paddy stem maggot,25
+3,4,asiatic rice borer,179
+4,5,yellow rice borer,82
+5,6,rice gall midge,95
+6,7,Rice Stemfly,28
+7,8,brown plant hopper,117
+8,9,white backed plant hopper,78
+9,10,small brown plant hopper,54
+10,11,rice water weevil,153
+11,12,rice leafhopper,119
+12,13,grain spreader thrips,20
+13,14,rice shell pest,36
+14,15,grub,676
+15,16,mole cricket,877
+16,17,wireworm,532
+17,18,white margined moth,60
+18,19,black cutworm,317
+19,20,large cutworm,176
+20,21,yellow cutworm,209
+21,22,red spider,168
+22,23,corn borer,440
+23,24,army worm,216
+24,25,aphids,1395
+25,26,Potosiabre vitarsis,238
+26,27,peach borer,254
+27,28,english grain aphid,310
+28,29,green bug,72
+29,30,bird cherry-oataphid,125
+30,31,wheat blossom midge,25
+31,32,penthaleus major,72
+32,33,longlegged spider mite,64
+33,34,wheat phloeothrips,108
+34,35,wheat sawfly,146
+35,36,cerodonta denticornis,27
+36,37,beet fly,34
+37,38,flea beetle,384
+38,39,cabbage army worm,266
+39,40,beet army worm,420
+40,41,Beet spot flies,71
+41,42,meadow moth,100
+42,43,beet weevil,157
+43,44,sericaorient alismots chulsky,100
+44,45,alfalfa weevil,91
+45,46,flax budworm,434
+46,47,alfalfa plant bug,237
+47,48,tarnished plant bug,365
+48,49,Locustoidea,552
+49,50,lytta polita,270
+50,51,legume blister beetle,476
+51,52,blister beetle,1013
+52,53,therioaphis maculata Buckton,5
+53,54,odontothrips loti,65
+54,55,Thrips,48
+55,56,alfalfa seed chalcid,20
+56,57,Pieris canidia,57
+57,58,Apolygus lucorum,35
+58,59,Limacodidae,224
+59,60,Viteus vitifoliae,0
+60,61,Colomerus vitis,0
+61,62,Brevipoalpus lewisi McGregor,2
+62,63,oides decempunctata,176
+63,64,Polyphagotars onemus latus,0
+64,65,Pseudococcus comstocki Kuwana,73
+65,66,parathrene regalis,31
+66,67,Ampelophaga,279
+67,68,Lycorma delicatula,338
+68,69,Xylotrechus,157
+69,70,Cicadella viridis,206
+70,71,Miridae,1268
+71,72,Trialeurodes vaporariorum,112
+72,73,Erythroneura apicalis,13
+73,74,Papilio xuthus,108
+74,75,Panonchus citri McGregor,82
+75,76,Phyllocoptes oleiverus ashmead,0
+76,77,Icerya purchasi Maskell,290
+77,78,Unaspis yanonensis,546
+78,79,Ceroplastes rubens,370
+79,80,Chrysomphalus aonidum,183
+80,81,Parlatoria zizyphus Lucus,0
+81,82,Nipaecoccus vastalor,46
+82,83,Aleurocanthus spiniferus,148
+83,84,Tetradacus c Bactrocera minax,58
+84,85,Dacus dorsalis(Hendel),131
+85,86,Bactrocera tsuneonis,27
+86,87,Prodenia litura,436
+87,88,Adristyrannus,133
+88,89,Phyllocnistis citrella Stainton,23
+89,90,Toxoptera citricidus,22
+90,91,Toxoptera aurantii,28
+91,92,Aphis citricola Vander Goot,8
+92,93,Scirtothrips dorsalis Hood,77
+93,94,Dasineura sp,22
+94,95,Lawana imitata Melichar,150
+95,96,Salurnis marginella Guerr,183
+96,97,Deporaus marginatus Pascoe,66
+97,98,Chlumetia transversa,60
+98,99,Mango flat beak leafhopper,13
+99,100,Rhytidodera bowrinii white,140
+100,101,Sternochetus frigidus,65
+101,102,Cicadellidae,2975

@@ -1,0 +1,13 @@
+yolo_pest_group,advisory_eligible,reason,requires_crop_context
+Ants,REVIEW,Some ant species can be agricultural pests while others are beneficial,YES
+Bees,NO,Generally beneficial pollinators; detection must not trigger pesticide advice,YES
+Beetles,REVIEW,Some beetles are pests and others are beneficial,YES
+Caterpillars,YES,Many caterpillar species are agricultural pests but species/crop context is required,YES
+Earthworms,NO,Generally beneficial soil organisms; detection must not trigger pesticide advice,YES
+Earwigs,REVIEW,Can be pest or beneficial depending on species and crop,YES
+Grasshoppers,YES,Known agricultural pest group; crop/context required,YES
+Moths,REVIEW,Adult moth detection alone does not establish damaging pest species,YES
+Slugs,YES,Known crop pests; crop/context required,YES
+Snails,YES,Some snail species are crop pests; species/context required,YES
+Wasps,NO,Many wasps are beneficial predators or parasitoids; detection must not trigger pesticide advice,YES
+Weevils,YES,Important agricultural pest group; crop/species context required,YES

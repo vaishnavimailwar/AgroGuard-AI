@@ -1,0 +1,103 @@
+ip102_id,ip102_class,agroguard_group,mapping_status,notes
+1,rice leaf roller,Caterpillars,REVIEW,Defoliating larval pest; verify crop-specific species evidence before advisory
+2,rice leaf caterpillar,Caterpillars,REVIEW,Larval rice pest; verify crop-specific advisory evidence
+3,paddy stem maggot,,REVIEW,Do not force into YOLO group; requires crop/species-specific validation
+4,asiatic rice borer,Caterpillars,REVIEW,Rice stem-boring larval pest; verify crop-specific advisory evidence
+5,yellow rice borer,Caterpillars,REVIEW,Rice stem-boring larval pest; verify crop-specific advisory evidence
+6,rice gall midge,,REVIEW,Do not force into YOLO group; requires dedicated gall-midge evidence
+7,Rice Stemfly,,REVIEW,Do not force into YOLO group; requires dedicated stemfly evidence
+8,brown plant hopper,,REVIEW,Not represented by current YOLO pest groups; keep unmapped for advisory model
+9,white backed plant hopper,,REVIEW,Not represented by current YOLO pest groups; keep unmapped for advisory model
+10,small brown plant hopper,,REVIEW,Not a weevil; not represented by current YOLO pest groups
+11,rice water weevil,Weevils,REVIEW,Weevil group; verify crop-specific advisory evidence
+12,rice leafhopper,,REVIEW,Not represented by current YOLO pest groups; keep unmapped
+13,grain spreader thrips,,REVIEW,Not represented by current YOLO pest groups
+14,rice shell pest,,REVIEW,Requires species validation before grouping
+15,grub,,REVIEW,Generic label; species identification required
+16,mole cricket,,REVIEW,Not represented by current YOLO pest groups
+17,wireworm,,REVIEW,Not represented by current YOLO pest groups
+18,white margined moth,Moths,REVIEW,Adult moth class; detection alone does not establish damaging species
+19,black cutworm,Caterpillars,REVIEW,Larval caterpillar pest; verify crop-specific evidence
+20,large cutworm,Caterpillars,REVIEW,Larval caterpillar pest; verify crop-specific evidence
+21,yellow cutworm,Caterpillars,REVIEW,Larval caterpillar pest; verify crop-specific evidence
+22,red spider,,REVIEW,Not represented by current YOLO pest groups
+23,corn borer,Caterpillars,REVIEW,Larval borer; verify crop-specific evidence
+24,army worm,Caterpillars,REVIEW,Larval caterpillar pest; verify crop-specific evidence
+25,aphids,,REVIEW,Not represented by current YOLO pest groups
+26,Potosiabre vitarsis,Beetles,REVIEW,Beetle identification; verify crop-specific evidence
+27,peach borer,Caterpillars,REVIEW,Borer larva; verify crop-specific evidence
+28,english grain aphid,,REVIEW,Aphid; not represented by current YOLO pest groups
+29,green bug,,REVIEW,Requires species validation; not represented by current YOLO groups
+30,bird cherry-oataphid,,REVIEW,Aphid; not represented by current YOLO pest groups
+31,wheat blossom midge,,REVIEW,Not represented by current YOLO pest groups
+32,penthaleus major,,REVIEW,Mite; not represented by current YOLO pest groups
+33,longlegged spider mite,,REVIEW,Mite; not represented by current YOLO pest groups
+34,wheat phloeothrips,,REVIEW,Thrips; not represented by current YOLO pest groups
+35,wheat sawfly,,REVIEW,Requires species validation before grouping
+36,cerodonta denticornis,,REVIEW,Requires species validation before grouping
+37,beet fly,,REVIEW,Fly pest; not represented by current YOLO pest groups
+38,flea beetle,Beetles,REVIEW,Beetle group; verify crop-specific evidence
+39,cabbage army worm,Caterpillars,REVIEW,Larval caterpillar pest; verify crop-specific evidence
+40,beet army worm,Caterpillars,REVIEW,Larval caterpillar pest; verify crop-specific evidence
+41,Beet spot flies,,REVIEW,Fly pest; not represented by current YOLO pest groups
+42,meadow moth,Moths,REVIEW,Moth class; species/crop context required
+43,beet weevil,Weevils,REVIEW,Weevil group; verify crop-specific evidence
+44,sericaorient alismots chulsky,Beetles,REVIEW,Beetle group; verify taxonomy
+45,alfalfa weevil,Weevils,REVIEW,Weevil group; verify crop-specific evidence
+46,flax budworm,Caterpillars,REVIEW,Larval caterpillar pest; verify crop-specific evidence
+47,alfalfa plant bug,,REVIEW,Not represented by current YOLO pest groups
+48,tarnished plant bug,,REVIEW,Not represented by current YOLO pest groups
+49,Locustoidea,Grasshoppers,REVIEW,Grasshopper group; verify species/crop evidence
+50,lytta polita,Beetles,REVIEW,Beetle group; verify crop-specific evidence
+51,legume blister beetle,Beetles,REVIEW,Beetle group; verify crop-specific evidence
+52,blister beetle,Beetles,REVIEW,Beetle group; verify crop-specific evidence
+53,therioaphis maculata Buckton,,REVIEW,Aphid; not represented by current YOLO pest groups
+54,odontothrips loti,,REVIEW,Thrips; not represented by current YOLO pest groups
+55,Thrips,,REVIEW,Thrips; not represented by current YOLO pest groups
+56,alfalfa seed chalcid,,REVIEW,Parasitoid/insect; requires species validation
+57,Pieris canidia,Caterpillars,REVIEW,Lepidopteran larval pest stage; verify crop-specific evidence
+58,Apolygus lucorum,,REVIEW,Plant bug; not represented by current YOLO pest groups
+59,Limacodidae,Caterpillars,REVIEW,Lepidopteran larval group; verify species/crop evidence
+60,Viteus vitifoliae,,REVIEW,Phylloxera; not represented by current YOLO pest groups
+61,Colomerus vitis,,REVIEW,Mite; not represented by current YOLO pest groups
+62,Brevipoalpus lewisi McGregor,,REVIEW,Mite; not represented by current YOLO pest groups
+63,oides decempunctata,Beetles,REVIEW,Beetle group; verify crop-specific evidence
+64,Polyphagotars onemus latus,,REVIEW,Mite; not represented by current YOLO pest groups
+65,Pseudococcus comstocki Kuwana,,REVIEW,Mealybug; not represented by current YOLO pest groups
+66,parathrene regalis,Caterpillars,REVIEW,Borer larval pest; verify crop-specific evidence
+67,Ampelophaga,Caterpillars,REVIEW,Lepidopteran larval pest; verify species/crop evidence
+68,Lycorma delicatula,,REVIEW,Planthopper; not represented by current YOLO pest groups
+69,Xylotrechus,Beetles,REVIEW,Beetle group; verify species/crop evidence
+70,Cicadella viridis,,REVIEW,Leafhopper; not represented by current YOLO pest groups
+71,Miridae,,REVIEW,Plant bug family; not represented by current YOLO pest groups
+72,Trialeurodes vaporariorum,,REVIEW,Whitefly; not represented by current YOLO pest groups
+73,Erythroneura apicalis,,REVIEW,Leafhopper; not represented by current YOLO pest groups
+74,Papilio xuthus,Caterpillars,REVIEW,Lepidopteran larval stage requires crop context
+75,Panonchus citri McGregor,,REVIEW,Mite; not represented by current YOLO pest groups
+76,Phyllocoptes oleiverus ashmead,,REVIEW,Mite; not represented by current YOLO pest groups
+77,Icerya purchasi Maskell,,REVIEW,Scale insect; not represented by current YOLO pest groups
+78,Unaspis yanonensis,,REVIEW,Scale insect; not represented by current YOLO pest groups
+79,Ceroplastes rubens,,REVIEW,Scale insect; not represented by current YOLO pest groups
+80,Chrysomphalus aonidum,,REVIEW,Scale insect; not represented by current YOLO pest groups
+81,Parlatoria zizyphus Lucus,,REVIEW,Scale insect; not represented by current YOLO pest groups
+82,Nipaecoccus vastalor,,REVIEW,Mealybug; not represented by current YOLO pest groups
+83,Aleurocanthus spiniferus,,REVIEW,Whitefly/whitefly-like pest; not represented by current YOLO pest groups
+84,Tetradacus c Bactrocera minax,,REVIEW,Fruit fly; not represented by current YOLO pest groups
+85,Dacus dorsalis(Hendel),,REVIEW,Fruit fly; not represented by current YOLO pest groups
+86,Bactrocera tsuneonis,,REVIEW,Fruit fly; not represented by current YOLO pest groups
+87,Prodenia litura,Caterpillars,REVIEW,Larval caterpillar pest; verify crop-specific evidence
+88,Adristyrannus,,REVIEW,Taxonomy requires validation
+89,Phyllocnistis citrella Stainton,Caterpillars,REVIEW,Leaf-mining larval pest; verify crop-specific evidence
+90,Toxoptera citricidus,,REVIEW,Aphid; not represented by current YOLO pest groups
+91,Toxoptera aurantii,,REVIEW,Aphid; not represented by current YOLO pest groups
+92,Aphis citricola Vander Goot,,REVIEW,Aphid; not represented by current YOLO pest groups
+93,Scirtothrips dorsalis Hood,,REVIEW,Thrips; not represented by current YOLO pest groups
+94,Dasineura sp,,REVIEW,Gall midge; requires dedicated evidence
+95,Lawana imitata Melichar,,REVIEW,Planthopper; not represented by current YOLO pest groups
+96,Salurnis marginella Guerr,,REVIEW,Planthopper; not represented by current YOLO pest groups
+97,Deporaus marginatus Pascoe,Beetles,REVIEW,Weevil-like beetle; verify taxonomy before advisory use
+98,Chlumetia transversa,Moths,REVIEW,Adult moth class; species/crop context required
+99,Mango flat beak leafhopper,,REVIEW,Leafhopper; not represented by current YOLO pest groups
+100,Rhytidodera bowrinii white,Beetles,REVIEW,Beetle group; verify species/crop evidence
+101,Sternochetus frigidus,Weevils,REVIEW,Weevil group; verify crop-specific evidence
+102,Cicadellidae,,REVIEW,Leafhopper family; not represented by current YOLO pest groups
