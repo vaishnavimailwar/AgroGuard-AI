@@ -15,6 +15,8 @@ from services.mission_service import (
     get_all_missions
 )
 
+from services.spray_advisory_service import generate_spray_advisory
+
 
 router = APIRouter(
     prefix="/missions",
@@ -328,84 +330,118 @@ def get_mission_results(
     # ======================================================
     # SPRAY ADVISORY
     # ======================================================
-    #
-    # We intentionally do NOT invent pesticide dose,
-    # formulation or active ingredient information.
-    #
-    # Until crop-specific validated advisory data is
-    # available, the system returns a safe fallback.
-    # ======================================================
 
     advisories = []
 
+    # Collect all detections
+    all_detections = []
+
+    for frame in frame_results:
+
+        if not isinstance(
+            frame,
+            dict
+        ):
+
+            continue
+
+        detections = frame.get(
+            "detections",
+            []
+        )
+
+        if not isinstance(
+            detections,
+            list
+        ):
+
+            continue
+
+        all_detections.extend(
+            detections
+        )
+
+    # Generate advisory for every detected pest
     for pest_name, pest_count in pest_counts.items():
 
-        advisories.append({
+        pest_confidences = []
 
-            "pest":
-                pest_name,
+        for detection in all_detections:
 
-            "detection_count":
-                pest_count,
+            if not isinstance(
+                detection,
+                dict
+            ):
 
-            "confidence":
-                round(
-                    average_confidence,
-                    3
-                ),
+                continue
 
-            "severity":
-                severity_level,
+            detection_pest = detection.get(
+                "class_name",
+                "Unknown"
+            )
 
-            "crop":
-                "Crop-dependent",
+            if detection_pest != pest_name:
 
-            "advisory_status":
-                "No crop-specific advisory record found",
+                continue
 
-            "monitoring":
-                (
-                    "Inspect affected plants and nearby "
-                    "plants for continued pest activity."
-                ),
+            try:
 
-            "action":
-                (
-                    "Continue monitoring and use validated "
-                    "integrated pest management practices."
-                ),
+                detection_confidence = float(
+                    detection.get(
+                        "confidence",
+                        0.0
+                    )
+                )
 
-            "intervention":
-                (
-                    "Consult a qualified agricultural "
-                    "extension recommendation before "
-                    "selecting any pesticide."
-                ),
+            except (
+                TypeError,
+                ValueError
+            ):
 
-            "recommendation_class":
-                None,
+                detection_confidence = 0.0
 
-            "economic_threshold":
-                None,
+            pest_confidences.append(
+                detection_confidence
+            )
 
-            "active_ingredient":
-                None,
+        if pest_confidences:
 
-            "formulation":
-                None,
+            pest_confidence = (
+                sum(pest_confidences)
+                /
+                len(pest_confidences)
+            )
 
-            "dose":
-                None,
+        else:
 
-            "application_method":
-                None,
+            pest_confidence = (
+                average_confidence
+            )
+                # Get crop from the farm associated with this mission
+        farm = (
+            db.query(models.Farm)
+            .filter(
+                models.Farm.id == mission.farm_id
+            )
+            .first()
+        )
 
-            "source":
-                None,
+        crop = farm.crop_type if farm else None
 
-            "evidence_type":
-                None
-        })
+        advisory = generate_spray_advisory(
+            pest=pest_name,
+            confidence=pest_confidence,
+            severity=severity_level,
+            crop=crop
+        )
+
+        advisory[
+            "detection_count"
+        ] = pest_count
+
+        advisories.append(
+            advisory
+        )
 
     response[
         "spray_advisories"

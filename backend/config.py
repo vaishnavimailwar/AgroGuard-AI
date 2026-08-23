@@ -22,11 +22,10 @@ PROJECT_ROOT = BASE_DIR.parent
 # This is the 30-epoch trained AgroGuard YOLO11 model.
 MODEL_PATH = (
     PROJECT_ROOT
-    / "ml_spray_advisory"
-    / "models"
+    / "UAV-Assisted-Agricultural-Pest-Surveillance"
+    / "YOLOv11n - Model Weights"
     / "best.pt"
 )
-
 
 # ============================================================
 # UPLOAD FOLDER

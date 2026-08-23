@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 import csv
 from typing import Optional
 
@@ -24,7 +24,6 @@ ADVISORY_FILE = (
 def load_advisory_records():
 
     if not ADVISORY_FILE.exists():
-
         raise FileNotFoundError(
             f"Advisory dataset not found: {ADVISORY_FILE}"
         )
@@ -68,7 +67,7 @@ def find_advisory_record(
     crop_normalized = normalize(crop)
 
     # ------------------------------------------------------
-    # 1. Exact crop + pest match
+    # 1. EXACT PEST + CROP MATCH
     # ------------------------------------------------------
 
     if crop_normalized:
@@ -90,8 +89,18 @@ def find_advisory_record(
 
                 return record
 
+        # IMPORTANT:
+        # Crop was supplied but no exact crop-specific
+        # advisory exists.
+        #
+        # NEVER return another crop's advisory.
+
+        return None
+
     # ------------------------------------------------------
-    # 2. Pest-only match
+    # 2. PEST-ONLY MATCH
+    #
+    # Allowed only when crop was NOT supplied.
     # ------------------------------------------------------
 
     for record in records:
@@ -105,7 +114,9 @@ def find_advisory_record(
             return record
 
     # ------------------------------------------------------
-    # 3. Species match
+    # 3. SPECIES MATCH
+    #
+    # Allowed only when crop was NOT supplied.
     # ------------------------------------------------------
 
     for record in records:
@@ -114,7 +125,10 @@ def find_advisory_record(
             record.get("pest_species")
         )
 
-        if pest_normalized and pest_normalized in species:
+        if (
+            pest_normalized
+            and pest_normalized in species
+        ):
 
             return record
 
@@ -170,7 +184,7 @@ def generate_spray_advisory(
     )
 
     # ------------------------------------------------------
-    # No advisory available
+    # No crop-specific advisory available
     # ------------------------------------------------------
 
     if record is None:
@@ -262,7 +276,7 @@ def generate_spray_advisory(
     )
 
     # ------------------------------------------------------
-    # Monitoring message
+    # Monitoring
     # ------------------------------------------------------
 
     if symptom_text:
