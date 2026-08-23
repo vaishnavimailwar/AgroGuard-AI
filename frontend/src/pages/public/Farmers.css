@@ -36,9 +36,9 @@
     position: absolute;
     inset: 0;
 
-    background:
-        url("/branding/agrogard-farmer.jpg")
-        center / cover no-repeat;
+    background-image: url("/assets/agroguard/farmers/indian-farmer-agritech.jpg");
+    background-position: center;
+    background-size: cover;
 }
 
 .farmers-hero-overlay {

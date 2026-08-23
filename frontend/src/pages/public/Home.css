@@ -47,18 +47,9 @@
     position: absolute;
     inset: 0;
 
-    background:
-        radial-gradient(
-            circle at 75% 35%,
-            rgba(184, 217, 125, 0.22),
-            transparent 28%
-        ),
-        linear-gradient(
-            135deg,
-            #153f24 0%,
-            #28633a 55%,
-            #0b2916 100%
-        );
+    background-image: url("/assets/agroguard/hero/agroguard-hero.jpg.jpeg");
+    background-position: center;
+    background-size: cover;
 
     transform: scale(1.02);
 }

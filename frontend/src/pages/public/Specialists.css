@@ -39,6 +39,9 @@
     color: white;
 
     overflow: hidden;
+    background-image: linear-gradient(rgba(21, 31, 25, .66), rgba(21, 31, 25, .75)), url("/assets/agroguard/specialists/agricultural-specialist.jpg");
+    background-position: center;
+    background-size: cover;
 }
 
 

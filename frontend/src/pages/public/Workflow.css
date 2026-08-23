@@ -166,6 +166,10 @@
 
     align-items: center;
     justify-content: center;
+    background-image: url("/assets/agroguard/workflow/a4bb5796-b44e-4ea0-af8d-84e98485da0b.jpg");
+    background-position: center;
+    background-size: cover;
+    border-radius: 12px;
 }
 
 .workflow-field {

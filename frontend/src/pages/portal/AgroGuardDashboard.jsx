@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../App.css";
-import heroImage from "../../assets/hero.png";
+const heroImage = "/assets/agroguard/crops/farm-cotton.jpg";
 
 import {
     getFarmerMissions,

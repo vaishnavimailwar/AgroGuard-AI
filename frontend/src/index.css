@@ -1,27 +1,27 @@
-@import url("https://fonts.googleapis.com/css2?family=Candara&family=DM+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
 
 /* =========================================================
    AGROGUARD-AI GLOBAL DESIGN SYSTEM
 ========================================================= */
 
 :root {
-    --ag-bg: #ffffff;
-    --ag-surface: #f7f9f5;
-    --ag-surface-soft: #f1f5ef;
+    --ag-bg: #fbfaf7;
+    --ag-surface: #ffffff;
+    --ag-surface-soft: #f3f0e9;
 
-    --ag-primary: #174a2a;
-    --ag-primary-deep: #0d321b;
-    --ag-primary-soft: #eaf2e5;
+    --ag-primary: #24342b;
+    --ag-primary-deep: #18211c;
+    --ag-primary-soft: #ecefe9;
 
-    --ag-green: #4f813e;
-    --ag-green-light: #b5d879;
+    --ag-green: #617b5d;
+    --ag-green-light: #c1cda8;
 
     --ag-earth: #a46f3f;
     --ag-danger: #c84a42;
 
-    --ag-text: #17231a;
-    --ag-text-soft: #637066;
-    --ag-text-muted: #8b958d;
+    --ag-text: #202522;
+    --ag-text-soft: #68716c;
+    --ag-text-muted: #8a8e89;
 
     --ag-border: #dfe6de;
 
@@ -30,15 +30,13 @@
     --space-10: 110px;
 
     --font-body:
-        "Candara",
+        "Manrope",
         "Segoe UI",
-        Arial,
         sans-serif;
 
     --font-heading:
-        "Candara",
+        "Manrope",
         "Segoe UI",
-        Arial,
         sans-serif;
 
     --transition: 220ms ease;

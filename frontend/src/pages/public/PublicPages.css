@@ -737,3 +737,38 @@ body {
         grid-template-columns: 1fr !important;
     }
 }
+
+.public-page,
+.ag-home,
+.about-page,
+.farmers-page,
+.solutions-page,
+.specialists-page,
+.workflow-page {
+    font-family: "Manrope", "Segoe UI", sans-serif;
+}
+
+.public-page p,
+.about-page p,
+.farmers-page p,
+.solutions-page p,
+.specialists-page p,
+.workflow-page p {
+    font-size: 16px;
+}
+
+.public-page-hero p,
+.farmers-hero p,
+.solutions-hero-copy > p,
+.specialists-hero-copy > p,
+.workflow-hero p {
+    font-size: 18px;
+}
+
+.public-card h3,
+.farmers-benefit-card h3,
+.solution-card h3,
+.specialist-feature h3,
+.workflow-card h3 {
+    font-size: 20px;
+}
