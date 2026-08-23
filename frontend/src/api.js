@@ -28,3 +28,18 @@ export const getMissionResults = (missionId) => {
 export const getFarmerMissions = (farmerId) => {
     return API.get(`/missions/farmer/${farmerId}`);
 };
+
+export const getFarmerFarms = (farmerId) => {
+    return API.get(`/farms/farmer/${farmerId}`);
+};
+
+export const createFarm = (farm) => {
+    return API.post("/farms/", farm);
+};
+
+export const downloadMissionReport = (missionId, farmerId) => {
+    return API.get(`/missions/${missionId}/report`, {
+        params: { farmer_id: farmerId },
+        responseType: "blob"
+    });
+};

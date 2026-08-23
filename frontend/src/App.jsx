@@ -18,91 +18,103 @@ import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import AdminFarmers from "./pages/admin/AdminFarmers.jsx";
 import AdminMissions from "./pages/admin/AdminMissions.jsx";
 import AdminAIResults from "./pages/admin/AdminAIResults.jsx";
+import SplashScreen from "./components/branding/SplashScreen.jsx";
+import { useState } from "react";
 
 function App() {
+    const [showSplash, setShowSplash] = useState(true);
+
     return (
-        <BrowserRouter>
-            <Routes>
-
-                {/* PUBLIC WEBSITE */}
-                <Route element={<PublicLayout />}>
-
-                    <Route
-                        path="/"
-                        element={<Home />}
-                    />
-
-                    <Route
-                        path="/about"
-                        element={<About />}
-                    />
-
-                    <Route
-                        path="/workflow"
-                        element={<Workflow />}
-                    />
-
-                    <Route
-                        path="/solutions"
-                        element={<Solutions />}
-                    />
-
-                    <Route
-                        path="/farmers"
-                        element={<Farmers />}
-                    />
-
-                    <Route
-                        path="/specialists"
-                        element={<Specialists />}
-                    />
-
-                </Route>
-
-
-                {/* AGROGUARD APPLICATION */}
-                <Route
-                    path="/portal"
-                    element={<Portal />}
+        <>
+            {showSplash && (
+                <SplashScreen
+                    duration={2000}
+                    onComplete={() => setShowSplash(false)}
                 />
-<Route
-    path="/login"
-    element={<Login />}
-/>
+            )}
+            <BrowserRouter>
+                <Routes>
 
-<Route
-    path="/signup"
-    element={<Signup />}
-/>
+                    {/* PUBLIC WEBSITE */}
+                    <Route element={<PublicLayout />}>
 
-<Route
-    path="/dashboard"
-    element={<AgroGuardDashboard />}
-/>
-<Route
-    path="/admin/login"
-    element={<AdminLogin />}
-/>
-<Route
-    path="/admin"
-    element={<AdminDashboard />}
-/>
-<Route
-    path="/admin/farmers"
-    element={<AdminFarmers />}
-/>
-<Route
-    path="/admin/missions"
-    element={<AdminMissions />}
-/>
+                        <Route
+                            path="/"
+                            element={<Home />}
+                        />
 
-<Route
-    path="/admin/ai-results"
-    element={<AdminAIResults />}
-/>
+                        <Route
+                            path="/about"
+                            element={<About />}
+                        />
 
-            </Routes>
-        </BrowserRouter>
+                        <Route
+                            path="/workflow"
+                            element={<Workflow />}
+                        />
+
+                        <Route
+                            path="/solutions"
+                            element={<Solutions />}
+                        />
+
+                        <Route
+                            path="/farmers"
+                            element={<Farmers />}
+                        />
+
+                        <Route
+                            path="/specialists"
+                            element={<Specialists />}
+                        />
+
+                    </Route>
+
+
+                    {/* AGROGUARD APPLICATION */}
+                    <Route
+                        path="/portal"
+                        element={<Portal />}
+                    />
+                    <Route
+                        path="/login"
+                        element={<Login />}
+                    />
+
+                    <Route
+                        path="/signup"
+                        element={<Signup />}
+                    />
+
+                    <Route
+                        path="/dashboard"
+                        element={<AgroGuardDashboard />}
+                    />
+                    <Route
+                        path="/admin/login"
+                        element={<AdminLogin />}
+                    />
+                    <Route
+                        path="/admin"
+                        element={<AdminDashboard />}
+                    />
+                    <Route
+                        path="/admin/farmers"
+                        element={<AdminFarmers />}
+                    />
+                    <Route
+                        path="/admin/missions"
+                        element={<AdminMissions />}
+                    />
+
+                    <Route
+                        path="/admin/ai-results"
+                        element={<AdminAIResults />}
+                    />
+
+                </Routes>
+            </BrowserRouter>
+        </>
     );
 }
 

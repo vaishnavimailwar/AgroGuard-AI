@@ -65,6 +65,14 @@ class Farm(Base):
         String
     )
 
+    farm_type = Column(
+        String
+    )
+
+    season = Column(
+        String
+    )
+
     area = Column(
         Float
     )

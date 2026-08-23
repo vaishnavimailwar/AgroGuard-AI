@@ -1,6 +1,8 @@
 ﻿from pathlib import Path
 import json
 
+from services.spray_advisory_service import generate_spray_advisory
+
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.pagesizes import A4
@@ -23,6 +25,13 @@ def generate_mission_report(
     detection_file: str,
     zone_file: str,
     output_file: str,
+    crop_type: str = None,
+    farm_name: str = None,
+    farm_type: str = None,
+    season: str = None,
+    area: float = None,
+    latitude: float = None,
+    longitude: float = None,
 ):
     """
     Generate a professional AgroGuard AI mission PDF report.
@@ -189,10 +198,6 @@ def generate_mission_report(
         exist_ok=True
     )
 
-    # ------------------------------------------------------
-    # PDF document
-    # ------------------------------------------------------
-
     document = SimpleDocTemplate(
         str(output_path),
         pagesize=A4,
@@ -300,6 +305,32 @@ def generate_mission_report(
             [
                 "Status",
                 str(status)
+            ],
+            [
+                "Farm",
+                farm_name or "Not available"
+            ],
+            [
+                "Crop",
+                crop_type or "Not available"
+            ],
+            [
+                "Farm Type",
+                farm_type or "Not available"
+            ],
+            [
+                "Season",
+                season or "Not available"
+            ],
+            [
+                "Area",
+                f"{area} acres" if area is not None else "Not available"
+            ],
+            [
+                "Location",
+                f"{latitude}, {longitude}"
+                if latitude is not None and longitude is not None
+                else "Not available"
             ],
             [
                 "Frames Analysed",
@@ -523,6 +554,187 @@ def generate_mission_report(
         )
 
     # ------------------------------------------------------
+    # Agricultural Spray Advisory
+    # ------------------------------------------------------
+
+    story.append(
+        Spacer(1, 8)
+    )
+
+    story.append(
+        Paragraph(
+            "Agricultural Spray Advisory",
+            section_style
+        )
+    )
+
+    story.append(
+        Paragraph(
+            (
+                "Advisory guidance is generated from the "
+                "configured agricultural advisory dataset. "
+                "Pesticide information is not invented when "
+                "a validated record is unavailable."
+            ),
+            normal_style
+        )
+    )
+
+    if pest_counts:
+
+        for pest_name, pest_count in pest_counts.items():
+
+            advisory = generate_spray_advisory(
+                pest=str(pest_name),
+                confidence=average_confidence,
+                severity=severity_level,
+                crop=crop_type
+            )
+
+            recommendation = (
+                advisory.get("recommendation_class")
+                or advisory.get("action")
+                or "Continue validated integrated pest management practices."
+            )
+
+            monitoring = (
+                advisory.get("monitoring")
+                or "Inspect affected plants and nearby plants for continued pest activity."
+            )
+
+            intervention = (
+                advisory.get("intervention")
+                or "Consult qualified agricultural extension guidance before selecting a pesticide."
+            )
+
+            source = (
+                advisory.get("source")
+                or "Configured agricultural advisory dataset"
+            )
+
+            advisory_status = (
+                advisory.get("advisory_status")
+                or "Advisory status unavailable"
+            )
+
+            advisory_rows = [
+                [
+                    "Pest",
+                    str(pest_name)
+                ],
+                [
+                    "Detections",
+                    str(pest_count)
+                ],
+                [
+                    "Severity",
+                    str(severity_level)
+                ],
+                [
+                    "Confidence",
+                    f"{average_confidence:.3f}"
+                ],
+                [
+                    "Status",
+                    str(advisory_status)
+                ],
+                [
+                    "Recommendation",
+                    str(recommendation)
+                ],
+                [
+                    "Monitoring",
+                    str(monitoring)
+                ],
+                [
+                    "Intervention",
+                    str(intervention)
+                ],
+                [
+                    "Active Ingredient",
+                    str(advisory.get("active_ingredient") or "Not available in advisory dataset")
+                ],
+                [
+                    "Formulation",
+                    str(advisory.get("formulation") or "Not available in advisory dataset")
+                ],
+                [
+                    "Dose",
+                    str(advisory.get("dose") or "Not available in advisory dataset")
+                ],
+                [
+                    "Application Method",
+                    str(advisory.get("application_method") or "Not available in advisory dataset")
+                ],
+                [
+                    "Source",
+                    str(source)
+                ]
+            ]
+
+            advisory_table = Table(
+                advisory_rows,
+                colWidths=[
+                    45 * mm,
+                    125 * mm
+                ]
+            )
+
+            advisory_table.setStyle(
+                TableStyle(
+                    [
+                        (
+                            "BACKGROUND",
+                            (0, 0),
+                            (0, -1),
+                            colors.HexColor("#eaf4e4")
+                        ),
+                        (
+                            "FONTNAME",
+                            (0, 0),
+                            (0, -1),
+                            "Helvetica-Bold"
+                        ),
+                        (
+                            "GRID",
+                            (0, 0),
+                            (-1, -1),
+                            0.5,
+                            colors.lightgrey
+                        ),
+                        (
+                            "VALIGN",
+                            (0, 0),
+                            (-1, -1),
+                            "TOP"
+                        ),
+                        (
+                            "PADDING",
+                            (0, 0),
+                            (-1, -1),
+                            6
+                        )
+                    ]
+                )
+            )
+
+            story.append(
+                advisory_table
+            )
+
+            story.append(
+                Spacer(1, 10)
+            )
+
+    else:
+
+        story.append(
+            Paragraph(
+                "No pest detected. Spray intervention is not recommended.",
+                normal_style
+            )
+        )
+    # ------------------------------------------------------
     # Spatial risk zones
     # ------------------------------------------------------
 
@@ -737,6 +949,42 @@ def generate_mission_report(
     story.append(
         zone_summary_table
     )
+
+    risk_summary_table = Table(
+        [[
+            Paragraph(
+                f"<b>HIGH RISK</b><br/>{high_zone_count}",
+                normal_style
+            ),
+            Paragraph(
+                f"<b>MODERATE RISK</b><br/>{moderate_zone_count}",
+                normal_style
+            ),
+            Paragraph(
+                f"<b>LOW RISK</b><br/>{low_zone_count}",
+                normal_style
+            ),
+        ]],
+        colWidths=[56 * mm, 56 * mm, 56 * mm]
+    )
+
+    risk_summary_table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (0, 0), colors.HexColor("#F8D7DA")),
+                ("BACKGROUND", (1, 0), (1, 0), colors.HexColor("#FFF3CD")),
+                ("BACKGROUND", (2, 0), (2, 0), colors.HexColor("#DFF3DF")),
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("PADDING", (0, 0), (-1, -1), 10),
+                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#D1D5DB")),
+                ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#D1D5DB")),
+            ]
+        )
+    )
+
+    story.append(Spacer(1, 8))
+    story.append(risk_summary_table)
 
     # ------------------------------------------------------
     # Advisory

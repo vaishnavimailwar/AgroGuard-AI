@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import "../../App.css";
+import heroImage from "../../assets/hero.png";
 
 import {
-    getMissions,
     getFarmerMissions,
     createMission,
     uploadVideo,
     getMissionResults,
+    getFarmerFarms,
+    createFarm,
+    downloadMissionReport,
 } from "../../api";
 
 
@@ -17,6 +20,8 @@ function AgroGuardDashboard() {
     // ==========================================================
 
     const [missions, setMissions] = useState([]);
+
+    const [farms, setFarms] = useState([]);
 
     const [missionResults, setMissionResults] = useState({});
 
@@ -43,6 +48,24 @@ function AgroGuardDashboard() {
 
     const [creatingMission, setCreatingMission] = useState(false);
 
+    const [createdMission, setCreatedMission] = useState(null);
+
+    const [selectedFarmId, setSelectedFarmId] = useState("");
+
+    const [farmForm, setFarmForm] = useState({
+        farm_name: "",
+        crop_type: "",
+        farm_type: "",
+        season: "",
+        area: "",
+        latitude: "",
+        longitude: ""
+    });
+
+    const [creatingFarm, setCreatingFarm] = useState(false);
+
+    const [downloadingReport, setDownloadingReport] = useState(false);
+
 
     // ==========================================================
     // LOAD MISSIONS
@@ -57,17 +80,33 @@ function AgroGuardDashboard() {
             setError("");
 
             const farmer = JSON.parse(
-    localStorage.getItem("agroguard_farmer")
-);
+                localStorage.getItem("agroguard_farmer")
+            );
 
-const response = farmer
-    ? await getFarmerMissions(farmer.farmer_id)
-    : await getMissions();
+            if (!farmer?.farmer_id) {
+                setError("Please sign in to view your farms and missions.");
+                setMissions([]);
+                setFarms([]);
+                return;
+            }
+
+            const farmResponse = await getFarmerFarms(farmer.farmer_id);
+            const farmData = Array.isArray(farmResponse.data)
+                ? farmResponse.data
+                : [];
+            setFarms(farmData);
+
+            if (farmData.length > 0 && !selectedFarmId) {
+                setSelectedFarmId(String(farmData[0].id));
+            }
+
+            const response = await getFarmerMissions(farmer.farmer_id);
 
             const missionData = Array.isArray(response.data)
                 ? response.data
-                : [response.data];
-
+                : Array.isArray(response.data?.value)
+                    ? response.data.value
+                    : [];
             setMissions(missionData);
 
             if (
@@ -197,26 +236,43 @@ const response = farmer
         );
 
 
-    const totalFarms =
-        new Set(
-            missions
-                .map(
-                    (mission) =>
-                        mission.farm_id
-                )
-                .filter(Boolean)
-        ).size;
+    const totalFarms = farms.length;
 
 
     const totalFarmers =
-        new Set(
-            missions
-                .map(
-                    (mission) =>
-                        mission.farmer_id
-                )
-                .filter(Boolean)
-        ).size;
+        JSON.parse(localStorage.getItem("agroguard_farmer"))?.name ? 1 : 0;
+
+    const farmerName =
+        JSON.parse(localStorage.getItem("agroguard_farmer"))?.name || "Farmer";
+
+    const currentFarm = farms.find(
+        (farm) => String(farm.id) === String(selectedFarmId)
+    ) || farms[0];
+
+    const latestMission = missions[0];
+
+    const riskLevelFor = (result) => String(
+        result?.severity?.severity_level || ""
+    ).toUpperCase();
+
+    const highRiskCount = Object.values(missionResults).filter(
+        (result) => riskLevelFor(result) === "HIGH"
+    ).length;
+
+    const moderateRiskCount = Object.values(missionResults).filter(
+        (result) => ["MODERATE", "MEDIUM"].includes(riskLevelFor(result))
+    ).length;
+
+    const lowRiskCount = Object.values(missionResults).filter(
+        (result) => riskLevelFor(result) === "LOW"
+    ).length;
+
+    const hour = new Date().getHours();
+    const timeOfDay = hour < 12
+        ? "Good morning"
+        : hour < 17
+            ? "Good afternoon"
+            : "Good evening";
 
 
     // ==========================================================
@@ -268,6 +324,22 @@ const response = farmer
 
         }
 
+        const trimmedMissionName = missionName.trim();
+        if (trimmedMissionName.length < 3 || trimmedMissionName.length > 100) {
+            setError("Inspection name must be between 3 and 100 characters.");
+            return;
+        }
+
+        if (!selectedFarmId) {
+            setError("Please add and select a farm first.");
+            setActivePage("farms");
+            return;
+        }
+
+        const farmer = JSON.parse(
+            localStorage.getItem("agroguard_farmer")
+        );
+
         try {
 
             setCreatingMission(true);
@@ -278,11 +350,11 @@ const response = farmer
                 await createMission({
 
                     mission_name:
-                        missionName.trim(),
+                        trimmedMissionName,
 
-                    farm_id: 1,
+                    farm_id: Number(selectedFarmId),
 
-                    farmer_id: 1,
+                    farmer_id: farmer.farmer_id,
 
                 });
 
@@ -292,6 +364,12 @@ const response = farmer
 
 
             setMissionName("");
+
+            setCreatedMission({
+                id: newMissionId,
+                name: trimmedMissionName,
+                farm: farms.find((farm) => farm.id === Number(selectedFarmId))
+            });
 
             setUploadMessage(
                 `Mission ${newMissionId} created successfully.`
@@ -356,6 +434,88 @@ const response = farmer
 
         setError("");
 
+    };
+
+
+    const handleFarmFormChange = (event) => {
+        const { name, value } = event.target;
+        setFarmForm((current) => ({ ...current, [name]: value }));
+    };
+
+
+    const handleCreateFarm = async (event) => {
+        event.preventDefault();
+
+        const farmer = JSON.parse(
+            localStorage.getItem("agroguard_farmer")
+        );
+
+        if (!farmer?.farmer_id) {
+            setError("Please sign in before adding a farm.");
+            return;
+        }
+
+        try {
+            setCreatingFarm(true);
+            setError("");
+            const response = await createFarm({
+                ...farmForm,
+                area: Number(farmForm.area),
+                latitude: Number(farmForm.latitude),
+                longitude: Number(farmForm.longitude),
+                farmer_id: farmer.farmer_id
+            });
+            setFarmForm({
+                farm_name: "",
+                crop_type: "",
+                farm_type: "",
+                season: "",
+                area: "",
+                latitude: "",
+                longitude: ""
+            });
+            setUploadMessage("Farm added successfully.");
+            await loadMissions();
+            setSelectedFarmId(String(response.data.id));
+        } catch (createError) {
+            setError(
+                createError.response?.data?.detail ||
+                "Failed to add farm."
+            );
+        } finally {
+            setCreatingFarm(false);
+        }
+    };
+
+
+    const handleDownloadReport = async (missionId) => {
+        try {
+            setDownloadingReport(true);
+            const farmer = JSON.parse(
+                localStorage.getItem("agroguard_farmer")
+            );
+            const response = await downloadMissionReport(
+                missionId,
+                farmer?.farmer_id
+            );
+            const blobUrl = window.URL.createObjectURL(response.data);
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = `AgroGuard_Mission_${missionId}_Report.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            window.setTimeout(() => {
+                link.remove();
+                window.URL.revokeObjectURL(blobUrl);
+            }, 1500);
+        } catch (reportError) {
+            setError(
+                reportError.response?.data?.detail ||
+                "Mission report is not available yet."
+            );
+        } finally {
+            setDownloadingReport(false);
+        }
     };
 
 
@@ -531,11 +691,11 @@ const response = farmer
                 <div>
 
                     <h1>
-                        Dashboard
+                        {timeOfDay}, {farmerName}
                     </h1>
 
                     <p>
-                        Monitor your agricultural missions and pest detection.
+                        Your farm at a glance. Make the next decision with confidence.
                     </p>
 
                 </div>
@@ -571,7 +731,10 @@ const response = farmer
             )}
 
 
-            <section className="welcome-card">
+            <section
+                className="welcome-card farmer-hero"
+                style={{ "--hero-image": `url(${heroImage})` }}
+            >
 
                 <div>
 
@@ -580,13 +743,14 @@ const response = farmer
                     </div>
 
                     <h2>
-                        Welcome to AgroGuard AI
+                        Monitor. Detect. Act.
+                        <br />
+                        Protect your crops with AI.
                     </h2>
 
                     <p>
-                        Upload drone videos, detect agricultural pests
-                        using AI, and monitor your farm missions from
-                        one dashboard.
+                        AI-powered UAV surveillance for early pest detection
+                        and practical agricultural advisory.
                     </p>
 
 
@@ -596,7 +760,7 @@ const response = farmer
                             setActivePage("missions")
                         }
                     >
-                        + Create New Mission
+                        + Start New Inspection
                     </button>
 
                 </div>
@@ -641,11 +805,11 @@ const response = farmer
                     <div>
 
                         <span>
-                            Farmers
+                            High Risk
                         </span>
 
                         <strong>
-                            {totalFarmers}
+                            {highRiskCount}
                         </strong>
 
                     </div>
@@ -662,11 +826,11 @@ const response = farmer
                     <div>
 
                         <span>
-                            Total Missions
+                            Medium Risk
                         </span>
 
                         <strong>
-                            {totalMissions}
+                            {moderateRiskCount}
                         </strong>
 
                     </div>
@@ -683,17 +847,70 @@ const response = farmer
                     <div>
 
                         <span>
-                            Detections
+                            Low Risk
                         </span>
 
                         <strong>
-                            {totalDetections}
+                            {lowRiskCount}
                         </strong>
 
                     </div>
 
                 </div>
 
+            </section>
+
+
+            <section className="section quick-summary">
+
+                <div className="section-heading">
+
+                    <div>
+                        <h2>Quick summary</h2>
+                        <p>The latest picture from your registered agriculture.</p>
+                    </div>
+
+                </div>
+
+                <div className="summary-grid">
+                    <div className="summary-card">
+                        <span>Active crop</span>
+                        <strong>{currentFarm?.crop_type || "No farm selected"}</strong>
+                        <small>{currentFarm?.farm_name || "Register a farm to begin"}</small>
+                    </div>
+                    <div className="summary-card">
+                        <span>Farm area</span>
+                        <strong>{currentFarm?.area ? `${currentFarm.area} acres` : "Not available"}</strong>
+                        <small>{currentFarm?.latitude && currentFarm?.longitude ? `${currentFarm.latitude}, ${currentFarm.longitude}` : "Location not added"}</small>
+                    </div>
+                    <div className="summary-card">
+                        <span>Last inspection</span>
+                        <strong>{latestMission ? `Inspection #${latestMission.id}` : "None yet"}</strong>
+                        <small>{latestMission?.status || "Start your first inspection"}</small>
+                    </div>
+                    <div className="summary-card">
+                        <span>Current crop risk</span>
+                        <strong>{selectedResults?.severity?.severity_level || "Not assessed"}</strong>
+                        <small>{selectedResults ? "Based on latest AI result" : "Upload UAV footage to assess"}</small>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <section className="section workflow-strip">
+                {[
+                    ["01", "Your farm"],
+                    ["02", "UAV inspection"],
+                    ["03", "AI detection"],
+                    ["04", "Risk & advisory"],
+                    ["05", "Report"]
+                ].map(([number, label]) => (
+                    <div key={number}>
+                        <span>{number}</span>
+                        <strong>{label}</strong>
+                    </div>
+                ))}
             </section>
 
 
@@ -708,7 +925,7 @@ const response = farmer
                         </h2>
 
                         <p>
-                            Latest UAV monitoring missions
+                            Your latest inspections
                         </p>
 
                     </div>
@@ -754,7 +971,7 @@ const response = farmer
                         <div className="mission-row">
 
                             <div>
-                                No missions available.
+                                No inspections yet. Start your first UAV inspection.
                             </div>
 
                         </div>
@@ -767,15 +984,15 @@ const response = farmer
 
                                 const result =
                                     missionResults[
-                                        mission.id
+                                    mission.id
                                     ];
 
 
                                 const detections =
                                     result &&
-                                    Array.isArray(
-                                        result.results
-                                    )
+                                        Array.isArray(
+                                            result.results
+                                        )
                                         ? result.results.reduce(
                                             (
                                                 count,
@@ -820,10 +1037,7 @@ const response = farmer
 
 
                                         <div>
-                                            Farm{" "}
-                                            {
-                                                mission.farm_id
-                                            }
+                                            {farms.find((farm) => farm.id === mission.farm_id)?.farm_name || "Farm"}
                                         </div>
 
 
@@ -974,7 +1188,7 @@ const response = farmer
                 <div>
 
                     <h1>
-                        Missions
+                        Inspections
                     </h1>
 
                     <p>
@@ -1026,32 +1240,59 @@ const response = farmer
                     }}
                 >
 
-                    <h2>
-                        Create New Mission
-                    </h2>
+                    <h2>Start a New Inspection</h2>
 
                     <p>
-                        Create a UAV mission before uploading drone footage.
+                        Select your farm, name the inspection, and upload UAV footage for AI-powered pest analysis.
                     </p>
 
-
-                    <input
-                        type="text"
-                        placeholder="Enter mission name"
-                        value={missionName}
-                        onChange={(event) =>
-                            setMissionName(
-                                event.target.value
-                            )
-                        }
+                    <label className="inspection-field-label">
+                        Select Farm
+                    </label>
+                    <select
+                        value={selectedFarmId}
+                        onChange={(event) => setSelectedFarmId(event.target.value)}
                         style={{
                             padding: "12px",
                             width: "60%",
                             marginRight: "10px",
+                            marginBottom: "12px",
                             borderRadius: "8px",
                             border: "1px solid #ccc"
                         }}
+                    >
+                        <option value="">Select a farm</option>
+                        {farms.map((farm) => (
+                            <option key={farm.id} value={farm.id}>
+                                {farm.farm_name} · {farm.crop_type}
+                            </option>
+                        ))}
+                    </select>
+
+                    {selectedFarmId && (
+                        <div className="selected-farm-context">
+                            {currentFarm?.farm_name} · {currentFarm?.crop_type} · {currentFarm?.area} acres · {currentFarm?.season || "Season not recorded"}
+                        </div>
+                    )}
+
+                    <label className="inspection-field-label" htmlFor="mission-name">
+                        Mission / Inspection Name
+                    </label>
+                    <input
+                        id="mission-name"
+                        name="mission_name"
+                        type="text"
+                        minLength={3}
+                        maxLength={100}
+                        placeholder="e.g. Cotton Field Inspection"
+                        value={missionName}
+                        onChange={(event) => setMissionName(event.target.value)}
+                        className="inspection-name-input"
+                        required
                     />
+                    <small className="inspection-helper">
+                        Give this inspection a name so you can easily identify it later.
+                    </small>
 
 
                     <button
@@ -1064,12 +1305,20 @@ const response = farmer
 
                         {creatingMission
                             ? "Creating..."
-                            : "Create Mission"
+                            : "Start AI Analysis"
                         }
 
                     </button>
 
                 </div>
+
+                {createdMission && (
+                    <div className="mission-confirmation">
+                        <span>Inspection Created Successfully</span>
+                        <strong>{createdMission.name}</strong>
+                        <small>Mission ID: #{createdMission.id} · {createdMission.farm?.farm_name || "Selected farm"} · Pending</small>
+                    </div>
+                )}
 
 
                 <div className="mission-table">
@@ -1099,15 +1348,15 @@ const response = farmer
 
                         const result =
                             missionResults[
-                                mission.id
+                            mission.id
                             ];
 
 
                         const detections =
                             result &&
-                            Array.isArray(
-                                result.results
-                            )
+                                Array.isArray(
+                                    result.results
+                                )
                                 ? result.results.reduce(
                                     (
                                         count,
@@ -1152,10 +1401,7 @@ const response = farmer
 
 
                                 <div>
-                                    Farm{" "}
-                                    {
-                                        mission.farm_id
-                                    }
+                                    {farms.find((farm) => farm.id === mission.farm_id)?.farm_name || "Farm"}
                                 </div>
 
 
@@ -1201,7 +1447,7 @@ const response = farmer
                 <div>
 
                     <h1>
-                        Video Analysis
+                        Upload Footage
                     </h1>
 
                     <p>
@@ -1259,6 +1505,16 @@ const response = farmer
 
             )}
 
+            {createdMission && (
+                <div className="mission-confirmation">
+                    <span>Inspection Created Successfully</span>
+                    <strong>{createdMission.name}</strong>
+                    <small>
+                        Mission ID: #{createdMission.id} · {createdMission.farm?.farm_name || "Selected farm"} · Pending
+                    </small>
+                </div>
+            )}
+
 
             <section className="section">
 
@@ -1272,11 +1528,11 @@ const response = farmer
                 >
 
                     <h2>
-                        Upload Drone Video
+                        Start a UAV Inspection
                     </h2>
 
                     <p>
-                        Select the mission and upload the UAV video.
+                        Upload drone footage of your crop area for AI-powered pest analysis.
                     </p>
 
 
@@ -1426,7 +1682,7 @@ const response = farmer
                             }}
                         >
 
-                             AI is extracting frames and
+                            AI is extracting frames and
                             running pest detection. Please wait...
 
                         </p>
@@ -1500,9 +1756,9 @@ const response = farmer
 
         const results =
             resultData &&
-            Array.isArray(
-                resultData.results
-            )
+                Array.isArray(
+                    resultData.results
+                )
                 ? resultData.results
                 : [];
 
@@ -1524,30 +1780,30 @@ const response = farmer
                 0
             );
 
-            const severity =
-    resultData?.severity || null;
+        const severity =
+            resultData?.severity || null;
 
-const severityLevel =
-    severity?.severity_level || "LOW";
+        const severityLevel =
+            severity?.severity_level || "LOW";
 
-const severityScore =
-    Number(severity?.severity_score || 0);
+        const severityScore =
+            Number(severity?.severity_score || 0);
 
-const averageConfidence =
-    Number(severity?.average_confidence || 0);
+        const averageConfidence =
+            Number(severity?.average_confidence || 0);
 
-const detectedPests =
-    Array.isArray(severity?.detected_pests)
-        ? severity.detected_pests
-        : [];
+        const detectedPests =
+            Array.isArray(severity?.detected_pests)
+                ? severity.detected_pests
+                : [];
 
-const zonesData =
-    resultData?.zones || null;
+        const zonesData =
+            resultData?.zones || null;
 
-const zones =
-    Array.isArray(zonesData?.zones)
-        ? zonesData.zones
-        : [];
+        const zones =
+            Array.isArray(zonesData?.zones)
+                ? zonesData.zones
+                : [];
 
         return (
 
@@ -1685,6 +1941,16 @@ const zones =
 
                                 </p>
 
+                                {selectedMission.status === "Completed" && (
+                                    <button
+                                        className="view-button"
+                                        onClick={() => handleDownloadReport(selectedMission.id)}
+                                        disabled={downloadingReport}
+                                    >
+                                        {downloadingReport ? "Preparing report..." : "Download mission report"}
+                                    </button>
+                                )}
+
                             </div>
 
 
@@ -1737,262 +2003,262 @@ const zones =
 
                             </section>
 
-{/* AI SEVERITY ASSESSMENT */}
+                            {/* AI SEVERITY ASSESSMENT */}
 
-{severity && (
+                            {severity && (
 
-    <section className="section">
+                                <section className="section">
 
-        <div
-            style={{
-                padding: "25px",
-                borderRadius: "12px",
-                background: "#ffffff",
-                border: "1px solid #dcebd5",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
-            }}
-        >
+                                    <div
+                                        style={{
+                                            padding: "25px",
+                                            borderRadius: "12px",
+                                            background: "#ffffff",
+                                            border: "1px solid #dcebd5",
+                                            boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
+                                        }}
+                                    >
 
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "20px"
-                }}
-            >
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                flexWrap: "wrap",
+                                                gap: "20px"
+                                            }}
+                                        >
 
-                <div>
+                                            <div>
 
-                    <small
-                        style={{
-                            fontWeight: 700,
-                            letterSpacing: "0.08em"
-                        }}
-                    >
-                        AI FIELD RISK ASSESSMENT
-                    </small>
+                                                <small
+                                                    style={{
+                                                        fontWeight: 700,
+                                                        letterSpacing: "0.08em"
+                                                    }}
+                                                >
+                                                    AI FIELD RISK ASSESSMENT
+                                                </small>
 
-                    <h2
-                        style={{
-                            margin: "8px 0"
-                        }}
-                    >
-                        {severityLevel}
-                    </h2>
+                                                <h2
+                                                    style={{
+                                                        margin: "8px 0"
+                                                    }}
+                                                >
+                                                    {severityLevel}
+                                                </h2>
 
-                    <p
-                        style={{
-                            margin: 0,
-                            color: "#666"
-                        }}
-                    >
-                        Detection-based pest risk assessment
-                    </p>
+                                                <p
+                                                    style={{
+                                                        margin: 0,
+                                                        color: "#666"
+                                                    }}
+                                                >
+                                                    Detection-based pest risk assessment
+                                                </p>
 
-                </div>
-
-
-                <div
-                    style={{
-                        minWidth: "150px",
-                        textAlign: "center",
-                        padding: "15px 20px",
-                        borderRadius: "12px",
-                        background: "#f5f7f4"
-                    }}
-                >
-
-                    <small>
-                        RISK SCORE
-                    </small>
-
-                    <div
-                        style={{
-                            fontSize: "32px",
-                            fontWeight: 800
-                        }}
-                    >
-                        {severityScore.toFixed(1)}
-                    </div>
-
-                    <small>
-                        / 100
-                    </small>
-
-                </div>
-
-            </div>
+                                            </div>
 
 
-            {/* METRICS */}
+                                            <div
+                                                style={{
+                                                    minWidth: "150px",
+                                                    textAlign: "center",
+                                                    padding: "15px 20px",
+                                                    borderRadius: "12px",
+                                                    background: "#f5f7f4"
+                                                }}
+                                            >
 
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns:
-                        "repeat(auto-fit, minmax(160px, 1fr))",
-                    gap: "15px",
-                    marginTop: "25px"
-                }}
-            >
+                                                <small>
+                                                    RISK SCORE
+                                                </small>
 
-                <div
-                    style={{
-                        padding: "15px",
-                        background: "#f8faf8",
-                        borderRadius: "10px"
-                    }}
-                >
+                                                <div
+                                                    style={{
+                                                        fontSize: "32px",
+                                                        fontWeight: 800
+                                                    }}
+                                                >
+                                                    {severityScore.toFixed(1)}
+                                                </div>
 
-                    <small>
-                        Total Detections
-                    </small>
+                                                <small>
+                                                    / 100
+                                                </small>
 
-                    <strong
-                        style={{
-                            display: "block",
-                            fontSize: "22px",
-                            marginTop: "5px"
-                        }}
-                    >
-                        {severity.total_detections ??
-                            totalDetectionsForMission}
-                    </strong>
+                                            </div>
 
-                </div>
+                                        </div>
 
 
-                <div
-                    style={{
-                        padding: "15px",
-                        background: "#f8faf8",
-                        borderRadius: "10px"
-                    }}
-                >
+                                        {/* METRICS */}
 
-                    <small>
-                        Average Confidence
-                    </small>
+                                        <div
+                                            style={{
+                                                display: "grid",
+                                                gridTemplateColumns:
+                                                    "repeat(auto-fit, minmax(160px, 1fr))",
+                                                gap: "15px",
+                                                marginTop: "25px"
+                                            }}
+                                        >
 
-                    <strong
-                        style={{
-                            display: "block",
-                            fontSize: "22px",
-                            marginTop: "5px"
-                        }}
-                    >
-                        {(averageConfidence * 100).toFixed(1)}%
-                    </strong>
+                                            <div
+                                                style={{
+                                                    padding: "15px",
+                                                    background: "#f8faf8",
+                                                    borderRadius: "10px"
+                                                }}
+                                            >
 
-                </div>
+                                                <small>
+                                                    Total Detections
+                                                </small>
 
+                                                <strong
+                                                    style={{
+                                                        display: "block",
+                                                        fontSize: "22px",
+                                                        marginTop: "5px"
+                                                    }}
+                                                >
+                                                    {severity.total_detections ??
+                                                        totalDetectionsForMission}
+                                                </strong>
 
-                <div
-                    style={{
-                        padding: "15px",
-                        background: "#f8faf8",
-                        borderRadius: "10px"
-                    }}
-                >
-
-                    <small>
-                        Pest Types
-                    </small>
-
-                    <strong
-                        style={{
-                            display: "block",
-                            fontSize: "22px",
-                            marginTop: "5px"
-                        }}
-                    >
-                        {detectedPests.length}
-                    </strong>
-
-                </div>
-
-            </div>
+                                            </div>
 
 
-            {/* DETECTED PESTS */}
+                                            <div
+                                                style={{
+                                                    padding: "15px",
+                                                    background: "#f8faf8",
+                                                    borderRadius: "10px"
+                                                }}
+                                            >
 
-            {detectedPests.length > 0 && (
+                                                <small>
+                                                    Average Confidence
+                                                </small>
 
-                <div
-                    style={{
-                        marginTop: "20px"
-                    }}
-                >
+                                                <strong
+                                                    style={{
+                                                        display: "block",
+                                                        fontSize: "22px",
+                                                        marginTop: "5px"
+                                                    }}
+                                                >
+                                                    {(averageConfidence * 100).toFixed(1)}%
+                                                </strong>
 
-                    <strong>
-                        Detected Pests
-                    </strong>
-
-
-                    <div
-                        style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "8px",
-                            marginTop: "10px"
-                        }}
-                    >
-
-                        {detectedPests.map(
-                            (pest) => (
-
-                                <span
-                                    key={pest}
-                                    style={{
-                                        padding:
-                                            "6px 12px",
-                                        borderRadius:
-                                            "20px",
-                                        background:
-                                            "#eef5e9",
-                                        fontSize:
-                                            "13px",
-                                        fontWeight:
-                                            600
-                                    }}
-                                >
-                                    {pest}
-                                </span>
-
-                            )
-                        )}
-
-                    </div>
-
-                </div>
-
-            )}
+                                            </div>
 
 
-            {/* EXPLANATION */}
+                                            <div
+                                                style={{
+                                                    padding: "15px",
+                                                    background: "#f8faf8",
+                                                    borderRadius: "10px"
+                                                }}
+                                            >
 
-            {severity.note && (
+                                                <small>
+                                                    Pest Types
+                                                </small>
 
-                <p
-                    style={{
-                        marginTop: "20px",
-                        marginBottom: 0,
-                        fontSize: "12px",
-                        color: "#6b7280"
-                    }}
-                >
-                    {severity.note}
-                </p>
+                                                <strong
+                                                    style={{
+                                                        display: "block",
+                                                        fontSize: "22px",
+                                                        marginTop: "5px"
+                                                    }}
+                                                >
+                                                    {detectedPests.length}
+                                                </strong>
 
-            )}
+                                            </div>
 
-        </div>
+                                        </div>
 
-    </section>
 
-)}
+                                        {/* DETECTED PESTS */}
+
+                                        {detectedPests.length > 0 && (
+
+                                            <div
+                                                style={{
+                                                    marginTop: "20px"
+                                                }}
+                                            >
+
+                                                <strong>
+                                                    Detected Pests
+                                                </strong>
+
+
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        flexWrap: "wrap",
+                                                        gap: "8px",
+                                                        marginTop: "10px"
+                                                    }}
+                                                >
+
+                                                    {detectedPests.map(
+                                                        (pest) => (
+
+                                                            <span
+                                                                key={pest}
+                                                                style={{
+                                                                    padding:
+                                                                        "6px 12px",
+                                                                    borderRadius:
+                                                                        "20px",
+                                                                    background:
+                                                                        "#eef5e9",
+                                                                    fontSize:
+                                                                        "13px",
+                                                                    fontWeight:
+                                                                        600
+                                                                }}
+                                                            >
+                                                                {pest}
+                                                            </span>
+
+                                                        )
+                                                    )}
+
+                                                </div>
+
+                                            </div>
+
+                                        )}
+
+
+                                        {/* EXPLANATION */}
+
+                                        {severity.note && (
+
+                                            <p
+                                                style={{
+                                                    marginTop: "20px",
+                                                    marginBottom: 0,
+                                                    fontSize: "12px",
+                                                    color: "#6b7280"
+                                                }}
+                                            >
+                                                {severity.note}
+                                            </p>
+
+                                        )}
+
+                                    </div>
+
+                                </section>
+
+                            )}
 
                             {/* RISK ZONE MAP */}
 
@@ -2411,28 +2677,33 @@ const zones =
                                 >
 
                                     <h2>
-                                         Spray Advisory
+                                        Agricultural Spray Advisory
                                     </h2>
 
                                     <p>
-                                        Pest detections have been identified
-                                        in this UAV mission.
+                                        Guidance is based on the configured agricultural advisory dataset.
                                     </p>
 
-                                    <p>
-
-                                        <strong>
-                                            Recommendation:
-                                        </strong>
-
-                                        {" "}
-
-                                        Inspect the affected crop area and
-                                        follow the appropriate agricultural
-                                        pest-management recommendation for
-                                        the detected pest.
-
-                                    </p>
+                                    {(resultData?.spray_advisories || []).length === 0 ? (
+                                        <p>No advisory record is available for this mission.</p>
+                                    ) : (
+                                        resultData.spray_advisories.map((advisory) => (
+                                            <div className="advisory-item" key={advisory.pest}>
+                                                <h3>{advisory.pest}</h3>
+                                                <p><strong>Status:</strong> {advisory.advisory_status || "Not available"}</p>
+                                                <p><strong>Monitor:</strong> {advisory.monitoring || "Not available"}</p>
+                                                <p><strong>Action:</strong> {advisory.action || "Not available"}</p>
+                                                <p><strong>Intervention:</strong> {advisory.intervention || "Not available"}</p>
+                                                <p><strong>Recommendation class:</strong> {advisory.recommendation_class || "Not available"}</p>
+                                                <p><strong>Economic threshold:</strong> {advisory.economic_threshold || "Not available"}</p>
+                                                <p><strong>Active ingredient:</strong> {advisory.active_ingredient || "Not available"}</p>
+                                                <p><strong>Formulation:</strong> {advisory.formulation || "Not available"}</p>
+                                                <p><strong>Dose:</strong> {advisory.dose || "Not available"}</p>
+                                                <p><strong>Application:</strong> {advisory.application_method || "Not available"}</p>
+                                                <small>Source: {advisory.source || "Not available"} · Evidence: {advisory.evidence_type || "Not available"}</small>
+                                            </div>
+                                        ))
+                                    )}
 
                                     <small>
                                         AgroGuard AI provides decision-support
@@ -2480,6 +2751,104 @@ const zones =
     // ==========================================================
     // SIMPLE PAGES
     // ==========================================================
+
+    const FarmsPage = () => (
+        <>
+            <header className="topbar">
+                <div>
+                    <h1>My Farms</h1>
+                    <p>Keep your fields ready for their next UAV inspection.</p>
+                </div>
+                <div className="system-status">
+                    <div className="status-dot"></div>
+                    Farmer workspace
+                </div>
+            </header>
+
+            <section className="section farm-grid">
+                {farms.length === 0 ? (
+                    <div className="empty-state">
+                        <h2>Add your first farm</h2>
+                        <p>Register a field before starting an inspection.</p>
+                    </div>
+                ) : farms.map((farm) => {
+                    const farmMissions = missions.filter(
+                        (mission) => mission.farm_id === farm.id
+                    );
+                    const latestMission = farmMissions[0];
+                    return (
+                        <button
+                            className={`farm-card ${selectedFarmId === String(farm.id) ? "selected" : ""}`}
+                            key={farm.id}
+                            onClick={() => setSelectedFarmId(String(farm.id))}
+                            style={{ "--farm-image": `url(${heroImage})` }}
+                        >
+                            <span className="farm-card-image" aria-hidden="true" />
+                            <span className="farm-card-label">FIELD {farm.id}</span>
+                            <h2>{farm.farm_name}</h2>
+                            <p>{farm.crop_type} · {farm.area} acres</p>
+                            <p>{farm.farm_type || "Farm type not recorded"} · {farm.season || "Season not recorded"}</p>
+                            <p>Location: {farm.latitude}, {farm.longitude}</p>
+                            <small>{farmMissions.length} inspections · {latestMission?.status || "No inspection yet"}</small>
+                        </button>
+                    );
+                })}
+            </section>
+
+            <section className="section farm-form-panel">
+                <div className="section-heading">
+                    <div>
+                        <h2>Add Farm</h2>
+                        <p>Register the field details used by your inspection reports.</p>
+                    </div>
+                </div>
+                <form className="farm-form" onSubmit={handleCreateFarm}>
+                    {[
+                        ["farm_name", "Farm name", "text"],
+                        ["area", "Area (acres)", "number"],
+                        ["latitude", "Latitude", "number"],
+                        ["longitude", "Longitude", "number"]
+                    ].map(([name, label, type]) => (
+                        <label key={name}>
+                            {label}
+                            <input
+                                name={name}
+                                type={type}
+                                step={type === "number" ? "any" : undefined}
+                                value={farmForm[name]}
+                                onChange={handleFarmFormChange}
+                                required
+                            />
+                        </label>
+                    ))}
+                    <label>
+                        Crop
+                        <select name="crop_type" value={farmForm.crop_type} onChange={handleFarmFormChange} required>
+                            <option value="">Select crop</option>
+                            {['Cotton', 'Rice', 'Wheat', 'Maize', 'Soybean', 'Sugarcane', 'Tomato', 'Potato', 'Groundnut', 'Chickpea', 'Pigeon Pea', 'Other'].map((crop) => <option key={crop}>{crop}</option>)}
+                        </select>
+                    </label>
+                    <label>
+                        Farm type
+                        <select name="farm_type" value={farmForm.farm_type} onChange={handleFarmFormChange} required>
+                            <option value="">Select farm type</option>
+                            {['Owned Farm', 'Leased Farm', 'Family Farm', 'Cooperative Farm', 'Organic Farm', 'Commercial Farm', 'Smallholder Farm'].map((type) => <option key={type}>{type}</option>)}
+                        </select>
+                    </label>
+                    <label>
+                        Season
+                        <select name="season" value={farmForm.season} onChange={handleFarmFormChange} required>
+                            <option value="">Select season</option>
+                            {['Kharif', 'Rabi', 'Zaid', 'Year-round'].map((season) => <option key={season}>{season}</option>)}
+                        </select>
+                    </label>
+                    <button className="primary-button" type="submit" disabled={creatingFarm}>
+                        {creatingFarm ? "Adding farm..." : "+ Add Farm"}
+                    </button>
+                </form>
+            </section>
+        </>
+    );
 
     const SimplePage = ({
         title,
@@ -2564,13 +2933,7 @@ const zones =
                 return <ResultsPage />;
 
             case "farms":
-
-                return (
-                    <SimplePage
-                        title="Farms"
-                        description="Manage registered agricultural farms."
-                    />
-                );
+                return <FarmsPage />;
 
             case "farmers":
 
@@ -2626,10 +2989,9 @@ const zones =
 
                     <button
                         className={
-                            `nav-item ${
-                                activePage === "dashboard"
-                                    ? "active"
-                                    : ""
+                            `nav-item ${activePage === "dashboard"
+                                ? "active"
+                                : ""
                             }`
                         }
                         onClick={() =>
@@ -2650,10 +3012,9 @@ const zones =
 
                     <button
                         className={
-                            `nav-item ${
-                                activePage === "farms"
-                                    ? "active"
-                                    : ""
+                            `nav-item ${activePage === "farms"
+                                ? "active"
+                                : ""
                             }`
                         }
                         onClick={() =>
@@ -2674,10 +3035,9 @@ const zones =
 
                     <button
                         className={
-                            `nav-item ${
-                                activePage === "farmers"
-                                    ? "active"
-                                    : ""
+                            `nav-item ${activePage === "farmers"
+                                ? "active"
+                                : ""
                             }`
                         }
                         onClick={() =>
@@ -2698,10 +3058,9 @@ const zones =
 
                     <button
                         className={
-                            `nav-item ${
-                                activePage === "missions"
-                                    ? "active"
-                                    : ""
+                            `nav-item ${activePage === "missions"
+                                ? "active"
+                                : ""
                             }`
                         }
                         onClick={() =>
@@ -2722,10 +3081,9 @@ const zones =
 
                     <button
                         className={
-                            `nav-item ${
-                                activePage === "video"
-                                    ? "active"
-                                    : ""
+                            `nav-item ${activePage === "video"
+                                ? "active"
+                                : ""
                             }`
                         }
                         onClick={() =>
@@ -2746,10 +3104,9 @@ const zones =
 
                     <button
                         className={
-                            `nav-item ${
-                                activePage === "results"
-                                    ? "active"
-                                    : ""
+                            `nav-item ${activePage === "results"
+                                ? "active"
+                                : ""
                             }`
                         }
                         onClick={() =>
@@ -2763,7 +3120,7 @@ const zones =
 
                         </span>
 
-                        Detection Results
+                        Inspection Results
 
                     </button>
 

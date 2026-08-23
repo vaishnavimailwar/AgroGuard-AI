@@ -1,7 +1,9 @@
 ﻿from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 import json
 import os
+from pathlib import Path
 
 import schemas
 import models
@@ -15,6 +17,10 @@ from services.mission_service import (
 
 from services.severity_services import (
     calculate_severity
+)
+
+from services.spray_advisory_service import (
+    generate_spray_advisory
 )
 
 
@@ -33,6 +39,24 @@ def add_mission(
     mission: schemas.MissionCreate,
     db: Session = Depends(get_db)
 ):
+
+    farmer = db.query(models.Farmer).filter(
+        models.Farmer.id == mission.farmer_id
+    ).first()
+
+    if not farmer:
+        raise HTTPException(status_code=404, detail="Farmer not found")
+
+    farm = db.query(models.Farm).filter(
+        models.Farm.id == mission.farm_id,
+        models.Farm.farmer_id == mission.farmer_id
+    ).first()
+
+    if not farm:
+        raise HTTPException(
+            status_code=400,
+            detail="Selected farm does not belong to this farmer"
+        )
 
     new_mission = create_mission(
         db,
@@ -184,63 +208,23 @@ def get_mission_results(
             severity
         )
 
+    farm = db.query(models.Farm).filter(
+        models.Farm.id == mission.farm_id
+    ).first()
+    crop_type = farm.crop_type if farm else None
+
     spray_advisories = []
 
     for pest_name, pest_count in pest_counts.items():
 
-        spray_advisories.append({
-
-            "pest": pest_name,
-
-            "detection_count": pest_count,
-
-            "confidence": round(
-                average_confidence,
-                3
-            ),
-
-            "severity": severity_level,
-
-            "crop": "Crop-dependent",
-
-            "advisory_status":
-                "No crop-specific advisory record found",
-
-            "monitoring":
-                (
-                    "Inspect affected plants and nearby "
-                    "plants for continued pest activity."
-                ),
-
-            "action":
-                (
-                    "Continue monitoring and use validated "
-                    "integrated pest management practices."
-                ),
-
-            "intervention":
-                (
-                    "Consult a qualified agricultural "
-                    "extension recommendation before "
-                    "selecting any pesticide."
-                ),
-
-            "recommendation_class": None,
-
-            "economic_threshold": None,
-
-            "active_ingredient": None,
-
-            "formulation": None,
-
-            "dose": None,
-
-            "application_method": None,
-
-            "source": None,
-
-            "evidence_type": None
-        })
+        advisory = generate_spray_advisory(
+            pest=pest_name,
+            confidence=average_confidence,
+            severity=severity_level,
+            crop=crop_type
+        )
+        advisory["detection_count"] = pest_count
+        spray_advisories.append(advisory)
     # ------------------------------------------------------
     # 6. Locate zone analysis
     # ------------------------------------------------------
@@ -283,6 +267,16 @@ def get_mission_results(
         "mission_id": mission.id,
         "mission_name": mission.mission_name,
         "status": mission.status,
+        "farm": {
+            "id": farm.id,
+            "farm_name": farm.farm_name,
+            "crop_type": farm.crop_type,
+            "farm_type": farm.farm_type,
+            "season": farm.season,
+            "area": farm.area,
+            "latitude": farm.latitude,
+            "longitude": farm.longitude
+        } if farm else None,
 
         # Existing detection results
         "results": results,
@@ -296,6 +290,40 @@ def get_mission_results(
         # Safe agricultural advisory guidance
         "spray_advisories": spray_advisories
     }
+
+
+@router.get("/{mission_id}/report")
+def get_mission_report(
+    mission_id: int,
+    farmer_id: int,
+    db: Session = Depends(get_db)
+):
+    mission = db.query(models.Mission).filter(
+        models.Mission.id == mission_id
+    ).first()
+
+    if not mission:
+        raise HTTPException(status_code=404, detail="Mission not found")
+
+    if mission.farmer_id != farmer_id:
+        raise HTTPException(status_code=403, detail="Mission does not belong to this farmer")
+
+    report_path = (
+        Path(__file__).resolve().parents[1]
+        / "uploads"
+        / f"mission_{mission_id}"
+        / "reports"
+        / f"mission_{mission_id}_report.pdf"
+    )
+
+    if not os.path.exists(report_path):
+        raise HTTPException(status_code=404, detail="Mission report not available")
+
+    return FileResponse(
+        report_path,
+        media_type="application/pdf",
+        filename=f"agroguard_inspection_{mission_id}.pdf"
+    )
 
 # ==========================================================
 # GET MISSIONS FOR A FARMER

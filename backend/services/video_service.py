@@ -7,7 +7,7 @@ from services.zone_service import analyze_zones
 from services.report_service import generate_mission_report
 
 
-def process_video(video_path, mission_id):
+def process_video(video_path, mission_id, crop_type=None, farm=None):
 
     # -----------------------------------------
     # Mission-specific folder
@@ -106,7 +106,14 @@ def process_video(video_path, mission_id):
         status="Completed",
         detection_file=detection_output,
         zone_file=zone_output,
-        output_file=report_output
+        output_file=report_output,
+        crop_type=crop_type,
+        farm_name=farm.farm_name if farm else None,
+        farm_type=farm.farm_type if farm else None,
+        season=farm.season if farm else None,
+        area=farm.area if farm else None,
+        latitude=farm.latitude if farm else None,
+        longitude=farm.longitude if farm else None
     )
 
     # -----------------------------------------

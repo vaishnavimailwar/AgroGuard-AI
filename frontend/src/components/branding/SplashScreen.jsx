@@ -44,7 +44,7 @@ function SplashScreen({ duration = 3000, onComplete }) {
                 </div>
 
                 <p className="ag-splash-tagline">
-                    Intelligent Crop Protection
+                    Smart Farming. Better Tomorrow.
                 </p>
 
                 <div className="ag-splash-loader">

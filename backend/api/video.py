@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 
 import shutil
 import os
+import models
 
 from services.video_service import process_video
 from services.mission_service import (
@@ -83,9 +84,15 @@ async def upload_video(
         # 3. Process video
         # -----------------------------------------
 
+        farm = db.query(models.Farm).filter(
+            models.Farm.id == mission.farm_id
+        ).first()
+
         result = process_video(
             file_path,
-            mission_id
+            mission_id,
+            farm.crop_type if farm else None,
+            farm
         )
 
         # -----------------------------------------
