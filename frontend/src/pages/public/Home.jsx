@@ -15,11 +15,23 @@ function Home() {
 
             <section className="ag-hero">
 
-                <div className="ag-hero-image" />
+                <video
+    className="ag-hero-video"
+    autoPlay
+    muted
+    loop
+    playsInline
+    poster="/assets/agroguard/hero/agroguard-hero.jpg.jpeg"
+>
+    <source
+        src="/assets/agroguard/hero/agroguard-hero.mp4"
+        type="video/mp4"
+    />
+</video>
 
-                <div className="ag-hero-shade" />
+<div className="ag-hero-shade" />
 
-                <div className="ag-hero-pattern" />
+<div className="ag-hero-pattern" />
 
 
                 <div className="ag-hero-content">
