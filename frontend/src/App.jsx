@@ -15,6 +15,9 @@ import Signup from "./pages/portal/Signup.jsx";
 import AgroGuardDashboard from "./pages/portal/AgroGuardDashboard.jsx";
 import AdminLogin from "./pages/admin/AdminLogin.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import AdminFarmers from "./pages/admin/AdminFarmers.jsx";
+import AdminMissions from "./pages/admin/AdminMissions.jsx";
+import AdminAIResults from "./pages/admin/AdminAIResults.jsx";
 
 function App() {
     return (
@@ -84,7 +87,19 @@ function App() {
     path="/admin"
     element={<AdminDashboard />}
 />
+<Route
+    path="/admin/farmers"
+    element={<AdminFarmers />}
+/>
+<Route
+    path="/admin/missions"
+    element={<AdminMissions />}
+/>
 
+<Route
+    path="/admin/ai-results"
+    element={<AdminAIResults />}
+/>
 
             </Routes>
         </BrowserRouter>

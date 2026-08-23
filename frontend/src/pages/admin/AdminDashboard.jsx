@@ -69,7 +69,10 @@ function AdminDashboard() {
                         Dashboard
                     </button>
 
-                    <button className="admin-nav-item">
+                    <button
+                        className="admin-nav-item"
+                        onClick={() => navigate("/admin/farmers")}
+                    >
                         Farmers
                     </button>
 
@@ -77,11 +80,17 @@ function AdminDashboard() {
                         Farms
                     </button>
 
-                    <button className="admin-nav-item">
+                    <button
+                        className="admin-nav-item"
+                        onClick={() => navigate("/admin/missions")}
+                    >
                         Missions
                     </button>
 
-                    <button className="admin-nav-item">
+                    <button
+                        className="admin-nav-item"
+                        onClick={() => navigate("/admin/ai-results")}
+                    >
                         AI Results
                     </button>
 
@@ -211,7 +220,7 @@ function AdminDashboard() {
                         </div>
 
                         {!loading &&
-                        overview?.recent_missions?.length > 0 ? (
+                            overview?.recent_missions?.length > 0 ? (
 
                             <div className="admin-mission-list">
 
