@@ -2921,19 +2921,19 @@ function AgroGuardDashboard() {
         switch (activePage) {
 
             case "dashboard":
-                return <DashboardPage />;
+                return DashboardPage();
 
             case "missions":
-                return <MissionsPage />;
+                return MissionsPage();
 
             case "video":
-                return <VideoPage />;
+                return VideoPage();
 
             case "results":
-                return <ResultsPage />;
+                return ResultsPage();
 
             case "farms":
-                return <FarmsPage />;
+                return FarmsPage();
 
             case "farmers":
 
@@ -2945,7 +2945,7 @@ function AgroGuardDashboard() {
                 );
 
             default:
-                return <DashboardPage />;
+                return DashboardPage();
 
         }
 
@@ -3158,3 +3158,4 @@ function AgroGuardDashboard() {
 
 
 export default AgroGuardDashboard;
+
