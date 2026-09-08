@@ -29,12 +29,10 @@
     padding: 110px 0 85px;
 
     background:
-        linear-gradient(
-            135deg,
+        linear-gradient(135deg,
             #092914 0%,
             #124723 55%,
-            #1c542b 100%
-        );
+            #1c542b 100%);
 
     color: white;
 
@@ -49,8 +47,7 @@
     display: grid;
 
     grid-template-columns:
-        minmax(0, 1fr)
-        430px;
+        minmax(0, 1fr) 430px;
 
     gap: 70px;
 
@@ -99,11 +96,9 @@
 .specialists-hero h1 {
     margin: 0;
 
-    font-size: clamp(
-        3.8rem,
-        6vw,
-        6.2rem
-    );
+    font-size: clamp(3.8rem,
+            6vw,
+            6.2rem);
 
     line-height: .94;
 
@@ -118,12 +113,12 @@
 }
 
 
-.specialists-hero-copy > p {
+.specialists-hero-copy>p {
     max-width: 570px;
 
     margin: 27px 0 0;
 
-    color: rgba(255,255,255,.72);
+    color: rgba(255, 255, 255, .72);
 
     font-size: 15px;
 
@@ -185,14 +180,14 @@
 
 
 .specialists-btn-secondary {
-    border: 1px solid rgba(255,255,255,.28);
+    border: 1px solid rgba(255, 255, 255, .28);
 
     color: white;
 }
 
 
 .specialists-btn-secondary:hover {
-    background: rgba(255,255,255,.08);
+    background: rgba(255, 255, 255, .08);
 }
 
 
@@ -216,11 +211,11 @@
     left: 50%;
     top: 50%;
 
-    border: 1px solid rgba(184,217,125,.20);
+    border: 1px solid rgba(184, 217, 125, .20);
 
     border-radius: 50%;
 
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
 
 
@@ -240,7 +235,7 @@
     width: 375px;
     height: 375px;
 
-    border-color: rgba(184,217,125,.10);
+    border-color: rgba(184, 217, 125, .10);
 }
 
 
@@ -253,7 +248,7 @@
     width: 145px;
     height: 145px;
 
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 
     display: flex;
 
@@ -269,7 +264,7 @@
     color: #16371f;
 
     box-shadow:
-        0 20px 60px rgba(0,0,0,.18);
+        0 20px 60px rgba(0, 0, 0, .18);
 }
 
 
@@ -322,11 +317,11 @@
     height: 67px;
 
     border:
-        1px solid rgba(255,255,255,.18);
+        1px solid rgba(255, 255, 255, .18);
 
     border-radius: 50%;
 
-    background: rgba(255,255,255,.06);
+    background: rgba(255, 255, 255, .06);
 
     backdrop-filter: blur(5px);
 
@@ -346,7 +341,7 @@
 
     font-size: 8px;
 
-    color: rgba(255,255,255,.65);
+    color: rgba(255, 255, 255, .65);
 }
 
 
@@ -381,8 +376,7 @@
     display: grid;
 
     grid-template-columns:
-        1fr
-        370px;
+        1fr 370px;
 
     gap: 80px;
 
@@ -394,11 +388,9 @@
 .specialists-workflow h2 {
     margin: 15px 0 0;
 
-    font-size: clamp(
-        2.7rem,
-        4.5vw,
-        4.8rem
-    );
+    font-size: clamp(2.7rem,
+            4.5vw,
+            4.8rem);
 
     line-height: .98;
 
@@ -414,7 +406,7 @@
 }
 
 
-.specialists-section-head > p {
+.specialists-section-head>p {
     margin: 0;
 
     color: #68736b;
@@ -433,7 +425,7 @@
     display: grid;
 
     grid-template-columns:
-        repeat(3,1fr);
+        repeat(3, 1fr);
 
     margin-top: 60px;
 
@@ -471,7 +463,7 @@
 }
 
 
-.specialist-feature > span {
+.specialist-feature>span {
     color: #4f813e;
 
     font-size: 10px;
@@ -520,11 +512,7 @@
     display: grid;
 
     grid-template-columns:
-        1fr
-        55px
-        1fr
-        55px
-        1fr;
+        1fr 55px 1fr 55px 1fr;
 
     align-items: center;
 
@@ -677,6 +665,7 @@
         padding: 30px;
     }
 }
+
 /* =========================================================
    SPECIALISTS — MOBILE RESPONSIVE
 ========================================================= */
@@ -851,4 +840,792 @@
     .specialists-section-head h2 {
         font-size: 2.7rem;
     }
+}
+
+
+/* =========================================================
+   EXPERT CONNECT — LOCATION FINDER
+========================================================= */
+
+.specialists-connect {
+    padding: 95px 0;
+
+    background: #ffffff;
+}
+
+.connect-heading {
+    margin: 15px 0 0;
+
+    font-size: clamp(2.6rem, 4.2vw, 4.4rem);
+
+    line-height: .98;
+
+    letter-spacing: -.05em;
+}
+
+.connect-heading em {
+    color: #4f813e;
+
+    font-style: normal;
+}
+
+.connect-subtext {
+    max-width: 560px;
+
+    margin: 18px 0 0;
+
+    color: #68736b;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+.connect-demo-banner {
+    max-width: 700px;
+
+    margin-top: 16px;
+
+    padding: 10px 14px;
+
+    background: #fdf3d9;
+
+    border: 1px solid #e8cf8a;
+
+    color: #7a5c12;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    line-height: 1.6;
+}
+
+.connect-layout {
+    display: grid;
+
+    grid-template-columns: 400px minmax(0, 1fr);
+
+    gap: 30px;
+
+    margin-top: 40px;
+
+    align-items: start;
+}
+
+
+/* LOCATE BOX */
+
+.connect-panel {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.connect-locate-box {
+    padding: 25px;
+
+    border: 1px solid #dfe6de;
+
+    background: #f4f7ef;
+}
+
+.connect-locate-btn {
+    width: 100%;
+}
+
+.connect-error-text {
+    margin: 12px 0 0;
+
+    padding: 10px 12px;
+
+    background: #fbeaea;
+
+    border: 1px solid #e6b8b8;
+
+    color: #8a2e2e;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+.connect-divider {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 20px 0;
+
+    color: #9aa39a;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .1em;
+}
+
+.connect-divider::before,
+.connect-divider::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background: #dfe6de;
+}
+
+.connect-manual-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+.connect-input-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+}
+
+.connect-input-row label {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .06em;
+
+    color: #4f5a51;
+}
+
+.connect-input-row input {
+    padding: 10px 11px;
+
+    border: 1px solid #dfe6de;
+
+    background: white;
+
+    font-size: 13px;
+
+    color: #17231a;
+}
+
+.connect-input-row input:focus {
+    outline: none;
+
+    border-color: #4f813e;
+}
+
+.connect-manual-btn {
+    width: 100%;
+}
+
+
+/* RESULTS */
+
+.connect-results {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    max-height: 640px;
+
+    overflow-y: auto;
+
+    padding-right: 4px;
+}
+
+.connect-state-box {
+    padding: 22px;
+
+    border: 1px dashed #dfe6de;
+
+    text-align: center;
+
+    color: #737d75;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+.connect-state-idle {
+    background: #fafcf9;
+}
+
+.connect-state-error {
+    border-color: #e6b8b8;
+
+    background: #fbeaea;
+
+    color: #8a2e2e;
+}
+
+.connect-spinner {
+    width: 22px;
+    height: 22px;
+
+    margin: 0 auto 10px;
+
+    border: 2px solid #dfe6de;
+    border-top-color: #4f813e;
+
+    border-radius: 50%;
+
+    animation: connect-spin .8s linear infinite;
+}
+
+@keyframes connect-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.connect-card {
+    padding: 18px 20px;
+
+    border: 1px solid #dfe6de;
+
+    background: white;
+
+    transition: .2s ease;
+}
+
+.connect-card:hover {
+    background: #f4f7ef;
+
+    border-color: #b8d97d;
+}
+
+.connect-card-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    flex-wrap: wrap;
+}
+
+.connect-card-category {
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .05em;
+
+    color: #4f813e;
+
+    text-transform: uppercase;
+}
+
+.connect-card-demo-badge {
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: .04em;
+
+    color: #7a5c12;
+
+    background: #fdf3d9;
+
+    border: 1px solid #e8cf8a;
+
+    padding: 2px 7px;
+
+    border-radius: 3px;
+}
+
+.connect-card-distance {
+    margin-left: auto;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: #123c20;
+
+    padding: 3px 9px;
+
+    border-radius: 20px;
+
+    background: #e5efd9;
+}
+
+.connect-card h3 {
+    margin: 0 0 6px;
+
+    font-size: 16px;
+
+    letter-spacing: -.01em;
+}
+
+.connect-card-address {
+    margin: 0;
+
+    color: #737d75;
+
+    font-size: 12.5px;
+
+    line-height: 1.6;
+}
+
+.connect-card-coords {
+    margin: 6px 0 0;
+
+    color: #a3aca4;
+
+    font-size: 11px;
+
+    font-family: monospace;
+}
+
+.connect-card-directions {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 14px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: #123c20;
+
+    text-decoration: none;
+
+    border-bottom: 1px solid #123c20;
+
+    padding-bottom: 2px;
+}
+
+.connect-card-directions:hover {
+    color: #4f813e;
+
+    border-color: #4f813e;
+}
+
+
+/* MAP */
+
+.connect-map-wrap {
+    position: sticky;
+
+    top: 20px;
+
+    height: 640px;
+
+    border: 1px solid #dfe6de;
+
+    overflow: hidden;
+}
+
+.connect-map {
+    width: 100%;
+    height: 100%;
+}
+
+.farmer-marker-icon {
+    filter: hue-rotate(90deg) saturate(1.4);
+}
+
+
+/* =========================================================
+   EXPERT CONNECT — RESPONSIVE
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .connect-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .connect-map-wrap {
+        position: static;
+
+        height: 420px;
+
+        order: -1;
+    }
+
+    .connect-results {
+        max-height: none;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .specialists-connect {
+        padding: 70px 0;
+    }
+
+    .connect-layout {
+        margin-top: 30px;
+
+        gap: 20px;
+    }
+
+    .connect-locate-box {
+        padding: 20px;
+    }
+
+    .connect-input-row {
+        grid-template-columns: 1fr;
+    }
+
+    .connect-map-wrap {
+        height: 340px;
+    }
+
+    .connect-card-distance {
+        margin-left: 0;
+    }
+}
+
+.connect-location-success {
+    margin-top: 15px;
+
+    padding: 12px;
+
+    border: 1px solid #b8d97d;
+
+    background: #eaf3dc;
+
+    color: #16371f;
+
+    font-size: 12px;
+}
+
+.connect-location-success strong {
+    display: block;
+
+    margin-bottom: 5px;
+}
+
+.connect-location-success p {
+    margin: 0;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   AGRICULTURAL EXPERTS
+========================================================= */
+
+.experts-section {
+    padding: 100px 0;
+    background: #f6f7f3;
+}
+
+
+.experts-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    margin-bottom: 55px;
+}
+
+
+.experts-section-head h2 {
+    margin: 14px 0 0;
+    font-size: clamp(42px, 5vw, 70px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    color: #1f2b25;
+}
+
+
+.experts-section-head h2 em {
+    color: #527544;
+    font-style: normal;
+}
+
+
+.experts-section-head p {
+    max-width: 430px;
+    margin: 0;
+    color: #68726b;
+    line-height: 1.7;
+}
+
+
+.experts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+}
+
+
+.expert-card {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 320px;
+    background: #ffffff;
+    border: 1px solid #dfe5dc;
+    overflow: hidden;
+    transition: transform 0.25s ease;
+}
+
+
+.expert-card:hover {
+    transform: translateY(-5px);
+}
+
+
+.expert-image {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    object-fit: cover;
+}
+
+
+.expert-content {
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.expert-tag {
+    display: inline-block;
+    width: fit-content;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    color: #63824f;
+    margin-bottom: 20px;
+}
+
+
+.expert-content h3 {
+    margin: 0 0 10px;
+    font-size: 28px;
+    color: #203028;
+}
+
+
+.expert-designation {
+    margin: 0 0 18px;
+    font-weight: 600;
+    color: #527544;
+}
+
+
+.expert-expertise {
+    margin: 0;
+    color: #68726b;
+    line-height: 1.7;
+}
+
+
+.expert-contact-btn {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    padding-top: 25px;
+    font-weight: 700;
+    color: #26352c;
+    border-top: 1px solid #e1e5df;
+}
+
+
+.expert-contact-btn span {
+    font-size: 20px;
+}
+
+
+@media (max-width: 900px) {
+
+    .experts-section-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+
+    .experts-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .experts-section {
+        padding: 70px 0;
+    }
+
+
+    .expert-card {
+        grid-template-columns: 1fr;
+    }
+
+
+    .expert-image {
+        height: 300px;
+        min-height: 0;
+    }
+
+
+    .expert-content {
+        padding: 28px;
+    }
+
+}
+
+/* =========================================================
+   AGRICULTURAL EXPERTS
+========================================================= */
+
+.experts-section {
+    display: block !important;
+    padding: 100px 0;
+    background: #f6f7f3;
+}
+
+.experts-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+.experts-section-head h2 {
+    margin: 15px 0 0;
+    font-size: clamp(42px, 5vw, 70px);
+    line-height: .98;
+    letter-spacing: -.04em;
+}
+
+.experts-section-head h2 em {
+    color: #4f813e;
+    font-style: normal;
+}
+
+.experts-section-head p {
+    max-width: 430px;
+    margin: 0;
+    color: #68736b;
+    line-height: 1.7;
+}
+
+.experts-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+}
+
+.expert-card {
+    display: grid !important;
+    grid-template-columns: 220px 1fr;
+    min-height: 320px;
+    background: #fff;
+    border: 1px solid #dfe6de;
+    overflow: hidden;
+}
+
+.expert-image {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+}
+
+.expert-content {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.expert-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: #4f813e;
+    margin-bottom: 18px;
+}
+
+.expert-content h3 {
+    margin: 0 0 10px;
+    font-size: 24px;
+}
+
+.expert-designation {
+    margin: 0 0 15px;
+    color: #4f813e;
+    font-weight: 600;
+}
+
+.expert-expertise {
+    margin: 0;
+    color: #737d75;
+    line-height: 1.6;
+    font-size: 13px;
+}
+
+.expert-contact-btn {
+    margin-top: auto;
+    padding-top: 20px;
+    color: #123c20;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+@media (max-width: 800px) {
+    .experts-section-head {
+        display: block;
+    }
+
+    .experts-section-head p {
+        margin-top: 20px;
+    }
+
+    .experts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 550px) {
+    .expert-card {
+        grid-template-columns: 1fr !important;
+    }
+
+    .expert-image {
+        height: 280px;
+    }
+}
+
+.expert-phone {
+    margin-top: 20px;
+    color: #123c20;
+    font-size: 14px;
+    font-weight: 600;
 }

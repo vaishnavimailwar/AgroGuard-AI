@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "https://agroguard-ai-ak4o.onrender.com",
+    baseURL: "http://127.0.0.1:8000",
 });
 
 export const getMissions = () => {
@@ -43,3 +43,4 @@ export const downloadMissionReport = (missionId, farmerId) => {
         responseType: "blob"
     });
 };
+

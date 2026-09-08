@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
-const API_BASE = "https://agroguard-ai-ak4o.onrender.com";
+const API_BASE = "http://127.0.0.1:8000";
 
 function Login() {
     const navigate = useNavigate();
@@ -188,3 +188,4 @@ function Login() {
 }
 
 export default Login;
+
