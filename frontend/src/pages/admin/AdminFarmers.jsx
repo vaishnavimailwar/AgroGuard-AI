@@ -12,7 +12,7 @@ function AdminFarmers() {
         const loadFarmers = async () => {
             try {
                 const response = await fetch(
-                    `${API_BASE}/farmers/`
+                    `${API_BASE}/admin/farmers`
                 );
 
                 const data = await response.json();
@@ -93,9 +93,9 @@ function AdminFarmers() {
 
                         <div
                             className="admin-farmer-row"
-                            key={farmer.id}
+                            key={farmer.farmer_id}
                         >
-                            <span>#{farmer.id}</span>
+                            <span>#{farmer.farmer_id}</span>
 
                             <strong>
                                 {farmer.name || "—"}

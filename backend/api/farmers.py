@@ -1,47 +1,72 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-
-
-import models
-import schemas
+from fastapi import APIRouter, HTTPException
 import bcrypt
-from database import get_db
+import re
 
+import schemas
+from mongodb import mongo_db
 
 router = APIRouter(
     prefix="/farmers",
     tags=["Farmers"]
 )
 
-# =========================================================
-# FARMER SIGNUP
-# =========================================================
+farmers_collection = mongo_db["farmers"]
+
+
+def validate_signup(farmer):
+    name = farmer.name.strip()
+    mobile = farmer.mobile.strip()
+    email = farmer.email.strip().lower()
+    village = farmer.village.strip()
+
+    if not re.fullmatch(r"[A-Za-z ]{2,50}", name):
+        raise HTTPException(
+            status_code=400,
+            detail="Name must contain only letters and spaces"
+        )
+
+    if not re.fullmatch(r"[6-9]\d{9}", mobile):
+        raise HTTPException(
+            status_code=400,
+            detail="Enter a valid 10-digit Indian mobile number"
+        )
+
+    if not re.fullmatch(
+        r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$",
+        email
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="Enter a valid email address"
+        )
+
+    if len(farmer.password) < 8:
+        raise HTTPException(
+            status_code=400,
+            detail="Password must be at least 8 characters"
+        )
+
+    if not village or len(village) < 2:
+        raise HTTPException(
+            status_code=400,
+            detail="Enter a valid village name"
+        )
+
+    return name, mobile, email, village
+
 
 @router.post("/signup")
-def signup_farmer(
-    farmer: schemas.FarmerCreate,
-    db: Session = Depends(get_db)
-):
+def signup_farmer(farmer: schemas.FarmerCreate):
 
-    existing_email = (
-        db.query(models.Farmer)
-        .filter(models.Farmer.email == farmer.email)
-        .first()
-    )
+    name, mobile, email, village = validate_signup(farmer)
 
-    if existing_email:
+    if farmers_collection.find_one({"email": email}):
         raise HTTPException(
             status_code=400,
             detail="Email already registered"
         )
 
-    existing_mobile = (
-        db.query(models.Farmer)
-        .filter(models.Farmer.mobile == farmer.mobile)
-        .first()
-    )
-
-    if existing_mobile:
+    if farmers_collection.find_one({"mobile": mobile}):
         raise HTTPException(
             status_code=400,
             detail="Mobile number already registered"
@@ -52,41 +77,42 @@ def signup_farmer(
         bcrypt.gensalt()
     ).decode("utf-8")
 
-    new_farmer = models.Farmer(
-        name=farmer.name,
-        mobile=farmer.mobile,
-        email=farmer.email,
-        password_hash=password_hash,
-        village=farmer.village
+    last_farmer = farmers_collection.find_one(
+        {},
+        sort=[("farmer_id", -1)]
     )
 
-    db.add(new_farmer)
-    db.commit()
-    db.refresh(new_farmer)
+    farmer_id = (
+        last_farmer["farmer_id"] + 1
+        if last_farmer
+        else 1
+    )
+
+    farmers_collection.insert_one({
+        "farmer_id": farmer_id,
+        "name": name,
+        "mobile": mobile,
+        "email": email,
+        "password_hash": password_hash,
+        "village": village
+    })
 
     return {
         "message": "Farmer Registered Successfully",
-        "farmer_id": new_farmer.id,
-        "name": new_farmer.name,
-        "email": new_farmer.email
+        "farmer_id": farmer_id,
+        "name": name,
+        "email": email
     }
 
-# =========================================================
-# FARMER LOGIN
-# =========================================================
 
 @router.post("/login")
-def login_farmer(
-    credentials: schemas.FarmerLogin,
-    db: Session = Depends(get_db)
-):
+def login_farmer(credentials: schemas.FarmerLogin):
 
-    farmer = (
-        db.query(models.Farmer)
-        .filter(models.Farmer.email == credentials.email)
-        .first()
-    )
+    email = credentials.email.strip().lower()
 
+    farmer = farmers_collection.find_one({
+        "email": email
+    })
 
     if not farmer:
         raise HTTPException(
@@ -94,90 +120,34 @@ def login_farmer(
             detail="Invalid email or password"
         )
 
-
-    if not farmer.password_hash:
-        raise HTTPException(
-            status_code=401,
-            detail="This farmer account does not have login credentials"
-        )
-
-
-    password_valid = bcrypt.checkpw(
-    credentials.password.encode("utf-8"),
-    farmer.password_hash.encode("utf-8")
-)
-
-
-    if not password_valid:
+    if not bcrypt.checkpw(
+        credentials.password.encode("utf-8"),
+        farmer["password_hash"].encode("utf-8")
+    ):
         raise HTTPException(
             status_code=401,
             detail="Invalid email or password"
         )
 
-
     return {
         "message": "Login Successful",
-        "farmer_id": farmer.id,
-        "name": farmer.name,
-        "email": farmer.email
+        "farmer_id": farmer["farmer_id"],
+        "name": farmer["name"],
+        "email": farmer["email"]
     }
 
-
-# =========================================================
-# EXISTING CREATE FARMER
-# =========================================================
-
-@router.post("/")
-def create_farmer(
-    farmer: schemas.FarmerCreate,
-    db: Session = Depends(get_db)
-):
-
-    existing_email = (
-        db.query(models.Farmer)
-        .filter(models.Farmer.email == farmer.email)
-        .first()
-    )
-
-    if existing_email:
-        raise HTTPException(
-            status_code=400,
-            detail="Email already registered"
-        )
-
-
-    new_farmer = models.Farmer(
-    name=farmer.name,
-    mobile=farmer.mobile,
-    email=farmer.email,
-    password_hash=bcrypt.hashpw(
-        farmer.password.encode("utf-8"),
-        bcrypt.gensalt()
-    ).decode("utf-8"),
-    village=farmer.village
-)
-
-
-    db.add(new_farmer)
-    db.commit()
-    db.refresh(new_farmer)
-
-
-    return {
-        "message": "Farmer Registered Successfully",
-        "id": new_farmer.id
-    }
-
-
-# =========================================================
-# GET ALL FARMERS
-# =========================================================
 
 @router.get("/")
-def get_farmers(
-    db: Session = Depends(get_db)
-):
+def get_farmers():
 
-    return db.query(
-        models.Farmer
-    ).all()
+    farmers = list(
+        farmers_collection.find(
+            {},
+            {"password_hash": 0}
+        )
+    )
+
+    for farmer in farmers:
+        farmer["_id"] = str(farmer["_id"])
+
+    return farmers

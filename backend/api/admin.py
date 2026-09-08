@@ -2,6 +2,7 @@
 
 from fastapi import APIRouter, HTTPException
 from dotenv import load_dotenv
+from mongodb import mongo_db
 
 
 load_dotenv()
@@ -58,9 +59,7 @@ def admin_overview(
     db: Session = Depends(get_db)
 ):
 
-    farmers_count = db.query(
-        models.Farmer
-    ).count()
+    farmers_count = mongo_db["farmers"].count_documents({})
 
     farms_count = db.query(
         models.Farm
@@ -191,3 +190,21 @@ def admin_overview(
         "average_confidence": average_confidence,
         "recent_missions": recent_missions
     }
+# ==========================================================
+# ADMIN FARMERS - MONGODB
+# ==========================================================
+
+@router.get("/farmers")
+def admin_farmers():
+
+    farmers = list(
+        mongo_db["farmers"].find(
+            {},
+            {
+                "_id": 0,
+                "password_hash": 0
+            }
+        )
+    )
+
+    return farmers

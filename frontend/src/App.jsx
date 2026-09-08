@@ -20,6 +20,17 @@ import AdminMissions from "./pages/admin/AdminMissions.jsx";
 import AdminAIResults from "./pages/admin/AdminAIResults.jsx";
 import SplashScreen from "./components/branding/SplashScreen.jsx";
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
+
+function AdminProtectedRoute({ children }) {
+    const admin = localStorage.getItem("agroguard_admin");
+
+    if (!admin) {
+        return <Navigate to="/admin/login" replace />;
+    }
+
+    return children;
+}
 
 function App() {
     const [showSplash, setShowSplash] = useState(true);
@@ -96,23 +107,40 @@ function App() {
                     />
                     <Route
                         path="/admin"
-                        element={<AdminDashboard />}
+                        element={
+                            <AdminProtectedRoute>
+                                <AdminDashboard />
+                            </AdminProtectedRoute>
+                        }
                     />
+
                     <Route
                         path="/admin/farmers"
-                        element={<AdminFarmers />}
+                        element={
+                            <AdminProtectedRoute>
+                                <AdminFarmers />
+                            </AdminProtectedRoute>
+                        }
                     />
+
                     <Route
                         path="/admin/missions"
-                        element={<AdminMissions />}
+                        element={
+                            <AdminProtectedRoute>
+                                <AdminMissions />
+                            </AdminProtectedRoute>
+                        }
                     />
 
                     <Route
                         path="/admin/ai-results"
-                        element={<AdminAIResults />}
+                        element={
+                            <AdminProtectedRoute>
+                                <AdminAIResults />
+                            </AdminProtectedRoute>
+                        }
                     />
-
-                </Routes>
+                    </Routes>
             </BrowserRouter>
         </>
     );
